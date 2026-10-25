@@ -1,0 +1,820 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ruta Web Plus</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: banco de trabajo de tres columnas — ruta de lecciones | lección y reto | editor + navegador. Se apila en móvil. */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --surface-2:#f5f7f9; --ink:#131a23; --muted:#596574; --line:#d8dee5;
+  --accent:#0f766e; --accent-ink:#ffffff; --accent-soft:#d6efe9;
+  --xp:#c2410c; --xp-soft:#fde5d4;
+  --ok:#15803d; --ok-soft:#dcf3e3; --bad:#b42318; --bad-soft:#fbe3e0;
+  --code-bg:#141a24; --code-ink:#dde5ee; --code-gutter:#5c6a7b; --code-line:#232c39;
+  --sx-tag:#7cc4ff; --sx-attr:#f4b977; --sx-str:#a6dd8b; --sx-com:#6f7d8f; --sx-kw:#e79bd8; --sx-num:#f6a6a6; --sx-prop:#8fd8cf;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0d1217; --surface:#141b23; --surface-2:#19222c; --ink:#e5ecf2; --muted:#94a2b1; --line:#26313c;
+  --accent:#34b8a7; --accent-ink:#04201c; --accent-soft:#12352f;
+  --xp:#fb923c; --xp-soft:#3b2314;
+  --ok:#4ade80; --ok-soft:#123222; --bad:#f87171; --bad-soft:#3a1717;
+  --code-bg:#0a0f15; --code-line:#18202b; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0d1217; --surface:#141b23; --surface-2:#19222c; --ink:#e5ecf2; --muted:#94a2b1; --line:#26313c;
+  --accent:#34b8a7; --accent-ink:#04201c; --accent-soft:#12352f;
+  --xp:#fb923c; --xp-soft:#3b2314;
+  --ok:#4ade80; --ok-soft:#123222; --bad:#f87171; --bad-soft:#3a1717;
+  --code-bg:#0a0f15; --code-line:#18202b; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--f-mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--line);padding:.05em .35em;border-radius:5px}
+
+/* Top bar */
+.top{display:flex;align-items:center;gap:16px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:800;font-size:20px;letter-spacing:-.01em}
+.brand .glyph{font-family:var(--f-mono);font-weight:600;font-size:14px;color:var(--accent-ink);background:var(--accent);border-radius:7px;padding:3px 7px}
+.menu-btn{display:none;border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:6px 12px;font-weight:700}
+.stats{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;font-variant-numeric:tabular-nums;background:var(--surface-2)}
+.chip b{font-weight:700}
+.chip.xp{background:var(--xp-soft);border-color:transparent;color:var(--xp)}
+.prog{width:120px;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+
+/* Shell */
+.shell{flex:1;min-height:0;display:grid;grid-template-columns:270px minmax(320px,1fr) minmax(380px,1.25fr)}
+.side{border-right:1px solid var(--line);background:var(--surface);overflow:auto;padding:18px 14px 30px}
+.lvl{margin-bottom:22px}
+.lvl-h{display:flex;justify-content:space-between;align-items:baseline;padding:0 6px 8px}
+.lvl-h h3{margin:0;font-family:var(--f-display);font-size:15px;font-weight:800}
+.lvl-h span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.lvl-sub{font-size:12px;color:var(--muted);padding:0 6px 8px;margin-top:-6px;text-transform:uppercase;letter-spacing:.06em}
+.path{list-style:none;margin:0;padding:0;position:relative}
+.path::before{content:"";position:absolute;left:17px;top:14px;bottom:14px;width:2px;background:var(--line)}
+.path li button{position:relative;width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:0;border-radius:8px;padding:7px 8px;font-size:14px}
+.path li button:hover{background:var(--surface-2)}
+.path li button[aria-current="true"]{background:var(--accent-soft);font-weight:700}
+.dot{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--accent-ink);z-index:1}
+.done .dot{background:var(--accent);border-color:var(--accent)}
+.help .dot{background:var(--xp);border-color:var(--xp);color:#fff}
+[aria-current="true"] .dot{border-color:var(--accent)}
+
+/* Lesson pane */
+.lesson{overflow:auto;padding:24px 26px 40px;min-width:0}
+.crumb{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.crumb .tag{color:var(--accent);font-weight:700}
+h1.l-title{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,3vw,34px);line-height:1.1;letter-spacing:-.02em;margin:8px 0 14px;text-wrap:balance}
+.theory p{margin:0 0 12px;max-width:62ch}
+.theory ul{margin:0 0 12px;padding-left:20px;max-width:62ch}
+.example{margin:6px 0 18px;border-radius:var(--r);background:var(--code-bg);color:var(--code-ink);font-family:var(--f-mono);font-size:13px;line-height:1.6;padding:14px 16px;overflow-x:auto;white-space:pre}
+.ex-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.task{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:16px 18px;margin:20px 0 14px}
+.task h2,.checks h2{margin:0 0 6px;font-family:var(--f-display);font-size:17px;font-weight:800}
+.task p{margin:0 0 8px}
+.task p:last-child{margin:0}
+.checks{margin:18px 0}
+.checks ul{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px}
+.checks li{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:14px}
+.checks li .st{flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center;font-size:11px;font-weight:700}
+.checks li.pass{border-color:transparent;background:var(--ok-soft)}
+.checks li.pass .st{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.checks li.fail{border-color:transparent;background:var(--bad-soft)}
+.checks li.fail .st{border-color:var(--bad);color:var(--bad)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 14px;font-weight:700;font-size:14px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn kbd{font-family:var(--f-mono);font-size:11px;opacity:.75;margin-left:6px;font-weight:400}
+.hint{border-left:3px solid var(--xp);background:var(--xp-soft);padding:10px 14px;border-radius:0 8px 8px 0;margin:8px 0;font-size:14px}
+.hint b{color:var(--xp)}
+.solution{margin-top:10px}
+.solution .example{margin-bottom:8px}
+.win{border-radius:var(--r);padding:16px 18px;background:var(--ok-soft);margin:14px 0;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.win strong{font-family:var(--f-display);font-size:18px}
+.win p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.win .btn{margin-left:auto}
+
+/* Workbench */
+.bench{display:flex;flex-direction:column;min-width:0;min-height:0;border-left:1px solid var(--line);background:var(--surface)}
+.ed-head,.pv-head{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:13px;flex-wrap:wrap}
+.file{font-family:var(--f-mono);font-size:12px;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+.ed-head .sp,.pv-head .sp{flex:1}
+.mini{border:0;background:none;color:var(--muted);font-size:13px;padding:4px 8px;border-radius:6px}
+.mini:hover{background:var(--surface-2);color:var(--ink)}
+.editor{flex:1.2;min-height:240px;position:relative;display:flex;background:var(--code-bg);font-family:var(--f-mono);font-size:13.5px;line-height:1.6;overflow:hidden}
+.gutter{flex:none;padding:12px 8px 12px 12px;text-align:right;color:var(--code-gutter);user-select:none;white-space:pre;overflow:hidden;font-variant-numeric:tabular-nums}
+.code-wrap{position:relative;flex:1;min-width:0}
+.code-wrap pre,.code-wrap textarea{position:absolute;inset:0;margin:0;padding:12px 14px;font:inherit;line-height:inherit;white-space:pre;overflow:auto;tab-size:2;border:0;letter-spacing:0}
+.code-wrap pre{color:var(--code-ink);pointer-events:none}
+.code-wrap textarea{background:transparent;color:transparent;caret-color:#fff;resize:none;outline:none;-webkit-text-fill-color:transparent}
+.code-wrap textarea::selection{background:rgba(124,196,255,.3);-webkit-text-fill-color:transparent}
+.tk-tag{color:var(--sx-tag)} .tk-attr{color:var(--sx-attr)} .tk-str{color:var(--sx-str)} .tk-com{color:var(--sx-com);font-style:italic} .tk-kw{color:var(--sx-kw)} .tk-num{color:var(--sx-num)} .tk-prop{color:var(--sx-prop)}
+.tabs{display:flex;gap:2px}
+.tab{border:0;background:none;padding:5px 10px;border-radius:6px;font-size:13px;color:var(--muted);font-weight:700}
+.tab[aria-selected="true"]{background:var(--surface-2);color:var(--ink)}
+.badge{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--xp);color:#fff;font-size:11px;text-align:center;margin-left:4px}
+.preview{flex:1;min-height:220px;display:flex;flex-direction:column;min-width:0}
+.browser{flex:1;display:flex;flex-direction:column;margin:10px;border:1px solid var(--line);border-radius:9px;overflow:hidden;min-height:0}
+.bar{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.bar i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.bar span{margin-left:8px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted);background:var(--surface);border-radius:5px;padding:2px 10px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
+.console{flex:1;margin:10px;border-radius:9px;background:var(--code-bg);color:var(--code-ink);font-family:var(--f-mono);font-size:12.5px;padding:10px 12px;overflow:auto;min-height:160px}
+.console div{padding:3px 0;border-bottom:1px solid var(--code-line);white-space:pre-wrap;word-break:break-word}
+.console .err{color:#ff9a9a}
+.console .warn{color:#ffd28a}
+.console .empty{color:var(--code-gutter);border:0}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;font-size:14px;transition:.3s;pointer-events:none;z-index:50;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.scrim{display:none}
+
+@media (max-width:1180px){
+  .shell{grid-template-columns:minmax(300px,1fr) minmax(360px,1.2fr)}
+  .side{position:fixed;z-index:40;top:0;bottom:0;left:0;width:min(300px,86vw);transform:translateX(-102%);transition:transform .25s;padding-top:calc(18px + env(safe-area-inset-top,0px));padding-left:max(14px,env(safe-area-inset-left,0px))}
+  .side.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.25)}
+  .scrim.open{display:block;position:fixed;inset:0;z-index:39;background:rgba(0,0,0,.3)}
+  .menu-btn{display:inline-block}
+}
+@media (max-width:820px){
+  html,body{height:auto}
+  .shell{display:flex;flex-direction:column}
+  .lesson{overflow:visible;padding:18px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+  .bench{border-left:0;border-top:1px solid var(--line)}
+  .editor{min-height:340px;flex:none;height:380px}
+  .preview{min-height:320px}
+  .prog{width:70px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <button class="menu-btn" id="menuBtn" aria-controls="side">☰ Lecciones</button>
+  <div class="brand"><span class="glyph">&lt;/&gt;</span>Ruta Web Plus</div>
+  <div class="stats">
+    <div class="chip" title="Días seguidos practicando">Racha <b id="streak">0</b> días</div>
+    <div class="chip xp" title="Puntos de experiencia"><b id="xp">0</b> XP</div>
+    <div class="chip"><span class="prog"><i id="progBar"></i></span><b id="progTxt">0/0</b></div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="side" id="side" aria-label="Ruta de lecciones"></nav>
+  <div class="scrim" id="scrim"></div>
+
+  <main class="lesson" id="lesson">
+    <div class="crumb"><span class="tag" id="lvlTag"></span><span id="lessonNum"></span><span id="mins"></span></div>
+    <h1 class="l-title" id="lTitle"></h1>
+    <div class="theory" id="theory"></div>
+    <section class="task"><h2>Tu reto</h2><div id="task"></div></section>
+    <div class="actions">
+      <button class="btn primary" id="checkBtn">Comprobar<kbd>Ctrl+Enter</kbd></button>
+      <button class="btn" id="hintBtn">Pedir pista</button>
+      <button class="btn" id="solBtn">Ver solución</button>
+    </div>
+    <div id="hints"></div>
+    <div id="win"></div>
+    <section class="checks"><h2>Comprobaciones</h2><ul id="checks"></ul></section>
+    <div class="solution" id="solution"></div>
+  </main>
+
+  <section class="bench" aria-label="Editor y vista previa">
+    <div class="ed-head">
+      <span class="file">index.html</span>
+      <span class="sp"></span>
+      <button class="mini" id="resetBtn">Reiniciar código</button>
+    </div>
+    <div class="editor">
+      <div class="gutter" id="gutter">1</div>
+      <div class="code-wrap">
+        <pre id="hl" aria-hidden="true"></pre>
+        <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Editor de código"></textarea>
+      </div>
+    </div>
+    <div class="preview">
+      <div class="pv-head">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" id="tabView" aria-selected="true">Vista previa</button>
+          <button class="tab" role="tab" id="tabCon" aria-selected="false">Consola<span class="badge" id="conBadge" hidden>0</span></button>
+        </div>
+        <span class="sp"></span>
+        <button class="mini" id="runBtn">Actualizar</button>
+      </div>
+      <div class="browser" id="browserPane">
+        <div class="bar"><i></i><i></i><i></i><span>mi-pagina.html</span></div>
+        <iframe id="frame" title="Vista previa de tu página"></iframe>
+      </div>
+      <div class="console" id="consolePane" hidden></div>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ------------------------------------------------------------------ */
+/*  Contenido del curso                                               */
+/* ------------------------------------------------------------------ */
+var LEVELS = [
+  {id:"html", name:"Nivel 1 · HTML", sub:"Básico: estructura"},
+  {id:"css",  name:"Nivel 2 · CSS",  sub:"Intermedio: estilo y diseño"},
+  {id:"js",   name:"Nivel 3 · JavaScript", sub:"Avanzado: lógica"},
+  {id:"pro",  name:"Nivel 4 · Proyecto", sub:"Pro: apps reales"}
+];
+
+var L = [
+/* ===================== HTML ===================== */
+{id:"h1", lvl:"html", title:"Tu primera página", mins:3,
+ theory:"<p>HTML (HyperText Markup Language) es el esqueleto de toda página web. Se escribe usando <b>etiquetas</b>. Una etiqueta típica tiene tres partes: una etiqueta de apertura <code>&lt;h1&gt;</code>, el contenido en el medio, y una etiqueta de cierre <code>&lt;/h1&gt;</code> (nota la barra inclinada).</p><p>Las etiquetas le dicen al navegador qué tipo de contenido es. Los títulos van de <code>&lt;h1&gt;</code> (el más importante, como el título de un libro) a <code>&lt;h6&gt;</code> (el menos importante). Por buenas prácticas, cada página debería tener un solo <code>&lt;h1&gt;</code> principal.</p>",
+ example:"<h1>Esto es un título principal</h1>\n<h2>Esto es un subtítulo</h2>",
+ task:"<p>Escribe un <code>&lt;h1&gt;</code> que diga <b>Hola, mundo</b> y debajo un <code>&lt;h2&gt;</code> con tu nombre.</p><p>Mira cómo la vista previa cambia a la derecha mientras escribes.</p>",
+ starter:"<!-- Escribe tu código debajo de esta línea -->\n\n",
+ solution:"<h1>Hola, mundo</h1>\n<h2>Me llamo Richard</h2>",
+ hints:["Una etiqueta se abre con <code>&lt;h1&gt;</code> y se cierra con <code>&lt;/h1&gt;</code>.","Pon el texto exactamente entre las dos etiquetas: <code>&lt;h1&gt;Hola, mundo&lt;/h1&gt;</code>."],
+ tests:[
+  {d:"Hay un <code>&lt;h1&gt;</code> en la página", t:function(c){return !!c.q("h1")}},
+  {d:"El <code>&lt;h1&gt;</code> dice “Hola, mundo”", t:function(c){return /hola,?\s*mundo/i.test(c.txt("h1"))}},
+  {d:"Hay un <code>&lt;h2&gt;</code> con texto", t:function(c){return c.txt("h2").trim().length>0}}
+ ]},
+{id:"h2", lvl:"html", title:"Párrafos y énfasis", mins:4,
+ theory:"<p>Para escribir bloques de texto normal, usamos la etiqueta <code>&lt;p&gt;</code> (párrafo). Dentro de un párrafo, a menudo queremos destacar ciertas palabras.</p><ul><li><code>&lt;strong&gt;</code> se usa para indicar que un texto es muy importante (los navegadores lo muestran en <b>negrita</b> por defecto).</li><li><code>&lt;em&gt;</code> se usa para dar énfasis especial a una palabra (se muestra en <i>cursiva</i>).</li></ul><p>Cuando ponemos una etiqueta dentro de otra (como <code>&lt;strong&gt;</code> dentro de <code>&lt;p&gt;</code>), decimos que están <b>anidadas</b>. La regla de oro es: la etiqueta que se abre última, debe cerrarse primera.</p>",
+ example:"<p>Aprender HTML es <strong>muy útil</strong> y <em>divertido</em>.</p>",
+ task:"<p>Crea <b>dos párrafos</b> (<code>&lt;p&gt;</code>). En uno de ellos incluye una palabra dentro de <code>&lt;strong&gt;</code> y en el otro incluye una palabra dentro de <code>&lt;em&gt;</code>.</p>",
+ starter:"<h1>Mi diario de código</h1>\n\n",
+ solution:"<h1>Mi diario de código</h1>\n\n<p>Hoy empecé a aprender <strong>desarrollo web</strong>.</p>\n<p>Mi meta es <em>vivir de esto</em> algún día.</p>",
+ hints:["Cada párrafo completo se envuelve en <code>&lt;p&gt;...&lt;/p&gt;</code>.","Para destacar una palabra: <code>&lt;p&gt;Esto es &lt;strong&gt;clave&lt;/strong&gt; para aprender.&lt;/p&gt;</code>."],
+ tests:[
+  {d:"Hay al menos 2 párrafos <code>&lt;p&gt;</code>", t:function(c){return c.all("p").length>=2}},
+  {d:"Usas <code>&lt;strong&gt;</code> dentro de un párrafo", t:function(c){return !!c.q("p strong")}},
+  {d:"Usas <code>&lt;em&gt;</code> dentro de un párrafo", t:function(c){return !!c.q("p em")}}
+ ]},
+{id:"h3", lvl:"html", title:"Enlaces y Atributos", mins:5,
+ theory:"<p>La web no sería una red sin enlaces. Se crean con la etiqueta <code>&lt;a&gt;</code> (de *anchor* o ancla). Pero la etiqueta sola no hace nada, necesita <b>atributos</b>.</p><p>Los atributos dan información extra a la etiqueta y siempre van en la etiqueta de apertura con el formato <code>nombre=\"valor\"</code>.</p><ul><li><code>href</code>: Es obligatorio en un enlace. Indica la URL (dirección) a la que te llevará.</li><li><code>target=\"_blank\"</code>: Es opcional, pero muy útil. Hace que el enlace se abra en una pestaña nueva, para no sacar al usuario de tu página.</li></ul>",
+ example:"<a href=\"https://developer.mozilla.org\" target=\"_blank\">Documentación de MDN</a>",
+ task:"<p>Crea un enlace (<code>&lt;a&gt;</code>) hacia <code>https://www.freecodecamp.org</code>. El texto visible debe ser <b>Practicar en freeCodeCamp</b> y debe abrirse en una pestaña nueva.</p>",
+ starter:"<h1>Mis recursos favoritos</h1>\n<p>Aquí guardo sitios para aprender.</p>\n\n",
+ solution:"<h1>Mis recursos favoritos</h1>\n<p>Aquí guardo sitios para aprender.</p>\n\n<a href=\"https://www.freecodecamp.org\" target=\"_blank\">Practicar en freeCodeCamp</a>",
+ hints:["La estructura básica es <code>&lt;a href=\"URL\"&gt;texto visible&lt;/a&gt;</code>.","Añade el atributo <code>target=\"_blank\"</code> dentro de la misma etiqueta de apertura, separado por un espacio del `href`."],
+ tests:[
+  {d:"Hay un enlace <code>&lt;a&gt;</code>", t:function(c){return !!c.q("a")}},
+  {d:"El <code>href</code> apunta a freecodecamp.org", t:function(c){var a=c.q("a");return !!a&&/freecodecamp\.org/.test(a.getAttribute("href")||"")}},
+  {d:"Tiene <code>target=\"_blank\"</code>", t:function(c){var a=c.q("a");return !!a&&a.getAttribute("target")==="_blank"}},
+  {d:"El texto del enlace no está vacío", t:function(c){return c.txt("a").trim().length>0}}
+ ]},
+{id:"h4", lvl:"html", title:"Imágenes y Accesibilidad", mins:5,
+ theory:"<p>Para mostrar imágenes usamos la etiqueta <code>&lt;img&gt;</code>. Esta etiqueta es especial porque <b>es de cierre automático</b> (no tiene `</img\>`). Requiere dos atributos vitales:</p><ul><li><code>src</code> (source): la ruta del archivo de imagen o su URL en internet.</li><li><code>alt</code> (alternative text): una descripción de la imagen. <b>¡Esto es crucial!</b> Se muestra si la imagen no carga y es lo que leen los lectores de pantalla para personas con discapacidad visual.</li></ul><p>También puedes ajustar su tamaño inicial con <code>width</code> (ancho).</p>",
+ example:"<img src=\"cafe.jpg\" alt=\"Taza de café humeante sobre una mesa de madera\" width=\"300\">",
+ task:"<p>Agrega una imagen usando la etiqueta <code>&lt;img&gt;</code>. Ponle <code>src=\"foto-perfil.jpg\"</code>, escribe un atributo <code>alt</code> descriptivo (de al menos 5 letras) y ponle un ancho de <code>width=\"200\"</code>.</p><p><i>Nota: Como no hemos subido esa foto, verás el icono de imagen rota y tu texto alternativo. ¡Para eso sirve el alt!</i></p>",
+ starter:"<h1>Sobre mí</h1>\n\n",
+ solution:"<h1>Sobre mí</h1>\n\n<img src=\"foto-perfil.jpg\" alt=\"Foto de perfil sonriendo con fondo azul\" width=\"200\">",
+ hints:["Recuerda, <code>&lt;img&gt;</code> no se cierra con otra etiqueta. Todo va dentro de los primeros corchetes angulares.","Pon los atributos separados por un espacio: <code>&lt;img src=\"...\" alt=\"...\" width=\"...\"&gt;</code>."],
+ tests:[
+  {d:"Hay una imagen <code>&lt;img&gt;</code>", t:function(c){return !!c.q("img")}},
+  {d:"El <code>src</code> es foto-perfil.jpg", t:function(c){var i=c.q("img");return !!i&&(i.getAttribute("src")||"").trim()==="foto-perfil.jpg"}},
+  {d:"Tiene un <code>alt</code> descriptivo (más de 5 caracteres)", t:function(c){var i=c.q("img");return !!i&&(i.getAttribute("alt")||"").trim().length>5}},
+  {d:"Tiene <code>width=\"200\"</code>", t:function(c){var i=c.q("img");return !!i&&i.getAttribute("width")==="200"}}
+ ]},
+{id:"h5", lvl:"html", title:"Listas (ul, ol, li)", mins:5,
+ theory:"<p>Las listas son excelentes para estructurar información. HTML tiene dos tipos principales:</p><ul><li><code>&lt;ul&gt;</code> (Unordered List): Crea una lista con viñetas (puntos). Útil cuando el orden no importa, como una lista de compras.</li><li><code>&lt;ol&gt;</code> (Ordered List): Crea una lista numerada. Perfecta para instrucciones paso a paso.</li></ul><p>Dentro de cualquiera de las dos, cada elemento individual de la lista debe ir encerrado en su propia etiqueta <code>&lt;li&gt;</code> (List Item).</p>",
+ example:"<h3>Mis frutas favoritas</h3>\n<ul>\n  <li>Manzana</li>\n  <li>Mango</li>\n</ul>\n\n<h3>Pasos para estudiar</h3>\n<ol>\n  <li>Leer la teoría</li>\n  <li>Hacer el ejercicio</li>\n</ol>",
+ task:"<p>Crea una lista desordenada (<code>&lt;ul&gt;</code>) con <b>3 ingredientes</b> para hacer una arepa. Luego, crea una lista ordenada (<code>&lt;ol&gt;</code>) con <b>al menos 3 pasos</b> de preparación.</p>",
+ starter:"<h1>Receta: arepa con queso</h1>\n\n<h2>Ingredientes</h2>\n\n\n<h2>Preparación</h2>\n\n",
+ solution:"<h1>Receta: arepa con queso</h1>\n\n<h2>Ingredientes</h2>\n<ul>\n  <li>Harina de maíz pre-cocida</li>\n  <li>Agua tibia y un poco de sal</li>\n  <li>Queso mozzarella rallado</li>\n</ul>\n\n<h2>Preparación</h2>\n<ol>\n  <li>Mezclar la harina con el agua y la sal hasta formar una masa suave.</li>\n  <li>Formar bolitas y aplanarlas para darles forma de arepa.</li>\n  <li>Asarlas en un sartén caliente, abrir por la mitad y rellenar con queso.</li>\n</ol>",
+ hints:["Primero abre la etiqueta principal (<code>&lt;ul&gt;</code> o <code>&lt;ol&gt;</code>). Luego, pon cada elemento dentro de un <code>&lt;li&gt;</code>...<code>&lt;/li&gt;</code>. Al final cierra la principal.","Revisa que cada <code>&lt;li&gt;</code> esté correctamente cerrado antes de abrir el siguiente."],
+ tests:[
+  {d:"Hay una <code>&lt;ul&gt;</code> con 3 o más <code>&lt;li&gt;</code> dentro", t:function(c){return c.all("ul > li").length>=3}},
+  {d:"Hay una <code>&lt;ol&gt;</code> con 3 o más <code>&lt;li&gt;</code> dentro", t:function(c){return c.all("ol > li").length>=3}}
+ ]},
+{id:"h6", lvl:"html", title:"Estructura Semántica", mins:6,
+ theory:"<p>En los inicios de la web, se usaba la etiqueta genérica <code>&lt;div&gt;</code> para separar todo. Hoy, usamos <b>etiquetas semánticas</b>. No cambian cómo se ve la página por defecto, pero explican la función de cada sección a los navegadores, buscadores (Google) y lectores de pantalla.</p><ul><li><code>&lt;header&gt;</code>: La cabecera (suele contener el logo o título principal).</li><li><code>&lt;nav&gt;</code>: Contiene los enlaces de navegación principales del sitio.</li><li><code>&lt;main&gt;</code>: El contenido principal y único de esa página.</li><li><code>&lt;footer&gt;</code>: El pie de página (copyright, enlaces legales).</li></ul><p>Escribir HTML semántico es el sello de un desarrollador profesional.</p>",
+ example:"<header>\n  <h1>Nombre del Sitio</h1>\n  <nav>\n    <a href=\"#\">Inicio</a>\n    <a href=\"#\">Contacto</a>\n  </nav>\n</header>\n<main>\n  <p>Aquí va el contenido importante.</p>\n</main>\n<footer>© 2026</footer>",
+ task:"<p>Estructura la página de la tienda. Envuelve el título y los enlaces en un <code>&lt;header&gt;</code> (y los enlaces dentro de un <code>&lt;nav&gt;</code>). Envuelve la sección de \"Café del Eje Cafetero\" en un <code>&lt;main&gt;</code>. Envuelve el copyright final en un <code>&lt;footer&gt;</code>.</p>",
+ starter:"<!-- Organiza este contenido usando etiquetas semánticas -->\n\n<h1>Café de Origen</h1>\n<a href=\"#\">Inicio</a>\n<a href=\"#\">Productos</a>\n\n<h2>Café del Eje Cafetero</h2>\n<p>Tostado artesanal, directo de la finca.</p>\n\n<p>© 2026 Café de Origen</p>\n",
+ solution:"<header>\n  <h1>Café de Origen</h1>\n  <nav>\n    <a href=\"#\">Inicio</a>\n    <a href=\"#\">Productos</a>\n  </nav>\n</header>\n\n<main>\n  <h2>Café del Eje Cafetero</h2>\n  <p>Tostado artesanal, directo de la finca.</p>\n</main>\n\n<footer>\n  <p>© 2026 Café de Origen</p>\n</footer>",
+ hints:["El <code>&lt;nav&gt;</code> va anidado dentro del <code>&lt;header&gt;</code>.","Asegúrate de cerrar <code>&lt;/header&gt;</code> antes de abrir <code>&lt;main&gt;</code>."],
+ tests:[
+  {d:"Existe un <code>&lt;header&gt;</code>", t:function(c){return !!c.q("header")}},
+  {d:"Existe un <code>&lt;nav&gt;</code> dentro del header con los 2 enlaces", t:function(c){return c.all("header nav a").length>=2}},
+  {d:"Existe un <code>&lt;main&gt;</code> que contiene el h2 y el párrafo", t:function(c){return c.all("main h2").length>=1 && c.all("main p").length>=1}},
+  {d:"Existe un <code>&lt;footer&gt;</code> con el texto de copyright", t:function(c){return !!c.q("footer") && /2026/.test(c.txt("footer"))}}
+ ]},
+{id:"h7", lvl:"html", title:"Formularios básicos", mins:7,
+ theory:"<p>Los formularios (<code>&lt;form&gt;</code>) permiten que el usuario envíe información (registros, búsquedas, comentarios). Sus componentes principales:</p><ul><li><code>&lt;input&gt;</code>: Es un campo de entrada. Es de cierre automático. El atributo <code>type</code> cambia su comportamiento: <code>text</code>, <code>email</code> (valida que tenga @), <code>password</code> (oculta caracteres).</li><li><code>&lt;label&gt;</code>: Es la etiqueta de texto para el campo. Se enlaza al input usando el atributo <code>for=\"id_del_input\"</code>. Esto hace que al tocar el texto, se active el campo (ideal para móviles).</li><li><code>required</code>: Es un atributo booleano (no necesita valor) que obliga al usuario a llenar el campo antes de enviar.</li></ul>",
+ example:"<form>\n  <label for=\"username\">Usuario:</label>\n  <input type=\"text\" id=\"username\" required>\n  <button type=\"submit\">Ingresar</button>\n</form>",
+ task:"<p>Crea un formulario de registro (dentro de <code>&lt;form&gt;</code>). Debe tener:</p><p>1. Un campo para el <b>Nombre</b> (<code>type=\"text\"</code>) con su respectivo <code>&lt;label&gt;</code> vinculado.<br>2. Un campo para el <b>Correo</b> (<code>type=\"email\"</code> y atributo <code>required</code>) con su <code>&lt;label&gt;</code> vinculado.<br>3. Un botón para enviar el formulario.</p>",
+ starter:"<h1>Únete al curso</h1>\n\n<!-- Empieza tu formulario aquí -->\n",
+ solution:"<h1>Únete al curso</h1>\n\n<form>\n  <label for=\"nombre_usuario\">Nombre completo:</label>\n  <input type=\"text\" id=\"nombre_usuario\">\n\n  <label for=\"correo_electronico\">Correo electrónico:</label>\n  <input type=\"email\" id=\"correo_electronico\" required>\n\n  <button type=\"submit\">Registrarme</button>\n</form>",
+ hints:["Recuerda crear un <code>id=\"algo\"</code> en el input y usar ese mismo 'algo' en el <code>for=\"algo\"</code> del label.","El atributo <code>required</code> se pone simplemente así al final de la etiqueta input: <code>... id=\"correo\" required&gt;</code>."],
+ tests:[
+  {d:"Existe un <code>&lt;form&gt;</code> envolviendo los elementos", t:function(c){return !!c.q("form")}},
+  {d:"Existe un input de texto para el nombre", t:function(c){return !!c.q("form input[type=text]")}},
+  {d:"Existe un input de tipo email y es requerido", t:function(c){return !!c.q("form input[type=email][required]")}},
+  {d:"Los inputs tienen labels vinculados correctamente (coincide for e id)", t:function(c){var ins=c.all("form input");if(!ins.length)return false;return ins.every(function(i){return i.id&&c.q('label[for="'+i.id+'"]')})}},
+  {d:"Hay un botón de envío", t:function(c){return !!c.q("form button")}}
+ ]},
+{id:"h8_eval", lvl:"html", title:"Resumen y Examen HTML", mins:10,
+ theory:"<p><b>¡Felicidades por completar el nivel de HTML!</b> Vamos a repasar los conceptos clave:</p><ul><li><b>Estructura base:</b> Toda página usa etiquetas para definir su contenido. Los títulos van de <code>h1</code> a <code>h6</code>, los párrafos en <code>p</code>.</li><li><b>Atributos:</b> Dan información extra. Recuerda <code>href</code> en enlaces (<code>&lt;a&gt;</code>) y <code>src</code>/<code>alt</code> en imágenes (<code>&lt;img&gt;</code>).</li><li><b>Semántica:</b> Usar <code>header</code>, <code>nav</code>, <code>main</code> y <code>footer</code> en lugar de puros divs ayuda a la accesibilidad y al SEO.</li><li><b>Formularios:</b> Permiten interacción. La pareja <code>label</code> + <code>input</code> (vinculados por <code>for</code> e <code>id</code>) es fundamental.</li></ul><p><b>Examen Práctico:</b> Es hora de demostrar lo aprendido construyendo la estructura base de un artículo de blog sin mirar las lecciones anteriores.</p>",
+ example:"<!-- Recuerda la estructura semántica básica -->\n<header>...</header>\n<main>...</main>",
+ task:"<p>Crea la estructura de un artículo de blog. Debes incluir:</p><p>1. Un <code>&lt;header&gt;</code> con el título del blog (en un <code>h1</code>) y un enlace a \"Inicio\".<br>2. Un <code>&lt;main&gt;</code> que contenga: el título del artículo (en un <code>h2</code>), una imagen (usa cualquier src, pero pon un alt descriptivo) y dos párrafos (uno de ellos con una frase en negrita usando <code>strong</code>).<br>3. Una lista desordenada (<code>ul</code>) dentro del main con 2 'tags' del artículo (ej. Desarrollo, Frontend).<br>4. Un <code>&lt;footer&gt;</code> con un texto de copyright.</p>",
+ starter:"<!-- Construye aquí la estructura de tu artículo de blog -->\n\n",
+ solution:"<header>\n  <h1>Blog del Programador</h1>\n  <a href=\"#\">Inicio</a>\n</header>\n\n<main>\n  <h2>Cómo dominar HTML en una tarde</h2>\n  <img src=\"banner.png\" alt=\"Persona tecleando código HTML en su laptop\">\n  <p>HTML es un <strong>lenguaje de marcado</strong> fundamental para la web.</p>\n  <p>Con práctica constante, puedes aprender lo básico muy rápido.</p>\n  <ul>\n    <li>HTML5</li>\n    <li>Web Dev</li>\n  </ul>\n</main>\n\n<footer>\n  <p>© 2026 BlogDev</p>\n</footer>",
+ hints:["Ve paso a paso. Primero arma el esqueleto semántico (header, main, footer).","Luego, rellena cada sección. En el main, recuerda la etiqueta de imagen que no se cierra y cómo hacer texto en negrita.","Verifica que la lista desordenada use <code>ul</code> y <code>li</code>."],
+ tests:[
+  {d:"Existe la estructura semántica correcta (header, main, footer)", t:function(c){return !!c.q("header") && !!c.q("main") && !!c.q("footer")}},
+  {d:"El header tiene un h1 y un enlace", t:function(c){return !!c.q("header h1") && !!c.q("header a")}},
+  {d:"El main tiene un h2, una imagen con alt y al menos dos párrafos", t:function(c){return !!c.q("main h2") && !!c.q("main img[alt]") && c.all("main p").length >= 2}},
+  {d:"Hay texto en negrita (strong) dentro de un párrafo en el main", t:function(c){return !!c.q("main p strong")}},
+  {d:"El main incluye una lista desordenada con 2 ítems", t:function(c){return c.all("main ul li").length >= 2}}
+ ]},
+
+/* ===================== CSS ===================== */
+{id:"c1", lvl:"css", title:"Selectores, color y tipografía", mins:5,
+ theory:"<p>Mientras HTML es el esqueleto, CSS (Cascading Style Sheets) es la ropa y el maquillaje. Escribimos CSS dentro de la etiqueta <code>&lt;style&gt;</code> (que normalmente va en el <code>&lt;head&gt;</code> del documento, aunque aquí lo escribiremos directo).</p><p>Una regla CSS tiene dos partes:</p><ul><li><b>El selector:</b> indica a qué elementos de HTML afectar (ej. <code>h1</code> afecta a todos los h1).</li><li><b>Las declaraciones:</b> van entre llaves <code>{}</code> y definen los estilos con el formato <code>propiedad: valor;</code> (no olvides el punto y coma al final).</li></ul>",
+ example:"<style>\n  h1 {\n    color: #0f766e; /* Color del texto (hexadecimal) */\n    font-family: Arial, sans-serif; /* Tipo de letra */\n  }\n  body {\n    background-color: #f8fafc; /* Color de fondo */\n  }\n</style>",
+ task:"<p>Dentro de <code>&lt;style&gt;</code>, crea reglas para:</p><p>1. Cambiar el <b>color del <code>h1</code></b> a tu gusto.<br>2. Cambiar el <b>color de fondo (background-color) del <code>body</code></b>.<br>3. Cambiar la tipografía (<code>font-family</code>) de los párrafos (<code>p</code>) a 'sans-serif'.</p>",
+ starter:"<style>\n  /* Escribe tus reglas CSS aquí abajo */\n\n</style>\n\n<h1>Panadería La Espiga</h1>\n<p>Pan fresco todas las mañanas. Recetas tradicionales.</p>",
+ solution:"<style>\n  body {\n    background-color: #fff7ed;\n  }\n  h1 {\n    color: #b45309;\n  }\n  p {\n    font-family: sans-serif;\n  }\n</style>\n\n<h1>Panadería La Espiga</h1>\n<p>Pan fresco todas las mañanas. Recetas tradicionales.</p>",
+ hints:["Recuerda la sintaxis: <code>selector { propiedad: valor; }</code>","Para la tipografía del párrafo el selector es simplemente <code>p</code> y la propiedad <code>font-family: sans-serif;</code>."],
+ tests:[
+  {d:"El <code>h1</code> tiene un color distinto al negro por defecto", t:function(c){var h=c.q("h1");return !!h&&c.cs(h).color!=="rgb(0, 0, 0)"}},
+  {d:"El <code>body</code> tiene un color de fondo definido", t:function(c){var b=c.cs(c.doc.body).backgroundColor;return b!=="rgba(0, 0, 0, 0)"&&b!=="transparent"}},
+  {d:"El párrafo usa tipografía sans-serif", t:function(c){var p=c.q("p"); return !!p&&c.cs(p).fontFamily.toLowerCase().indexOf("sans-serif")>-1}}
+ ]},
+{id:"c2", lvl:"css", title:"Clases vs Etiquetas", mins:5,
+ theory:"<p>Usar el selector de etiqueta (como <code>p { color: red; }</code>) cambiará TODOS los párrafos de tu página. ¿Qué pasa si solo quieres cambiar algunos?</p><p>Usamos las <b>clases</b>. En el HTML, le agregas el atributo <code>class=\"nombre_clase\"</code> al elemento. En el CSS, seleccionas esa clase poniéndole un <b>punto por delante</b> (<code>.nombre_clase</code>).</p><p>Una clase se puede reutilizar en muchos elementos diferentes (un título y un párrafo pueden tener la misma clase).</p>",
+ example:"<style>\n  .alerta {\n    color: white;\n    background-color: red;\n    padding: 10px;\n  }\n</style>\n\n<p>Mensaje normal</p>\n<p class=\"alerta\">¡Cuidado, error en el sistema!</p>",
+ task:"<p>Crea una clase CSS llamada <code>.destacado</code>. Dale un <b>color de fondo</b> (background-color) y haz que el texto esté en negrita usando <code>font-weight: bold;</code>.</p><p>Luego, aplica esa clase en el HTML a <b>al menos dos</b> elementos de la lista del menú del día (usa el atributo class).</p>",
+ starter:"<style>\n  /* Define tu clase aquí */\n\n</style>\n\n<h1>Menú del día</h1>\n<ul>\n  <li>Bandeja paisa</li>\n  <li>Ajiaco</li>\n  <li>Sancocho de gallina</li>\n  <li>Mojarra frita</li>\n</ul>",
+ solution:"<style>\n  .destacado {\n    background-color: #fef3c7;\n    font-weight: bold;\n  }\n</style>\n\n<h1>Menú del día</h1>\n<ul>\n  <li class=\"destacado\">Bandeja paisa</li>\n  <li class=\"destacado\">Ajiaco</li>\n  <li>Sancocho de gallina</li>\n  <li>Mojarra frita</li>\n</ul>",
+ hints:["En el bloque <code>&lt;style&gt;</code>, el selector debe empezar con un punto: <code>.destacado { ... }</code>.","En el HTML, agrega <code>class=\"destacado\"</code> dentro de la etiqueta de apertura de los <code>&lt;li&gt;</code> que elijas."],
+ tests:[
+  {d:"Al menos 2 elementos en el HTML tienen la clase <code>destacado</code>", t:function(c){return c.all(".destacado").length>=2}},
+  {d:"La clase CSS <code>.destacado</code> define un color de fondo", t:function(c){var e=c.q(".destacado");if(!e)return false;var b=c.cs(e).backgroundColor;return b!=="rgba(0, 0, 0, 0)"&&b!=="transparent"}},
+  {d:"La clase CSS <code>.destacado</code> hace el texto negrita", t:function(c){var e=c.q(".destacado");return !!e&&parseInt(c.cs(e).fontWeight,10)>=600}}
+ ]},
+{id:"c3", lvl:"css", title:"El modelo de caja (Box Model)", mins:7,
+ theory:"<p>Este es el concepto más importante en diseño web. En CSS, <b>TODO elemento es una caja rectangular</b>, compuesta de cuatro capas (de adentro hacia afuera):</p><ol><li><b>Content:</b> El área donde está el texto o la imagen.</li><li><b>Padding (Relleno):</b> Espacio transparente *dentro* de la caja, entre el contenido y el borde.</li><li><b>Border (Borde):</b> Una línea que rodea la caja.</li><li><b>Margin (Margen):</b> Espacio transparente *fuera* de la caja, que la separa de otros elementos.</li></ol><p>Propiedades extra útiles: <code>border-radius</code> redondea las esquinas del borde.</p>",
+ example:".tarjeta {\n  padding: 20px; /* Respira por dentro */\n  border: 2px solid #ccc; /* Grosor, estilo, color */\n  border-radius: 12px; /* Esquinas suaves */\n  margin-bottom: 16px; /* Separa hacia abajo */\n}",
+ task:"<p>Vamos a darle estilo a la clase <code>.tarjeta</code>. Añade:</p><p>1. Un <code>padding</code> de 20px.<br>2. Un <code>border</code> sólido y visible (ej. 2px solid green).<br>3. Redondea las esquinas con <code>border-radius</code>.<br>4. Añade un <code>margin</code> exterior de 15px.</p>",
+ starter:"<style>\n  .tarjeta {\n    background-color: #f1f5f9;\n    /* Añade las propiedades del modelo de caja aquí */\n\n  }\n</style>\n\n<div class=\"tarjeta\">\n  <h2>Plan Básico</h2>\n  <p>$29.900 al mes</p>\n</div>\n<div class=\"tarjeta\">\n  <h2>Plan Pro</h2>\n  <p>$59.900 al mes</p>\n</div>",
+ solution:"<style>\n  .tarjeta {\n    background-color: #f1f5f9;\n    padding: 20px;\n    border: 2px solid #0f766e;\n    border-radius: 12px;\n    margin: 15px;\n  }\n</style>\n\n<div class=\"tarjeta\">\n  <h2>Plan Básico</h2>\n  <p>$29.900 al mes</p>\n</div>\n<div class=\"tarjeta\">\n  <h2>Plan Pro</h2>\n  <p>$59.900 al mes</p>\n</div>",
+ hints:["Asegúrate de que la propiedad border tenga los 3 valores: grosor, estilo (solid) y color. Ej: <code>border: 1px solid black;</code>.","El margen y el padding pueden llevar un solo valor (ej. <code>margin: 15px;</code>) que se aplica a los 4 lados (arriba, derecha, abajo, izquierda)."],
+ tests:[
+  {d:"Las tarjetas tienen un <code>padding</code> de 20px", t:function(c){var e=c.q(".tarjeta");return !!e&&c.cs(e).paddingTop==="20px"}},
+  {d:"Tienen un borde visible (grosor mayor a 0 y estilo distinto a none)", t:function(c){var e=c.q(".tarjeta");if(!e)return false;var s=c.cs(e);return parseFloat(s.borderTopWidth)>0&&s.borderTopStyle!=="none"}},
+  {d:"Tienen esquinas redondeadas (border-radius)", t:function(c){var e=c.q(".tarjeta");return !!e&&parseFloat(c.cs(e).borderTopLeftRadius)>0}},
+  {d:"Tienen un margen exterior", t:function(c){var e=c.q(".tarjeta");return !!e&&parseFloat(c.cs(e).marginTop)>0}}
+ ]},
+{id:"c4", lvl:"css", title:"Flexbox: Alineación perfecta", mins:7,
+ theory:"<p>Antes, alinear elementos uno al lado del otro era una pesadilla. Hoy usamos <b>Flexbox</b>. Es un sistema para organizar elementos en una fila o columna.</p><p>Se activa poniendo <code>display: flex;</code> al contenedor padre. Una vez activado, tienes superpoderes:</p><ul><li><code>justify-content</code>: Alinea los elementos en el eje principal (horizontal por defecto). Valores comunes: <code>center</code>, <code>space-between</code> (empuja elementos a los extremos), <code>flex-end</code>.</li><li><code>align-items</code>: Alinea los elementos en el eje secundario (vertical por defecto). Valor común: <code>center</code>.</li><li><code>gap</code>: Define el espacio exacto entre los elementos hijos, sin lidiar con márgenes raros.</li></ul>",
+ example:".contenedor-menu {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 12px;\n}",
+ task:"<p>Convierte la <code>.barra</code> de navegación en un contenedor Flexbox (<code>display: flex</code>). Haz que el logo quede a un extremo y los enlaces al otro usando <code>justify-content: space-between</code>. Céntralos verticalmente con <code>align-items: center</code> y añade un espacio entre ellos con <code>gap</code>.</p>",
+ starter:"<style>\n  .barra {\n    background: #1e293b;\n    color: white;\n    padding: 12px 20px;\n    /* Activa flexbox aquí */\n\n  }\n  .barra a { color: #94a3b8; text-decoration: none; }\n  .barra a:hover { color: white; }\n</style>\n\n<header class=\"barra\">\n  <strong>MiAppLogo</strong>\n  <nav>\n    <a href=\"#\">Inicio</a>\n    <a href=\"#\">Servicios</a>\n    <a href=\"#\">Contacto</a>\n  </nav>\n</header>",
+ solution:"<style>\n  .barra {\n    background: #1e293b;\n    color: white;\n    padding: 12px 20px;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    gap: 20px;\n  }\n  .barra a { color: #94a3b8; text-decoration: none; }\n  .barra a:hover { color: white; }\n</style>\n\n<header class=\"barra\">\n  <strong>MiAppLogo</strong>\n  <nav>\n    <a href=\"#\">Inicio</a>\n    <a href=\"#\">Servicios</a>\n    <a href=\"#\">Contacto</a>\n  </nav>\n</header>",
+ hints:["Las 4 propiedades nuevas (display, justify-content, align-items, gap) van dentro de la regla <code>.barra { ... }</code>.","Mira cómo la vista previa cambia instantáneamente de estar apilados uno sobre otro a estar alineados de lado a lado."],
+ tests:[
+  {d:"<code>.barra</code> usa <code>display: flex</code>", t:function(c){var e=c.q(".barra");return !!e&&c.cs(e).display==="flex"}},
+  {d:"Usa <code>justify-content: space-between</code> para separar logo de menú", t:function(c){var e=c.q(".barra");return !!e&&c.cs(e).justifyContent==="space-between"}},
+  {d:"Usa <code>align-items: center</code> para centrado vertical", t:function(c){var e=c.q(".barra");return !!e&&c.cs(e).alignItems==="center"}},
+  {d:"Tiene un <code>gap</code> definido", t:function(c){var e=c.q(".barra");return !!e&&parseFloat(c.cs(e).columnGap)>0}}
+ ]},
+{id:"c5", lvl:"css", title:"CSS Grid: Estructuras 2D", mins:7,
+ theory:"<p>Si Flexbox es para alinear en una sola dimensión (fila o columna), <b>CSS Grid</b> es para crear cuadrículas bidimensionales complejas (filas Y columnas al mismo tiempo). Es ideal para galerías de fotos o el esqueleto general de una página web.</p><p>Se activa con <code>display: grid;</code>. La magia ocurre definiendo columnas:</p><p><code>grid-template-columns: repeat(3, 1fr);</code></p><p>Esto significa: \"crea una cuadrícula que repita 3 columnas, donde cada una ocupe 1 <b>fr</b>acción (1fr) del espacio libre\". Igual que Flexbox, puedes usar <code>gap</code> para separar las celdas.</p>",
+ example:".galeria {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */\n  gap: 15px;\n}",
+ task:"<p>Convierte el contenedor <code>.galeria</code> en una cuadrícula (grid) que tenga <b>exactamente 3 columnas iguales</b> y un espacio (<code>gap</code>) de 10px entre las celdas.</p>",
+ starter:"<style>\n  .galeria div {\n    background: #99f6e4;\n    padding: 30px;\n    text-align: center;\n    font-weight: bold;\n    border-radius: 8px;\n  }\n  .galeria {\n    /* Define tu grid aquí */\n\n  }\n</style>\n\n<div class=\"galeria\">\n  <div>Foto 1</div><div>Foto 2</div><div>Foto 3</div>\n  <div>Foto 4</div><div>Foto 5</div><div>Foto 6</div>\n</div>",
+ solution:"<style>\n  .galeria div {\n    background: #99f6e4;\n    padding: 30px;\n    text-align: center;\n    font-weight: bold;\n    border-radius: 8px;\n  }\n  .galeria {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    gap: 10px;\n  }\n</style>\n\n<div class=\"galeria\">\n  <div>Foto 1</div><div>Foto 2</div><div>Foto 3</div>\n  <div>Foto 4</div><div>Foto 5</div><div>Foto 6</div>\n</div>",
+ hints:["No modifiques la regla <code>.galeria div</code>. Trabaja en la regla vacía <code>.galeria</code>.","Aplica <code>display: grid;</code> y luego define las columnas usando la función <code>repeat()</code> como se muestra en la teoría."],
+ tests:[
+  {d:"<code>.galeria</code> usa <code>display: grid</code>", t:function(c){var e=c.q(".galeria");return !!e&&c.cs(e).display==="grid"}},
+  {d:"Tiene exactamente 3 columnas configuradas", t:function(c){var e=c.q(".galeria");return !!e&&c.cs(e).gridTemplateColumns.trim().split(/\s+/).length===3}},
+  {d:"Tiene un <code>gap</code>", t:function(c){var e=c.q(".galeria");return !!e&&parseFloat(c.cs(e).rowGap)>0}}
+ ]},
+{id:"c6", lvl:"css", title:"Diseño Responsivo (Mobile First)", mins:8,
+ theory:"<p>El diseño web hoy debe funcionar tanto en un celular pequeñito como en un monitor gigante de escritorio. A esto se le llama diseño responsivo. La herramienta para lograrlo son las <b>Media Queries</b>.</p><p>Una Media Query envuelve reglas CSS y solo las aplica si se cumple una condición (generalmente el ancho de la pantalla).</p><pre><code>@media (max-width: 600px) {\n  /* Estas reglas solo se aplican si la pantalla es menor a 600px */\n  .contenedor { flex-direction: column; }\n}</code></pre><p><i>Consejo profesional (Mobile First):</i> Escribe primero el CSS normal pensando en móviles (una sola columna). Luego usa Media Queries con <code>min-width</code> para cambiar a varias columnas en pantallas más grandes. Para este ejercicio lo haremos al revés por simplicidad con <code>max-width</code>.</p>",
+ example:"@media (max-width: 600px) {\n  .galeria {\n    grid-template-columns: 1fr; /* Pasa de 3 columnas a 1 sola en móvil */\n  }\n}",
+ task:"<p>El diseño actual usa Grid para mostrar dos columnas (principal y barra lateral). Añade una <b>media query</b> para pantallas pequeñas (usando <code>max-width: 600px</code>). Dentro de esa media query, cambia la regla de <code>.columnas</code> para que en lugar de dos fracciones (<code>1fr 1fr</code>), use solo <b>una columna</b> (<code>1fr</code>), para que se apilen en dispositivos móviles.</p><p>Prueba el resultado achicando el ancho de tu navegador web.</p>",
+ starter:"<style>\n  .columnas {\n    display: grid;\n    grid-template-columns: 2fr 1fr; /* Principal más ancha, lateral más angosta */\n    gap: 16px;\n  }\n  .columnas div { background: #e2e8f0; padding: 20px; border-radius: 8px; }\n\n  /* Añade tu media query aquí abajo */\n\n</style>\n\n<div class=\"columnas\">\n  <div class=\"principal\">Contenido principal extenso del artículo...</div>\n  <div class=\"lateral\">Barra lateral con anuncios o enlaces</div>\n</div>",
+ solution:"<style>\n  .columnas {\n    display: grid;\n    grid-template-columns: 2fr 1fr;\n    gap: 16px;\n  }\n  .columnas div { background: #e2e8f0; padding: 20px; border-radius: 8px; }\n\n  @media (max-width: 600px) {\n    .columnas {\n      grid-template-columns: 1fr;\n    }\n  }\n</style>\n\n<div class=\"columnas\">\n  <div class=\"principal\">Contenido principal extenso del artículo...</div>\n  <div class=\"lateral\">Barra lateral con anuncios o enlaces</div>\n</div>",
+ hints:["La sintaxis es estricta: <code>@media (max-width: 600px) { ... }</code>. Y dentro de esas llaves, debes poner la regla CSS completa: <code>.columnas { grid-template-columns: 1fr; }</code>."],
+ tests:[
+  {d:"Existe una media query utilizando <code>max-width</code>", t:function(c){return c.rules().some(function(r){return r.media&&/max-width/.test(r.media.mediaText)})}},
+  {d:"La media query modifica el selector <code>.columnas</code>", t:function(c){return c.rules().some(function(r){return r.media&&Array.prototype.some.call(r.cssRules,function(x){return /\.columnas/.test(x.selectorText||"")})})}},
+  {d:"En pantalla pequeña (media query), se define una sola columna (1fr)", t:function(c){return c.rules().some(function(r){return r.media&&Array.prototype.some.call(r.cssRules,function(x){var v=x.style&&x.style.gridTemplateColumns||"";return /\.columnas/.test(x.selectorText||"")&&v.trim().split(/\s+/).length===1&&v.trim()!==""})})}}
+ ]},
+{id:"c7", lvl:"css", title:"Interacción: Hover y Transiciones", mins:6,
+ theory:"<p>CSS también maneja interacciones básicas usando <b>pseudo-clases</b>, que representan el estado de un elemento. La más usada es <code>:hover</code>, que aplica estilos cuando el cursor del ratón pasa sobre el elemento.</p><p>Para que los cambios de estado no sean bruscos e instantáneos, usamos la propiedad <code>transition</code> en el estado base del elemento (no en el hover). Esto le dice al navegador que anime el cambio de propiedades.</p>",
+ example:".boton {\n  background-color: blue;\n  transition: background-color 0.3s ease; /* Anima el color de fondo en 0.3 segundos */\n}\n.boton:hover {\n  background-color: darkblue;\n}",
+ task:"<p>Dale vida al botón. Añade la propiedad <code>transition</code> a la regla base de <code>.boton</code> (para que anime el <code>background-color</code> y el <code>transform</code> en unos 0.3s).</p><p>Luego, crea una nueva regla con el selector <code>.boton:hover</code> que cambie el color de fondo a un tono más oscuro y aumente su tamaño ligeramente usando <code>transform: scale(1.05);</code>.</p>",
+ starter:"<style>\n  .boton {\n    background-color: #0f766e;\n    color: white;\n    border: none;\n    padding: 12px 24px;\n    border-radius: 8px;\n    cursor: pointer;\n    /* Añade la transición aquí */\n\n  }\n\n  /* Crea la regla :hover aquí */\n\n</style>\n\n<button class=\"boton\">Comprar ahora</button>",
+ solution:"<style>\n  .boton {\n    background-color: #0f766e;\n    color: white;\n    border: none;\n    padding: 12px 24px;\n    border-radius: 8px;\n    cursor: pointer;\n    transition: background-color 0.3s ease, transform 0.3s ease;\n  }\n\n  .boton:hover {\n    background-color: #115e59;\n    transform: scale(1.05);\n  }\n</style>\n\n<button class=\"boton\">Comprar ahora</button>",
+ hints:["En .boton agrega: <code>transition: all 0.3s ease;</code> (all anima cualquier propiedad que cambie).","La regla hover se escribe así: <code>.boton:hover { background-color: #nuevoColor; transform: scale(1.05); }</code>."],
+ tests:[
+  {d:"<code>.boton</code> tiene una transición definida", t:function(c){var b=c.q(".boton");return !!b&&c.cs(b).transitionDuration.split(",").some(function(d){return parseFloat(d)>0})}},
+  {d:"Existe la pseudo-clase <code>.boton:hover</code>", t:function(c){return c.rules().some(function(r){return /\.boton:hover/.test(r.selectorText||"")})}},
+  {d:"El hover modifica al menos el fondo o la transformación", t:function(c){return c.rules().some(function(r){return /\.boton:hover/.test(r.selectorText||"")&&(r.style.backgroundColor||r.style.background||r.style.transform)})}}
+ ]},
+{id:"c8_eval", lvl:"css", title:"Resumen y Examen CSS", mins:12,
+ theory:"<p><b>¡Impresionante! Has terminado el nivel de diseño con CSS.</b> Resumamos las piezas del rompecabezas:</p><ul><li><b>Selectores y Clases:</b> Aplicamos estilos apuntando a etiquetas (<code>h1</code>) o a clases reutilizables (<code>.mi-clase</code>).</li><li><b>Box Model:</b> Todo es una caja con <code>margin</code> (espacio exterior), <code>border</code> y <code>padding</code> (espacio interior).</li><li><b>Layout moderno:</b> Flexbox (<code>display: flex</code>) es ideal para alinear en una línea (menús). Grid (<code>display: grid</code>) es el rey para estructuras de filas y columnas.</li><li><b>Responsive Design:</b> Las Media Queries (<code>@media</code>) adaptan el diseño a los celulares modificando propiedades clave.</li></ul><p><b>Examen Práctico:</b> Construirás la clásica 'tarjeta de producto' (Card) usando clases, el modelo de caja y un contenedor Flexbox. ¡Todo desde cero!</p>",
+ example:"<!-- Recuerda la anatomía de una clase y flexbox -->\n<style>.contenedor { display: flex; gap: 10px; }</style>",
+ task:"<p>Crea el CSS para diseñar una tarjeta de producto atractiva:</p><p>1. Crea una clase <code>.tarjeta</code> que tenga: fondo blanco, un borde sutil (ej. 1px solid #ddd), bordes redondeados (border-radius), un <code>padding</code> interior y un ancho máximo (<code>max-width: 300px;</code>).<br>2. Haz que la clase <code>.tarjeta</code> tenga una transición y que, en su estado <code>:hover</code>, se eleve ligeramente (<code>transform: translateY(-5px);</code>).<br>3. Crea una clase <code>.etiquetas</code> para el contenedor que agrupa las categorías del producto. Usa <b>Flexbox</b> para alinearlas, con un pequeño <code>gap</code>.<br>4. Crea una clase <code>.tag</code> para dar estilo a los elementos dentro de las etiquetas (fondo de color, texto pequeño, padding pequeño, bordes muy redondeados).</p>",
+ starter:"<style>\n  body { background-color: #f0fdf4; font-family: sans-serif; padding: 2rem; }\n  /* Escribe las 4 reglas CSS que pide el ejercicio aquí abajo */\n\n</style>\n\n<!-- El HTML ya está listo, solo dale estilo -->\n<div class=\"tarjeta\">\n  <h2>Zapatillas Running X</h2>\n  <p>Ligeras y perfectas para maratones.</p>\n  <div class=\"etiquetas\">\n    <span class=\"tag\">Deporte</span>\n    <span class=\"tag\">Calzado</span>\n  </div>\n</div>",
+ solution:"<style>\n  body { background-color: #f0fdf4; font-family: sans-serif; padding: 2rem; }\n  \n  .tarjeta {\n    background-color: white;\n    border: 1px solid #e2e8f0;\n    border-radius: 12px;\n    padding: 24px;\n    max-width: 300px;\n    transition: transform 0.3s ease;\n  }\n  \n  .tarjeta:hover {\n    transform: translateY(-5px);\n  }\n  \n  .etiquetas {\n    display: flex;\n    gap: 8px;\n    margin-top: 16px;\n  }\n  \n  .tag {\n    background-color: #dcfce7;\n    color: #166534;\n    padding: 4px 12px;\n    border-radius: 99px;\n    font-size: 12px;\n    font-weight: bold;\n  }\n</style>\n\n<div class=\"tarjeta\">\n  <h2>Zapatillas Running X</h2>\n  <p>Ligeras y perfectas para maratones.</p>\n  <div class=\"etiquetas\">\n    <span class=\"tag\">Deporte</span>\n    <span class=\"tag\">Calzado</span>\n  </div>\n</div>",
+ hints:["No toques el HTML. Concéntrate en crear las 4 reglas en CSS: <code>.tarjeta</code>, <code>.tarjeta:hover</code>, <code>.etiquetas</code>, y <code>.tag</code>.","Para la clase .etiquetas recuerda <code>display: flex; gap: 8px;</code>."],
+ tests:[
+  {d:"La <code>.tarjeta</code> tiene padding, borde redondeado y transición", t:function(c){var t=c.q(".tarjeta"); if(!t)return false; var s=c.cs(t); return parseFloat(s.paddingTop)>0 && parseFloat(s.borderTopLeftRadius)>0 && parseFloat(s.transitionDuration.split(",")[0])>0}},
+  {d:"Existe la regla hover para la tarjeta que altera 'transform'", t:function(c){return c.rules().some(function(r){return /\.tarjeta:hover/.test(r.selectorText||"") && r.style.transform})}},
+  {d:"El contenedor <code>.etiquetas</code> usa Flexbox y gap", t:function(c){var e=c.q(".etiquetas"); return !!e && c.cs(e).display==="flex" && parseFloat(c.cs(e).columnGap)>0}},
+  {d:"Los span <code>.tag</code> tienen estilo (fondo y padding)", t:function(c){var t=c.q(".tag"); if(!t)return false; var s=c.cs(t); return s.backgroundColor!=="rgba(0, 0, 0, 0)" && parseFloat(s.paddingTop)>0}}
+ ]},
+
+/* ===================== JS ===================== */
+{id:"j1", lvl:"js", title:"Variables y la Consola", mins:5,
+ theory:"<p>¡Bienvenido al cerebro de la web! JavaScript es un lenguaje de programación real. HTML estructura, CSS diseña, JS <b>hace que las cosas sucedan</b>. El código JS se escribe dentro de una etiqueta <code>&lt;script&gt;</code>.</p><p>Para manejar datos usamos variables (piensa en ellas como cajas con nombres que guardan información):</p><ul><li><code>const</code>: Para valores constantes que NO van a cambiar nunca en la ejecución. (Usa esta por defecto siempre).</li><li><code>let</code>: Para variables cuyo valor sabes que cambiará más adelante (ej. un contador).</li></ul><p>Para ver qué está haciendo tu código, usamos <code>console.log()</code>. Esto imprime mensajes ocultos en la 'Consola' del navegador (una herramienta para desarrolladores). <b>¡Abre la pestaña 'Consola' al lado de 'Vista previa' para ver su resultado!</b></p>",
+ example:"const nombre = \"Ana\"; // Texto (string) entre comillas\nlet edad = 25;        // Números (number) sin comillas\nedad = edad + 1;      // Como usamos let, podemos reasignar su valor\nconsole.log(nombre, edad); // Imprime: Ana 26",
+ task:"<p>Crea una constante (<code>const</code>) llamada <code>curso</code> con el valor de texto <code>\"Ruta Web\"</code>. Luego, crea una variable (<code>let</code>) llamada <code>leccionActual</code> y asígnale el número <code>1</code>. Súmale 1 a esa variable. Finalmente, usa <code>console.log(curso, leccionActual)</code> para imprimir ambas.</p><p><i>Revisa el resultado en la pestaña Consola.</i></p>",
+ starter:"<script>\n  // Escribe tu código JavaScript aquí\n\n<\/script>",
+ solution:"<script>\n  const curso = \"Ruta Web\";\n  let leccionActual = 1;\n  leccionActual = leccionActual + 1;\n  console.log(curso, leccionActual);\n<\/script>",
+ hints:["Declara la constante así: <code>const curso = \"Ruta Web\";</code>","Actualiza la variable así: <code>leccionActual = leccionActual + 1;</code>","Imprime separando con coma: <code>console.log(curso, leccionActual);</code>"],
+ tests:[
+  {d:"Declaraste la constante <code>curso</code>", t:function(c){return c.ev("curso")==="Ruta Web" && /const\s+curso/.test(c.code)}},
+  {d:"Usaste <code>let</code> para <code>leccionActual</code>", t:function(c){return /let\s+leccionActual/.test(c.code)}},
+  {d:"<code>leccionActual</code> termina valiendo 2", t:function(c){return c.ev("leccionActual")===2}},
+  {d:"Muestras los valores en la consola", t:function(c){return c.logs.some(function(l){return l.type==="log"&&/Ruta Web/.test(l.text)})}}
+ ]},
+{id:"j2", lvl:"js", title:"Funciones (Bloques de acción)", mins:6,
+ theory:"<p>Una <b>función</b> agrupa varias líneas de código para realizar una tarea específica. Una vez definida, puedes 'llamarla' múltiples veces para reutilizar el código. Pueden recibir datos de entrada (parámetros) y devolver un resultado usando <code>return</code>.</p><p>En JavaScript moderno, usamos mucho las <b>funciones flecha</b> (Arrow Functions). Son más cortas de escribir. Si la función hace una sola operación, puedes omitir las llaves y la palabra `return`.</p>",
+ example:"// Función clásica\nfunction saludar(nombre) {\n  return \"Hola, \" + nombre;\n}\n\n// Función flecha (más compacta)\nconst doble = (numero) => {\n  return numero * 2;\n};\n\n// Función flecha en una sola línea (retorno implícito)\nconst triple = (n) => n * 3;",
+ task:"<p>Escribe una función clásica llamada <code>restar(a, b)</code> que devuelva la resta de ambos números. Luego, escribe una función flecha (arrow function) llamada <code>calcularDescuento</code> que reciba un precio y devuelva el 20% de ese precio (multiplicando por 0.20).</p>",
+ starter:"<script>\n  // Escribe las funciones aquí\n\n\n  // Aquí las probamos llamándolas:\n  console.log(restar(10, 4));\n  console.log(calcularDescuento(50000));\n<\/script>",
+ solution:"<script>\n  function restar(a, b) {\n    return a - b;\n  }\n\n  const calcularDescuento = (precio) => precio * 0.20;\n\n  console.log(restar(10, 4));\n  console.log(calcularDescuento(50000));\n<\/script>",
+ hints:["En la función clásica, no olvides usar la palabra reservada <code>return</code> para devolver el resultado de <code>a - b</code>.","Para la función flecha: <code>const calcularDescuento = (precio) =&gt; precio * 0.20;</code>"],
+ tests:[
+  {d:"La función <code>restar(10, 4)</code> devuelve 6", t:function(c){return c.ev("restar")(10,4)===6}},
+  {d:"La función <code>calcularDescuento(50000)</code> devuelve 10000", t:function(c){return Math.round(c.ev("calcularDescuento")(50000))===10000}},
+  {d:"Usaste sintaxis de función flecha (=>) para calcularDescuento", t:function(c){return /calcularDescuento\s*=\s*(\([^)]*\)|\w+)\s*=>/.test(c.code)}}
+ ]},
+{id:"j3", lvl:"js", title:"Condicionales (Decisiones)", mins:7,
+ theory:"<p>Los programas necesitan tomar caminos distintos según la situación. Para eso usamos <code>if</code> (si...) y <code>else</code> (si no...).</p><p>Para comparar valores usamos: <code>===</code> (estrictamente igual), <code>!==</code> (distinto), <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>.</p><p><i>Importante: En JS usa siempre <code>===</code> (tres iguales) en vez de <code>==</code>, ya que el triple igual comprueba que el valor y el tipo de dato sean idénticos, evitando errores ocultos.</i></p><p>Puedes evaluar múltiples escenarios encadenando <code>else if</code>.</p>",
+ example:"function evaluarClima(temp) {\n  if (temp > 30) {\n    return \"Hace mucho calor\";\n  } else if (temp >= 20) {\n    return \"Clima agradable\";\n  } else {\n    return \"Hace frío\";\n  }\n}",
+ task:"<p>Imagina un semáforo. Escribe una función <code>accionSemaforo(color)</code>. Debe evaluar el parámetro de texto color:</p><ul><li>Si es <code>\"verde\"</code> devolver <code>\"Avanzar\"</code>.</li><li>Si es <code>\"amarillo\"</code> devolver <code>\"Precaución\"</code>.</li><li>Si es <code>\"rojo\"</code> devolver <code>\"Detenerse\"</code>.</li><li>En cualquier otro caso (el <code>else</code> final), devolver <code>\"Color inválido\"</code>.</li></ul>",
+ starter:"<script>\n  function accionSemaforo(color) {\n    // Escribe tus if/else if/else aquí\n\n  }\n\n  console.log(accionSemaforo(\"verde\"));\n  console.log(accionSemaforo(\"rojo\"));\n  console.log(accionSemaforo(\"azul\"));\n<\/script>",
+ solution:"<script>\n  function accionSemaforo(color) {\n    if (color === \"verde\") {\n      return \"Avanzar\";\n    } else if (color === \"amarillo\") {\n      return \"Precaución\";\n    } else if (color === \"rojo\") {\n      return \"Detenerse\";\n    } else {\n      return \"Color inválido\";\n    }\n  }\n\n  console.log(accionSemaforo(\"verde\"));\n  console.log(accionSemaforo(\"rojo\"));\n  console.log(accionSemaforo(\"azul\"));\n<\/script>",
+ hints:["Comienza comparando si color es estrictamente igual a verde: <code>if (color === \"verde\") { return \"Avanzar\"; }</code>.","Cierra con un <code>else { ... }</code> para manejar casos extraños como 'azul'."],
+ tests:[
+  {d:"Retorna \"Avanzar\" para \"verde\"", t:function(c){return c.ev("accionSemaforo")("verde")==="Avanzar"}},
+  {d:"Retorna \"Detenerse\" para \"rojo\"", t:function(c){return c.ev("accionSemaforo")("rojo")==="Detenerse"}},
+  {d:"Retorna \"Color inválido\" para cualquier otro texto", t:function(c){return c.ev("accionSemaforo")("morado")==="Color inválido"}},
+  {d:"Usaste comparación estricta (===)", t:function(c){return /===/.test(c.code)}}
+ ]},
+{id:"j4", lvl:"js", title:"Arrays (Listas de datos)", mins:8,
+ theory:"<p>A menudo necesitamos manejar listas de datos, como los productos en un carrito. Para eso usamos <b>Arrays</b> (Arreglos), definidos entre corchetes <code>[]</code>.</p><p>Los arrays vienen con herramientas (métodos) incorporadas poderosísimas:</p><ul><li><code>.push(nuevoElemento)</code>: Añade un elemento al final de la lista.</li><li><code>.map(funcion)</code>: Recorre todo el array, aplica una función a cada elemento y crea un array nuevo modificado.</li><li><code>.filter(funcion)</code>: Recorre el array y crea uno nuevo quedándose solo con los elementos que pasen una prueba.</li></ul>",
+ example:"const numeros = [10, 20, 30];\n// map: multiplicar cada numero por 2\nconst dobles = numeros.map(num => num * 2); // [20, 40, 60]\n\n// filter: quedarse solo con los mayores a 15\nconst grandes = numeros.filter(num => num > 15); // [20, 30]",
+ task:"<p>Tienes un array constante <code>notas</code>. Escribe dos funciones:</p><p>1. <code>obtenerAprobadas(lista)</code>: Usa <code>.filter</code> para devolver un nuevo array solo con las notas que sean <b>mayores o iguales a 3.0</b>.<br>2. <code>agregarBono(lista)</code>: Usa <code>.map</code> para devolver un nuevo array sumando <b>0.5</b> a cada nota original.</p>",
+ starter:"<script>\n  const notas = [4.2, 2.5, 3.8, 1.9, 5.0];\n\n  function obtenerAprobadas(lista) {\n    // Usa .filter()\n  }\n\n  function agregarBono(lista) {\n    // Usa .map()\n  }\n\n  console.log(\"Aprobadas:\", obtenerAprobadas(notas));\n  console.log(\"Con bono:\", agregarBono(notas));\n<\/script>",
+ solution:"<script>\n  const notas = [4.2, 2.5, 3.8, 1.9, 5.0];\n\n  function obtenerAprobadas(lista) {\n    return lista.filter(nota => nota >= 3.0);\n  }\n\n  function agregarBono(lista) {\n    return lista.map(nota => nota + 0.5);\n  }\n\n  console.log(\"Aprobadas:\", obtenerAprobadas(notas));\n  console.log(\"Con bono:\", agregarBono(notas));\n<\/script>",
+ hints:["Dentro de las funciones, debes usar <code>return</code> antes del método de array.","Ejemplo filter: <code>return lista.filter(nota =&gt; nota &gt;= 3.0);</code>. Nota es simplemente el nombre temporal que le damos a cada elemento mientras se procesa."],
+ tests:[
+  {d:"<code>obtenerAprobadas</code> filtra correctamente (solo >= 3.0)", t:function(c){var r=c.ev("obtenerAprobadas")([4.2, 2.5, 3.8]); return JSON.stringify(r)==="[4.2,3.8]"}},
+  {d:"<code>agregarBono</code> suma 0.5 a cada nota", t:function(c){var r=c.ev("agregarBono")([1.5, 2.0]); return JSON.stringify(r)==="[2,2.5]"}},
+  {d:"Usaste los métodos de array en el código", t:function(c){return /\.filter\b/.test(c.code) && /\.map\b/.test(c.code)}}
+ ]},
+{id:"j5", lvl:"js", title:"Objetos (Entidades complejas)", mins:7,
+ theory:"<p>Mientras un array es una simple lista, un <b>Objeto</b> representa una entidad con múltiples propiedades descriptivas. Se define usando llaves <code>{}</code> y pares de <code>clave: valor</code>. Son el pilar para representar información del mundo real (usuarios, productos, posts).</p><p>Se accede a sus valores usando un punto: <code>objeto.propiedad</code>. Un objeto también puede contener funciones dentro de sí, llamadas <b>métodos</b>. Al ejecutarse, un método puede referirse a otras propiedades del mismo objeto usando la palabra clave especial <code>this</code>.</p>",
+ example:"const usuario = {\n  nombre: \"Carlos\",\n  rol: \"Admin\",\n  saludar() {\n    return \"Hola, soy \" + this.nombre + \" y soy \" + this.rol;\n  }\n};\nconsole.log(usuario.saludar());",
+ task:"<p>Crea un objeto llamado <code>producto</code> que tenga tres propiedades: <code>nombre</code> (texto, ej. \"Teclado Mecánico\"), <code>precio</code> (número, ej. 250000) y <code>stock</code> (número, cantidad disponible).</p><p>Añade un método llamado <code>comprar()</code>. En este método, si el <code>this.stock</code> es mayor a cero, devuelves \"Compra exitosa de [nombre]\". Si es cero, devuelves \"Sin stock\".</p>",
+ starter:"<script>\n  const producto = {\n    // Añade las propiedades y el método aquí\n\n  };\n\n  console.log(producto.nombre);\n  console.log(producto.comprar());\n<\/script>",
+ solution:"<script>\n  const producto = {\n    nombre: \"Teclado Mecánico\",\n    precio: 250000,\n    stock: 5,\n    comprar() {\n      if (this.stock > 0) {\n        return \"Compra exitosa de \" + this.nombre;\n      } else {\n        return \"Sin stock\";\n      }\n    }\n  };\n\n  console.log(producto.nombre);\n  console.log(producto.comprar());\n<\/script>",
+ hints:["Separa las propiedades simples con comas: <code>nombre: \"X\", precio: 10,</code>.","Dentro del método, debes acceder a las variables usando 'this': <code>if (this.stock &gt; 0) { ... }</code>."],
+ tests:[
+  {d:"El objeto tiene nombre (string) y precio (número)", t:function(c){var p=c.ev("producto"); return typeof p.nombre==="string" && typeof p.precio==="number"}},
+  {d:"El método <code>comprar()</code> existe y usa 'this'", t:function(c){var p=c.ev("producto"); return typeof p.comprar==="function" && /this\.stock/.test(c.code)}},
+  {d:"<code>comprar()</code> evalúa el stock correctamente", t:function(c){var p=c.ev("producto"); var tmp=p.stock; p.stock=1; var res1=p.comprar(); p.stock=0; var res2=p.comprar(); p.stock=tmp; return res1.indexOf("Compra")>-1 && res2.indexOf("Sin stock")>-1}}
+ ]},
+{id:"j6", lvl:"js", title:"Manipular el DOM", mins:8,
+ theory:"<p>Aquí es donde JS se conecta con HTML. El <b>DOM</b> (Document Object Model) es una representación en memoria de tu página web que JS puede leer y modificar. El objeto global maestro se llama <code>document</code>.</p><ul><li><b>Encontrar elementos:</b> <code>document.querySelector(\"selectorCSS\")</code> busca el primer elemento que coincida (ej. \"#miId\", \".mi-clase\", \"h1\").</li><li><b>Modificar elementos:</b> Una vez guardado el elemento en una constante, puedes cambiar su texto con <code>.textContent</code> o alterar sus clases con <code>.classList.add(\"clase\")</code>.</li></ul>",
+ example:"// Encontrar el botón y el título\nconst elTitulo = document.querySelector(\"#tituloPrincipal\");\n\n// Cambiar texto dinámicamente\nelTitulo.textContent = \"¡Texto cambiado por JS!\";\n// Añadir una clase CSS que ya exista en tus estilos\nelTitulo.classList.add(\"destacado\");",
+ task:"<p>El código HTML tiene un título, un párrafo y un botón, todos con IDs. Usa <code>document.querySelector</code> para atrapar el título (ID 'mensaje') y el párrafo (ID 'estado').</p><p>Inmediatamente, mediante JS, cambia el texto (textContent) del título a \"¡Misión Completada!\" y añade la clase CSS 'exito' al párrafo.</p>",
+ starter:"<style>\n  .exito { color: green; font-weight: bold; background: #eaffea; padding: 10px; }\n</style>\n\n<h1 id=\"mensaje\">Esperando órdenes...</h1>\n<p id=\"estado\">El sistema está inactivo.</p>\n<button id=\"boton_accion\">Ejecutar</button>\n\n<script>\n  // Atrapa los elementos y modifícalos directamente aquí\n\n<\/script>",
+ solution:"<style>\n  .exito { color: green; font-weight: bold; background: #eaffea; padding: 10px; }\n</style>\n\n<h1 id=\"mensaje\">Esperando órdenes...</h1>\n<p id=\"estado\">El sistema está inactivo.</p>\n<button id=\"boton_accion\">Ejecutar</button>\n\n<script>\n  const msj = document.querySelector(\"#mensaje\");\n  const est = document.querySelector(\"#estado\");\n\n  msj.textContent = \"¡Misión Completada!\";\n  est.classList.add(\"exito\");\n<\/script>",
+ hints:["Para atrapar por ID no olvides el símbolo # en el string: <code>document.querySelector(\"#mensaje\");</code>.","Usa <code>.textContent</code> para el texto y <code>.classList.add(\"exito\")</code> para inyectar el estilo."],
+ tests:[
+  {d:"Usaste <code>querySelector</code> para atrapar elementos", t:function(c){return /querySelector/.test(c.code)}},
+  {d:"El h1 (#mensaje) cambió su texto mediante JS", t:function(c){return c.txt("#mensaje")==="¡Misión Completada!"}},
+  {d:"El párrafo (#estado) adquirió la clase 'exito'", t:function(c){var p=c.q("#estado"); return p && p.classList.contains("exito")}}
+ ]},
+{id:"j7", lvl:"js", title:"Eventos (Reaccionar al usuario)", mins:9,
+ theory:"<p>Modificar el DOM de inmediato no es tan útil. Queremos reaccionar a las acciones del usuario: clics, teclado, scroll. A esto se le llaman <b>Eventos</b>.</p><p>Para 'escuchar' un evento, atrapamos un elemento del DOM y le agregamos un <i>Event Listener</i>: <code>elemento.addEventListener(\"nombreDelEvento\", funcionARealizar)</code>.</p><p>El evento más común es el <code>\"click\"</code> sobre botones.</p>",
+ example:"const boton = document.querySelector(\"#miBoton\");\nconst resultado = document.querySelector(\"#resultado\");\n\nboton.addEventListener(\"click\", () => {\n  // Este código SOLO se ejecuta cuando el usuario hace clic\n  resultado.textContent = \"¡Botón clickeado!\";\n});",
+ task:"<p>Vamos a hacer un interruptor de 'Modo Oscuro'. Tienes un botón con ID <code>toggleBtn</code> y el <code>body</code> de la página. Hemos creado una clase CSS llamada <code>.dark-mode</code> que oscurece todo.</p><p>Atrapa el botón y el <code>body</code>. Agrégale un listener de tipo 'click' al botón. Dentro de la función, usa el método especial <code>document.body.classList.toggle(\"dark-mode\")</code>. <i>(toggle hace magia: si la clase no está, la pone; si ya está, la quita).</i></p><p>Prueba a hacer clic en el botón en la Vista Previa.</p>",
+ starter:"<style>\n  body { transition: background 0.3s, color 0.3s; padding: 20px; }\n  .dark-mode { background-color: #1a202c; color: white; }\n  button { padding: 10px 15px; cursor: pointer; }\n</style>\n\n<h1>Configuración</h1>\n<button id=\"toggleBtn\">Cambiar Tema</button>\n\n<script>\n  // Atrapa el botón e implementa el event listener\n\n<\/script>",
+ solution:"<style>\n  body { transition: background 0.3s, color 0.3s; padding: 20px; }\n  .dark-mode { background-color: #1a202c; color: white; }\n  button { padding: 10px 15px; cursor: pointer; }\n</style>\n\n<h1>Configuración</h1>\n<button id=\"toggleBtn\">Cambiar Tema</button>\n\n<script>\n  const btn = document.querySelector(\"#toggleBtn\");\n  \n  btn.addEventListener(\"click\", () => {\n    document.body.classList.toggle(\"dark-mode\");\n  });\n<\/script>",
+ hints:["Atrapa el botón: <code>const btn = document.querySelector(\"#toggleBtn\");</code>.","El formato es: <code>btn.addEventListener(\"click\", () =&gt; { ...código adentro... });</code>.","Dentro pon exactamente: <code>document.body.classList.toggle(\"dark-mode\");</code> (body es tan importante que se puede acceder directamente sin querySelector)."],
+ tests:[
+  {d:"Usaste <code>addEventListener</code> en el código", t:function(c){return /addEventListener\s*\(\s*['"]click['"]/.test(c.code)}},
+  {d:"Hacer clic en el botón añade la clase 'dark-mode' al body", t:function(c){var b=c.q("#toggleBtn"); if(!b)return false; b.click(); return c.doc.body.classList.contains("dark-mode")}},
+  {d:"Hacer clic de nuevo remueve la clase", t:function(c){var b=c.q("#toggleBtn"); if(!b)return false; b.click(); var ok = !c.doc.body.classList.contains("dark-mode"); c.doc.body.classList.remove("dark-mode"); return ok;}}
+ ]},
+{id:"j8_eval", lvl:"js", title:"Resumen y Examen JavaScript", mins:15,
+ theory:"<p><b>¡Lo lograste! Tienes las bases de la programación con JS.</b> Hagamos memoria:</p><ul><li><b>Variables y Lógica:</b> Manejamos datos con <code>const/let</code>. Tomamos decisiones usando <code>if/else</code>. Reutilizamos tareas creando <b>funciones</b>.</li><li><b>Estructuras de datos:</b> Usamos <b>Arrays</b> para listas (herramientas: <code>.map</code>, <code>.filter</code>). Usamos <b>Objetos</b> para entidades descriptivas complejas.</li><li><b>DOM y Eventos:</b> Seleccionamos partes de la página con <code>querySelector</code> y reaccionamos a lo que hace el usuario gracias a <code>addEventListener</code>.</li></ul><p><b>Examen Práctico:</b> Construirás un pequeño calculador de propinas interactivo. Unirás lógica matemática con interacciones del DOM.</p>",
+ example:"<!-- Deberás leer valores de inputs con inputElement.value -->\nconst val = Number(input.value); // Convierte el texto del input a número",
+ task:"<p>Programa el calculador de propinas:</p><p>1. Atrapa los elementos del DOM: el input de la cuenta (<code>#cuenta</code>), el botón (<code>#calcular</code>) y el espacio de resultado (<code>#resultado</code>).<br>2. Añade un evento 'click' al botón.<br>3. Dentro del evento, lee el valor del input y conviértelo a número: <code>const total = Number(campoCuenta.value);</code>.<br>4. Lógica (condicional): Si el total es menor o igual a cero, muestra en el resultado \"Por favor ingresa un monto válido.\".<br>5. Si es válido, calcula la propina (10% del total) y modifica el textContent del resultado para mostrar: \"La propina sugerida es $X\" (reemplaza X con el valor calculado).</p>",
+ starter:"<label for=\"cuenta\">Total de la cuenta ($):</label>\n<input type=\"number\" id=\"cuenta\" placeholder=\"Ej. 50000\">\n<button id=\"calcular\">Calcular 10% Propina</button>\n\n<h2 id=\"resultado\">---</h2>\n\n<script>\n  // Implementa aquí la lógica del calculador\n\n<\/script>",
+ solution:"<label for=\"cuenta\">Total de la cuenta ($):</label>\n<input type=\"number\" id=\"cuenta\" placeholder=\"Ej. 50000\">\n<button id=\"calcular\">Calcular 10% Propina</button>\n\n<h2 id=\"resultado\">---</h2>\n\n<script>\n  const inputCuenta = document.querySelector(\"#cuenta\");\n  const btnCalcular = document.querySelector(\"#calcular\");\n  const textoResultado = document.querySelector(\"#resultado\");\n\n  btnCalcular.addEventListener(\"click\", () => {\n    const total = Number(inputCuenta.value);\n    \n    if (total <= 0) {\n      textoResultado.textContent = \"Por favor ingresa un monto válido.\";\n    } else {\n      const propina = total * 0.10;\n      textoResultado.textContent = \"La propina sugerida es $\" + propina;\n    }\n  });\n<\/script>",
+ hints:["Atrapa los tres elementos con querySelector usando sus IDs con '#'.","Usa if/else para validar. Recuerda convertir el valor del input a número con <code>Number(valor)</code>.","Para unir texto y variables usa el signo más: <code>\"Texto $\" + variable</code>."],
+ tests:[
+  {d:"Al hacer clic con cuenta en 0 (o vacío), muestra mensaje de error", t:function(c){var btn=c.q("#calcular"); var inpt=c.q("#cuenta"); inpt.value="0"; btn.click(); return c.txt("#resultado").indexOf("válido")>-1}},
+  {d:"Al ingresar 500 y calcular, muestra correctamente $50 de propina", t:function(c){var btn=c.q("#calcular"); var inpt=c.q("#cuenta"); inpt.value="500"; btn.click(); return c.txt("#resultado").indexOf("$50")>-1}}
+ ]},
+
+/* ===================== PRO ===================== */
+{id:"p1", lvl:"pro", title:"Renderizado de Listas", mins:10,
+ theory:"<p>Entramos a las grandes ligas. En el mundo real, rara vez escribes listas larguísimas a mano en HTML (imagina YouTube escribiendo miles de videos). Los datos llegan como Arrays de Objetos en JavaScript, y tu programa debe <b>construir el HTML dinámicamente</b>.</p><ul><li><code>document.createElement(\"etiqueta\")</code>: Crea un nuevo elemento en la memoria de JS, que aún no está en la pantalla.</li><li>Configuras ese elemento (su textContent, sus clases).</li><li><code>contenedorDOM.append(nuevoElemento)</code>: Finalmente, insertas el elemento recién configurado dentro de un contenedor que ya existe en la página HTML.</li></ul>",
+ example:"// Crear elementos dinámicos desde un array\nconst usuarios = [\"Ana\", \"Luis\"];\nconst contenedor = document.querySelector(\"#lista\");\n\n// Por cada elemento en el array, ejecutamos esta función\nusuarios.forEach(usuario => {\n  const nuevoLi = document.createElement(\"li\");\n  nuevoLi.textContent = usuario; // ej. \"Ana\"\n  contenedor.append(nuevoLi); // Lo pegamos al HTML\n});",
+ task:"<p>Tienes un array de objetos <code>productos</code> y un <code>&lt;ul id=\"catalogo\"&gt;</code> vacío. Usa el método de array <code>forEach</code> para recorrer la lista de productos.</p><p>Por cada producto, debes crear un elemento <code>&lt;li&gt;</code>, asignarle como texto su nombre y precio concatenados (ej: \"Café - $18000\"), y agregarlo al contenedor del catálogo usando <code>append()</code>.</p>",
+ starter:"<h1>Catálogo</h1>\n<ul id=\"catalogo\"></ul>\n\n<script>\n  const productos = [\n    { nombre: \"Café\", precio: 18000 },\n    { nombre: \"Panela\", precio: 4500 },\n    { nombre: \"Bocadillo\", precio: 6000 }\n  ];\n\n  // Selecciona el contenedor y escribe el bucle forEach aquí\n  \n<\/script>",
+ solution:"<h1>Catálogo</h1>\n<ul id=\"catalogo\"></ul>\n\n<script>\n  const productos = [\n    { nombre: \"Café\", precio: 18000 },\n    { nombre: \"Panela\", precio: 4500 },\n    { nombre: \"Bocadillo\", precio: 6000 }\n  ];\n\n  const catalogo = document.querySelector(\"#catalogo\");\n\n  productos.forEach(p => {\n    const li = document.createElement(\"li\");\n    li.textContent = p.nombre + \" - $\" + p.precio;\n    catalogo.append(li);\n  });\n<\/script>",
+ hints:["Para concatenar el texto correctamente puedes hacer: <code>li.textContent = productoEnTurno.nombre + \" - $\" + productoEnTurno.precio;</code>","No olvides hacer <code>catalogo.append(li);</code> al final de la función interna del forEach."],
+ tests:[
+  {d:"Hay exactamente 3 elementos <code>&lt;li&gt;</code> generados en #catalogo", t:function(c){return c.all("#catalogo li").length===3}},
+  {d:"El primer elemento dice correctamente “Café - $18000”", t:function(c){var li=c.q("#catalogo li");return !!li&&li.textContent.trim()==="Café - $18000"}},
+  {d:"Usaste <code>createElement</code> y <code>append</code> (o appendChild)", t:function(c){return /createElement/.test(c.code) && /append/.test(c.code)}}
+ ]},
+{id:"p2", lvl:"pro", title:"JSON (Comunicando aplicaciones)", mins:8,
+ theory:"<p>¿Cómo se pasan datos diferentes lenguajes (ej. un servidor en Python a una página en JS)? Usando texto plano formateado universalmente. El formato dominante absoluto de la web es <b>JSON (JavaScript Object Notation)</b>.</p><p>Visualmente es idéntico a un objeto o array de JavaScript, pero está todo <b>encerrado en un String gigante</b> y requiere que las claves vayan en comillas dobles.</p><ul><li><code>JSON.parse(stringJSON)</code>: Traduce el String de texto que llegó de internet y lo convierte en un Objeto/Array real de JS para que puedas trabajar con él.</li><li><code>JSON.stringify(objetoJS)</code>: Toma tus variables de JS y las aplasta en un String formateado para que puedas enviarlo por internet a otro sistema.</li></ul>",
+ example:"// Recibiendo datos de internet (llegan como string puro)\nconst textoAPI = '{\"ciudad\":\"Cali\", \"temp\":28}';\n\n// Convertimos el texto a objeto JS trabajable\nconst clima = JSON.parse(textoAPI);\nconsole.log(clima.ciudad); // Ahora sí podemos acceder a 'Cali'\n\n// Para enviar datos a guardar:\nconst aEnviar = JSON.stringify(clima);",
+ task:"<p>Practiquemos ambas conversiones. Escribe dos funciones simples:</p><p>1. <code>leerNombre(stringDeTexto)</code>: Recibe un string JSON, usa <code>JSON.parse()</code> para convertirlo en objeto, y devuelve únicamente el valor de su propiedad <code>nombre</code>.<br>2. <code>aTexto(objetoJS)</code>: Recibe un objeto normal de JavaScript y devuelve su versión en texto (String) usando <code>JSON.stringify()</code>.</p>",
+ starter:"<script>\n  function leerNombre(textoJson) {\n    // Completa aquí\n  }\n\n  function aTexto(objetoNormal) {\n    // Completa aquí\n  }\n\n  // Pruebas (míralas en la consola):\n  console.log(leerNombre('{\"nombre\":\"Valentina\",\"rol\":\"Diseñadora\"}'));\n  console.log(aTexto({ curso: \"Ruta Web\", nivel: 4 }));\n<\/script>",
+ solution:"<script>\n  function leerNombre(textoJson) {\n    const datosObjeto = JSON.parse(textoJson);\n    return datosObjeto.nombre;\n  }\n\n  function aTexto(objetoNormal) {\n    return JSON.stringify(objetoNormal);\n  }\n\n  console.log(leerNombre('{\"nombre\":\"Valentina\",\"rol\":\"Diseñadora\"}'));\n  console.log(aTexto({ curso: \"Ruta Web\", nivel: 4 }));\n<\/script>",
+ hints:["En <code>leerNombre</code> guarda el resultado del parseo en una constante y luego retorna la propiedad .nombre de esa constante.","En <code>aTexto</code> basta con una sola línea retornando el resultado del método de stringify."],
+ tests:[
+  {d:"<code>leerNombre</code> convierte y devuelve correctamente el nombre", t:function(c){return c.ev("leerNombre")('{"nombre":"Sofía","edad":30}')==="Sofía"}},
+  {d:"<code>aTexto</code> convierte el objeto a una cadena JSON válida", t:function(c){return c.ev("aTexto")({a:1,b:"x"})==='{"a":1,"b":"x"}'}}
+ ]},
+{id:"p3", lvl:"pro", title:"Asincronía (Promesas, async/await)", mins:10,
+ theory:"<p>Peticiones web (como buscar una película en Netflix) no ocurren de inmediato. Tardan milisegundos o segundos por la red. JavaScript normal ejecutaría la siguiente línea de código antes de que la respuesta llegara y fallaría.</p><p>Para tareas lentas, usamos herramientas de asincronía. La forma moderna es usar funciones <b>async</b> junto con la palabra clave <b>await</b>.</p><ul><li>Declarar una función como <code>async function...</code> permite usar superpoderes asíncronos en su interior.</li><li>La palabra <code>await</code> antes de una tarea lenta (como pedir datos a un servidor - fetch) le dice a JS: <i>\"Pausa la ejecución de esta función específicamente y espera hasta que el servidor conteste, luego sigue.\"</i></li></ul><p>Detrás de escena, esto se gestiona con objetos especiales llamados 'Promesas'.</p>",
+ example:"// Simulamos una tarea lenta (como una descarga)\nfunction simularRedLenta() {\n  return new Promise(resolver => setTimeout(resolver, 1500));\n}\n\n// Función asíncrona\nasync function cargarDatos() {\n  console.log(\"Descargando...\");\n  await simularRedLenta(); // Pausa la función 1.5 segundos\n  console.log(\"¡Descarga completa!\");\n}",
+ task:"<p>Te proveemos de una función <code>esperar(ms)</code> que crea un retardo real (devuelve una Promesa). Escribe una función asíncrona <code>async function obtenerPerfil()</code>.</p><p>Dentro de ella, utiliza <code>await</code> para pausar la ejecución llamando a <code>esperar(500)</code> (medio segundo). Después de esa espera, la función debe devolver un objeto simple: <code>{ usuario: \"dev_experto\", activo: true }</code>.</p>",
+ starter:"<script>\n  // NO modifiques esta función de retardo\n  function esperar(milisegundos) {\n    return new Promise(res => setTimeout(res, milisegundos));\n  }\n\n  // Escribe tu función asíncrona aquí:\n  \n\n  // Lo probamos (imprime una Promesa, y luego de 0.5s imprime el objeto):\n  obtenerPerfil().then(perfil => console.log(\"Llegó el perfil:\", perfil));\n<\/script>",
+ solution:"<script>\n  function esperar(milisegundos) {\n    return new Promise(res => setTimeout(res, milisegundos));\n  }\n\n  async function obtenerPerfil() {\n    await esperar(500);\n    return { usuario: \"dev_experto\", activo: true };\n  }\n\n  obtenerPerfil().then(perfil => console.log(\"Llegó el perfil:\", perfil));\n<\/script>",
+ hints:["Define la función declarando <code>async function obtenerPerfil() { ... }</code>.","Adentro, en la primera línea pon <code>await esperar(500);</code>. En la siguiente línea haz el return del objeto literal."],
+ tests:[
+  {d:"Creaste la función <code>obtenerPerfil</code> utilizando la palabra clave <code>async</code>", t:function(c){return /async\s+function\s+obtenerPerfil/.test(c.code)}},
+  {d:"Usaste <code>await</code> en el interior esperando el tiempo", t:function(c){return /await\s+esperar/.test(c.code)}},
+  {d:"La función efectivamente se demora (asincronía real probada)", t:function(c){var t0=Date.now();return c.ev("obtenerPerfil")().then(function(){return Date.now()-t0>=450})}},
+  {d:"Al resolverse, la promesa devuelve el objeto correcto", t:function(c){return c.ev("obtenerPerfil")().then(function(p){return p&&p.usuario==="dev_experto"&&p.activo===true})}}
+ ]},
+{id:"p4", lvl:"pro", title:"Proyecto Final: Lista de Tareas (To-Do App)", mins:20,
+ theory:"<p>La culminación de nuestro viaje. Construir una Lista de Tareas (To-Do List) es el proyecto rito de iniciación de todo desarrollador frontend. Combina todo lo aprendido: Maquetación HTML básica, estilos interactivos CSS, escuchar eventos JS, manipular el DOM y aplicar lógica condicional.</p><p>Para que la app se sienta profesional, aplicaremos validaciones UX (Experiencia de Usuario) comunes:</p><ul><li>No debe permitir agregar tareas completamente vacías. Para esto leeremos el valor del input y usaremos el método string <code>.trim()</code> que borra espacios en blanco accidentales al inicio o final.</li><li>Después de añadir exitosamente la tarea, el campo de texto debe vaciarse automáticamente (<code>input.value = \"\"</code>) dejándolo listo para otra escritura.</li><li>Permitiremos marcar tareas como completadas alternando una clase CSS especial al tocarlas.</li></ul>",
+ example:"// Validación típica de input antes de procesar\nboton.addEventListener(\"click\", () => {\n  const textoEscrito = campo.value.trim();\n  // Si después de limpiar espacios quedó vacío, salimos tempranamente (return detiene la función)\n  if (textoEscrito === \"\") {\n    return;\n  }\n  //... crear elementos\n});",
+ task:"<p>Completa la lógica JavaScript para hacer funcionar la To-Do app. Las piezas visuales y los identificadores (IDs) ya están listos.</p><p>1. En el evento click del botón, lee el valor del input, aplícale <code>.trim()</code> y guárdalo en una constante.<br>2. Evalúa si el texto está vacío (es igual a <code>\"\"</code>). Si es así, no hagas nada (haz un return directo).<br>3. Si hay texto válido, crea un nuevo elemento <code>&lt;li&gt;</code> y asígnale el texto.<br>4. Añádele al propio <code>&lt;li&gt;</code> que acabas de crear un evento de tipo 'click', para que al ser tocado, alterne (toggle) la clase css predefinida <code>hecha</code>.<br>5. Inserta el <code>&lt;li&gt;</code> en la lista (ul) usando append y finalmente limpia el valor del campo input (igualándolo a string vacío).</p>",
+ starter:"<style>\n  body { font-family: system-ui; max-width: 420px; margin: 24px auto; padding: 0 16px; }\n  .fila { display: flex; gap: 8px; }\n  input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }\n  button { padding: 10px 15px; background: #0f766e; color: white; border: none; border-radius: 4px; cursor: pointer; }\n  ul { list-style: none; padding: 0; margin-top: 20px; }\n  li { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; transition: background 0.2s; }\n  li:hover { background-color: #f8fafc; }\n  /* Esta clase se aplicará dinámicamente con JS */\n  .hecha { text-decoration: line-through; opacity: 0.5; color: green; }\n</style>\n\n<h1>Mis Tareas Pendientes</h1>\n<div class=\"fila\">\n  <input id=\"tarea\" placeholder=\"Ej. Comprar leche...\">\n  <button id=\"agregar\">Añadir</button>\n</div>\n<ul id=\"tareas\"></ul>\n\n<script>\n  const campoTexto = document.querySelector(\"#tarea\");\n  const btnAgregar = document.querySelector(\"#agregar\");\n  const listaUl = document.querySelector(\"#tareas\");\n\n  // Añade el evento click al btnAgregar y desarrolla toda la lógica descrita\n\n<\/script>",
+ solution:"<style>\n  body { font-family: system-ui; max-width: 420px; margin: 24px auto; padding: 0 16px; }\n  .fila { display: flex; gap: 8px; }\n  input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }\n  button { padding: 10px 15px; background: #0f766e; color: white; border: none; border-radius: 4px; cursor: pointer; }\n  ul { list-style: none; padding: 0; margin-top: 20px; }\n  li { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; transition: background 0.2s; }\n  li:hover { background-color: #f8fafc; }\n  /* Esta clase se aplicará dinámicamente con JS */\n  .hecha { text-decoration: line-through; opacity: 0.5; color: green; }\n</style>\n\n<h1>Mis Tareas Pendientes</h1>\n<div class=\"fila\">\n  <input id=\"tarea\" placeholder=\"Ej. Comprar leche...\">\n  <button id=\"agregar\">Añadir</button>\n</div>\n<ul id=\"tareas\"></ul>\n\n<script>\n  const campoTexto = document.querySelector(\"#tarea\");\n  const btnAgregar = document.querySelector(\"#agregar\");\n  const listaUl = document.querySelector(\"#tareas\");\n\n  btnAgregar.addEventListener(\"click\", () => {\n    // 1. Validar texto\n    const textoValidado = campoTexto.value.trim();\n    if (textoValidado === \"\") {\n      return;\n    }\n\n    // 2. Crear elemento\n    const nuevoLi = document.createElement(\"li\");\n    nuevoLi.textContent = textoValidado;\n\n    // 3. Añadirle el comportamiento de tachado individual\n    nuevoLi.addEventListener(\"click\", () => {\n      nuevoLi.classList.toggle(\"hecha\");\n    });\n\n    // 4. Pintar en pantalla y limpiar input\n    listaUl.append(nuevoLi);\n    campoTexto.value = \"\";\n  });\n<\/script>",
+ hints:["Revisa paso por paso. Primero lee y valida: <code>const txt = campoTexto.value.trim(); if(txt === \"\") return;</code>.","Luego creas y configuras el elemento. ¡Atención! el evento para tachar se le agrega a esa constante 'nuevoLi' que acabas de crear, no a la lista general.","Por último, inyéctalo con <code>listaUl.append(...)</code> y vacía el string del campoTexto.value."],
+ tests:[
+  {d:"Escribir texto y presionar el botón crea exitosamente un elemento <code>&lt;li&gt;</code> visible", t:function(c){var i=c.q("#tarea");i.value="Aprender JS";c.q("#agregar").click();var li=c.all("#tareas li");return li.length===1&&li[0].textContent.trim()==="Aprender JS"}},
+  {d:"Limpia el campo de texto después de agregar", t:function(c){return c.q("#tarea").value===""}},
+  {d:"Valida y evita crear tareas vacías (incluso con espacios)", t:function(c){var i=c.q("#tarea");i.value="   ";c.q("#agregar").click();return c.all("#tareas li").length===1}}, /* length 1 porque el test anterior ya dejó una tarea real */
+  {d:"Al hacer clic sobre un <code>&lt;li&gt;</code>, alterna la clase 'hecha' (para marcar como completada)", t:function(c){var li=c.q("#tareas li");if(!li)return false;li.click();var a=li.classList.contains("hecha");li.click();return a&&!li.classList.contains("hecha")}}
+ ]}
+];
+
+/* ------------------------------------------------------------------ */
+/*  Estado                                                            */
+/* ------------------------------------------------------------------ */
+var KEY="ruta-web-v1";
+var S={done:{},help:{},xp:0,days:[],code:{},current:"h1",hintN:{},tries:{}};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);for(var k in p)S[k]=p[k];}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+var $=function(id){return document.getElementById(id)};
+var byId={};L.forEach(function(l,i){l.n=i;byId[l.id]=l});
+var cur=byId[S.current]||L[0];
+
+/* ------------------------------------------------------------------ */
+/*  Resaltado de sintaxis                                             */
+/* ------------------------------------------------------------------ */
+var RX=/(<!--[\s\S]*?(?:-->|$)|\/\*[\s\S]*?(?:\*\/|$)|\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*"?|'(?:[^'\\\n]|\\.)*'?)|(<\/?[a-zA-Z][\w-]*|\/?>)|([a-zA-Z-]+)(?==)|\b(const|let|var|function|return|if|else|for|while|of|new|async|await|true|false|null|undefined|this|document|console)\b|(--[\w-]+|[a-z-]+(?=\s*:\s*[^\s{]))|(\b\d+(?:\.\d+)?(?:px|rem|em|%|s|ms|fr|vh|vw)?\b)/g;
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function highlight(src){
+  var out="",last=0,m;RX.lastIndex=0;
+  var cls=[null,"com","str","tag","attr","kw","prop","num"];
+  while((m=RX.exec(src))){
+    if(m[0]===""){RX.lastIndex++;continue}
+    out+=esc(src.slice(last,m.index));
+    for(var g=1;g<cls.length;g++){if(m[g]!==undefined){out+='<span class="tk-'+cls[g]+'">'+esc(m[0])+"</span>";break}}
+    last=RX.lastIndex;
+  }
+  return out+esc(src.slice(last));
+}
+
+/* ------------------------------------------------------------------ */
+/*  Editor                                                            */
+/* ------------------------------------------------------------------ */
+var ta=$("code"),hl=$("hl"),gut=$("gutter");
+function paint(){
+  hl.innerHTML=highlight(ta.value)+"\n";
+  var n=ta.value.split("\n").length,s="";for(var i=1;i<=n;i++)s+=i+"\n";gut.textContent=s;
+  syncScroll();
+}
+function syncScroll(){hl.scrollTop=ta.scrollTop;hl.scrollLeft=ta.scrollLeft;gut.scrollTop=ta.scrollTop}
+ta.addEventListener("scroll",syncScroll);
+var runT;
+ta.addEventListener("input",function(){paint();S.code[cur.id]=ta.value;save();clearTimeout(runT);runT=setTimeout(run,450)});
+ta.addEventListener("keydown",function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();check();return}
+  var s=ta.selectionStart,en=ta.selectionEnd,v=ta.value;
+  if(e.key==="Tab"){
+    e.preventDefault();
+    if(s===en){insert("  ")}
+    else{
+      var ls=v.lastIndexOf("\n",s-1)+1,block=v.slice(ls,en);
+      var nb=e.shiftKey?block.replace(/^ {1,2}/gm,""):block.replace(/^/gm,"  ");
+      ta.setRangeText(nb,ls,en,"select");ta.dispatchEvent(new Event("input"));
+    }
+  }else if(e.key==="Enter"){
+    var line=v.slice(v.lastIndexOf("\n",s-1)+1,s);var ind=(line.match(/^\s*/)||[""])[0];
+    var prev=v[s-1];if(prev==="{"||prev===">"&&!/<\/[^>]*>$|\/>$/.test(line)&&/<[a-z]/i.test(line)) ind+="  ";
+    e.preventDefault();insert("\n"+ind);
+  }
+});
+function insert(t){ta.setRangeText(t,ta.selectionStart,ta.selectionEnd,"end");ta.dispatchEvent(new Event("input"))}
+
+/* ------------------------------------------------------------------ */
+/*  Vista previa + consola                                            */
+/* ------------------------------------------------------------------ */
+var frame=$("frame"),logs=[];
+window.__cap=function(type,args){
+  var text=args.map(function(a){
+    if(typeof a==="string")return a;
+    try{return JSON.stringify(a)}catch(e){return String(a)}
+  }).join(" ");
+  logs.push({type:type,text:text});renderConsole();
+};
+var PRE='<script>(function(){var P=window.parent;["log","info","warn","error"].forEach(function(k){var o=console[k];console[k]=function(){try{P.__cap(k==="info"?"log":k,[].slice.call(arguments))}catch(e){}o.apply(console,arguments)}});window.addEventListener("error",function(e){try{P.__cap("error",[e.message+(e.lineno?" (línea "+e.lineno+")":"")])}catch(x){}});})();<\/script>';
+function run(){
+  return new Promise(function(res){
+    logs=[];renderConsole();
+    frame.onload=function(){setTimeout(res,60)};
+    frame.srcdoc='<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width">'+PRE+ta.value;
+  });
+}
+function renderConsole(){
+  var c=$("consolePane");
+  if(!logs.length){c.innerHTML='<div class="empty">La consola está vacía. Usa console.log() en tu código para ver mensajes aquí.</div>'}
+  else c.innerHTML=logs.map(function(l){return '<div class="'+(l.type==="error"?"err":l.type==="warn"?"warn":"")+'">'+(l.type==="error"?"✕ ":"› ")+esc(l.text)+"</div>"}).join("");
+  var b=$("conBadge");b.hidden=!logs.length;b.textContent=logs.length;
+}
+function showTab(con){
+  $("tabView").setAttribute("aria-selected",!con);$("tabCon").setAttribute("aria-selected",!!con);
+  $("browserPane").hidden=!!con;$("consolePane").hidden=!con;
+}
+$("tabView").onclick=function(){showTab(false)};
+$("tabCon").onclick=function(){showTab(true)};
+$("runBtn").onclick=run;
+
+/* ------------------------------------------------------------------ */
+/*  Comprobación                                                      */
+/* ------------------------------------------------------------------ */
+function ctx(){
+  var doc=frame.contentDocument,win=frame.contentWindow;
+  return {doc:doc,win:win,logs:logs,code:ta.value,
+    q:function(s){return doc.querySelector(s)},
+    all:function(s){return Array.prototype.slice.call(doc.querySelectorAll(s))},
+    txt:function(s){var e=doc.querySelector(s);return e?e.textContent:""},
+    cs:function(e){return win.getComputedStyle(e)},
+    ev:function(n){return win.eval(n)},
+    rules:function(){var out=[];Array.prototype.forEach.call(doc.styleSheets,function(sh){try{Array.prototype.forEach.call(sh.cssRules,function(r){out.push(r)})}catch(e){}});return out}
+  };
+}
+async function check(){
+  await run();
+  var c=ctx(),ul=$("checks"),items=ul.children,allOk=true;
+  for(var i=0;i<cur.tests.length;i++){
+    var ok=false;
+    try{ok=!!(await Promise.race([Promise.resolve(cur.tests[i].t(c)),new Promise(function(r){setTimeout(function(){r(false)},2500)})]))}catch(e){ok=false}
+    items[i].className=ok?"pass":"fail";items[i].querySelector(".st").textContent=ok?"✓":"✕";
+    if(!ok)allOk=false;
+  }
+  if(allOk) complete();
+  else{
+    S.tries[cur.id]=(S.tries[cur.id]||0)+1;save();
+    var n=cur.tests.filter(function(_,i){return items[i].className==="pass"}).length;
+    toast(n+" de "+cur.tests.length+" comprobaciones superadas. ¡Sigue intentando!");
+    if(logs.some(function(l){return l.type==="error"})){showTab(true)}
+  }
+}
+function today(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function complete(){
+  var first=!S.done[cur.id];
+  if(first){
+    var gain=S.help[cur.id]?5:10;S.xp+=gain;S.done[cur.id]=true;
+    var t=today();if(S.days.indexOf(t)<0)S.days.push(t);
+    var lvlDone=L.filter(function(l){return l.lvl===cur.lvl}).every(function(l){return S.done[l.id]});
+    if(lvlDone){S.xp+=25}
+    save();renderStats();renderSide();
+    toast(lvlDone?"¡Nivel completado! +"+(gain+25)+" XP":"¡Lección superada! +"+gain+" XP");
+  }
+  var next=L[cur.n+1];
+  $("win").innerHTML='<div class="win"><div><strong>'+(next?"¡Lo lograste!":"¡Terminaste la ruta completa!")+'</strong><p>'+(next?"Siguiente: "+next.title:"Ya tienes las bases de un desarrollador web. Tu lista de tareas es tu primer proyecto de portafolio.")+'</p></div>'+(next?'<button class="btn primary" id="nextBtn">Siguiente lección →</button>':'')+'</div>';
+  if(next)$("nextBtn").onclick=function(){go(next.id)};
+}
+
+/* ------------------------------------------------------------------ */
+/*  Pistas y solución                                                 */
+/* ------------------------------------------------------------------ */
+function renderHints(){
+  var n=S.hintN[cur.id]||0;
+  $("hints").innerHTML=cur.hints.slice(0,n).map(function(h,i){return '<div class="hint"><b>Pista '+(i+1)+':</b> '+h+'</div>'}).join("");
+  $("hintBtn").disabled=n>=cur.hints.length;
+  $("hintBtn").textContent=n>=cur.hints.length?"Sin más pistas":"Pedir pista ("+(cur.hints.length-n)+")";
+}
+$("hintBtn").onclick=function(){S.hintN[cur.id]=Math.min((S.hintN[cur.id]||0)+1,cur.hints.length);save();renderHints()};
+$("solBtn").onclick=function(){
+  var box=$("solution");
+  if(box.innerHTML){box.innerHTML="";$("solBtn").textContent="Ver solución";return}
+  if(!S.done[cur.id]&&(S.tries[cur.id]||0)<1){
+    box.innerHTML='<div class="hint"><b>Inténtalo primero:</b> pulsa “Comprobar” al menos una vez. Equivocarse es parte de aprender. Luego podrás ver la solución.</div>';
+    return;
+  }
+  box.innerHTML='<div class="ex-label">Solución de referencia</div><div class="example">'+highlight(cur.solution)+'</div><button class="btn" id="useSol">Cargar en el editor</button>';
+  $("solBtn").textContent="Ocultar solución";
+  $("useSol").onclick=function(){
+    if(!S.done[cur.id]){S.help[cur.id]=true;save()}
+    ta.value=cur.solution;ta.dispatchEvent(new Event("input"));
+    toast("Solución cargada. Léela línea por línea y luego pulsa Comprobar.");
+  };
+};
+$("resetBtn").onclick=function(){ta.value=cur.starter;ta.dispatchEvent(new Event("input"));toast("Código reiniciado")};
+$("checkBtn").onclick=check;
+
+/* ------------------------------------------------------------------ */
+/*  Navegación y render                                               */
+/* ------------------------------------------------------------------ */
+function renderSide(){
+  var h="";
+  LEVELS.forEach(function(lv){
+    var ls=L.filter(function(l){return l.lvl===lv.id}),d=ls.filter(function(l){return S.done[l.id]}).length;
+    h+='<div class="lvl"><div class="lvl-h"><h3>'+lv.name+'</h3><span>'+d+'/'+ls.length+'</span></div><div class="lvl-sub">'+lv.sub+'</div><ul class="path">';
+    ls.forEach(function(l){
+      var st=S.done[l.id]?(S.help[l.id]?"help":"done"):"";
+      h+='<li class="'+st+'"><button data-id="'+l.id+'" aria-current="'+(l.id===cur.id)+'"><span class="dot">'+(st?"✓":"")+'</span>'+l.title+'</button></li>';
+    });
+    h+='</ul></div>';
+  });
+  $("side").innerHTML=h;
+  Array.prototype.forEach.call($("side").querySelectorAll("button[data-id]"),function(b){b.onclick=function(){go(b.dataset.id);closeSide()}});
+}
+function streak(){
+  var set={};S.days.forEach(function(d){set[d]=1});
+  var d=new Date(),n=0;
+  if(!set[today()]){d.setDate(d.getDate()-1)}
+  while(true){var k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");if(set[k]){n++;d.setDate(d.getDate()-1)}else break}
+  return n;
+}
+function renderStats(){
+  var d=Object.keys(S.done).length;
+  $("xp").textContent=S.xp;$("streak").textContent=streak();
+  $("progTxt").textContent=d+"/"+L.length;$("progBar").style.width=(d/L.length*100)+"%";
+}
+function go(id){
+  cur=byId[id];S.current=id;save();
+  var lv=LEVELS.filter(function(x){return x.id===cur.lvl})[0];
+  $("lvlTag").textContent=lv.name;
+  $("lessonNum").textContent="Lección "+(cur.n+1)+" de "+L.length;
+  $("mins").textContent="≈ "+cur.mins+" min";
+  $("lTitle").textContent=cur.title;
+  $("theory").innerHTML=cur.theory+'<div class="ex-label">Ejemplo</div><div class="example">'+highlight(cur.example)+'</div>';
+  $("task").innerHTML=cur.task;
+  $("checks").innerHTML=cur.tests.map(function(t){return '<li><span class="st"></span><span>'+t.d+'</span></li>'}).join("");
+  $("solution").innerHTML="";$("solBtn").textContent="Ver solución";
+  $("win").innerHTML="";
+  renderHints();
+  ta.value=S.code[id]!=null?S.code[id]:cur.starter;paint();ta.scrollTop=0;
+  showTab(false);
+  run();renderSide();
+  $("lesson").scrollTop=0;
+  if(S.done[id]){$("win").innerHTML='<div class="win"><div><strong>Lección completada</strong><p>Puedes repasarla o seguir adelante.</p></div>'+(L[cur.n+1]?'<button class="btn primary" id="nextBtn">Siguiente lección →</button>':'')+'</div>';if(L[cur.n+1])$("nextBtn").onclick=function(){go(L[cur.n+1].id)}}
+}
+
+/* Menú lateral en pantallas medianas */
+function closeSide(){$("side").classList.remove("open");$("scrim").classList.remove("open")}
+$("menuBtn").onclick=function(){$("side").classList.add("open");$("scrim").classList.add("open")};
+$("scrim").onclick=closeSide;
+
+var tT;function toast(m){var t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(tT);tT=setTimeout(function(){t.classList.remove("show")},2600)}
+
+renderStats();go(cur.id);
+</script>
+
+</body></html>
