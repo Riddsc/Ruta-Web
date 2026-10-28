@@ -83,7 +83,7 @@ h1,h2,h3{text-wrap:balance}
 .views{flex:1;min-height:0;display:flex;flex-direction:column}
 .view{display:none;flex:1;min-height:0}
 body[data-view="inicio"] #v-inicio,
-body[data-view="glosario"] #v-glosario,
+body[data-view="apuntes"] #v-apuntes,
 body[data-view="logros"] #v-logros{display:block;overflow:auto}
 body[data-view="curso"] #v-curso{display:grid}
 .page{padding:28px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
@@ -265,6 +265,83 @@ iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
 .console .warn{color:#ffd28a}
 .console .empty{color:var(--code-gutter);border:0}
 
+/* ---------- Apuntes ---------- */
+kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--surface);border:1px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:.05em .45em;white-space:nowrap;color:var(--ink)}
+.seg{display:flex;gap:4px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:20px;width:fit-content;max-width:100%}
+.seg button{border:0;background:none;border-radius:9px;padding:8px 14px;font-weight:700;font-size:14px;color:var(--muted)}
+.seg button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.pane-intro{color:var(--muted);margin:0 0 16px;max-width:70ch}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:14px;align-items:start}
+.cs-card{padding:0;overflow:hidden;min-width:0}
+.cs-card>summary{list-style:none;display:flex;gap:12px;align-items:center;padding:16px 18px;cursor:pointer;border-top:4px solid var(--lv)}
+.cs-card>summary::-webkit-details-marker{display:none}
+.cs-card>summary h3{margin:0;font-family:var(--f-display);font-weight:800;font-size:18px;flex:1}
+.cs-card>summary .chev{color:var(--muted);transition:transform .2s}
+.cs-card[open]>summary .chev{transform:rotate(90deg)}
+.cs-body{padding:0 18px 18px;overflow-x:auto}
+.cs-body h4{margin:16px 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.cs-body p{margin:0 0 8px;font-size:14px}
+.cs-code{margin:0 0 6px;font-size:12.5px}
+.cs-t{width:100%;border-collapse:collapse;font-size:14px}
+.cs-t td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.cs-t td:first-child{width:46%}
+.cs-t code,.cs-t kbd{white-space:nowrap;display:inline-block;margin:1px 0}
+.keycap-demo{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 14px}
+.kc{position:relative;width:76px;height:76px;flex:none;border-radius:12px;background:var(--surface);border:1px solid var(--line);border-bottom-width:5px;font-family:var(--f-mono);font-weight:600;font-size:20px}
+.kc span{position:absolute}
+.kc .tl{top:8px;left:12px}.kc .bl{bottom:6px;left:12px}.kc .br{bottom:6px;right:12px;color:var(--accent)}
+.kc-l p{margin:2px 0;font-size:14px}
+.kb-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.kb-t{width:100%;border-collapse:collapse;font-size:14px;min-width:720px}
+.kb-t th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:10px;border-bottom:1px solid var(--line);background:var(--surface-2);position:sticky;top:0}
+.kb-t td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.kb-t td.sym{font-family:var(--f-mono);font-size:20px;font-weight:600;text-align:center;width:52px}
+.kb-t td.mine{color:var(--ok);font-weight:700}
+.kb-t th.hl,.kb-t td.hl{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.tester{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.tester .card{padding:16px 18px}
+.tester input{width:100%;font:600 22px var(--f-mono);padding:12px 14px;border-radius:10px;border:2px solid var(--line);background:var(--surface-2);color:var(--ink)}
+.tester input:focus{border-color:var(--accent);outline:none}
+.tester-out{font-size:15px;min-height:52px;margin-top:10px}
+.tester-out .big{font:600 34px var(--f-mono);margin-right:10px;vertical-align:middle}
+.need{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.need span{font:600 16px var(--f-mono);width:36px;height:36px;display:grid;place-items:center;border-radius:8px;border:1px dashed var(--line);color:var(--muted)}
+.need span.ok{border:1px solid var(--ok);background:var(--ok-soft);color:var(--ok)}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:18px 0}
+.tips .card{padding:14px 16px}
+.tips h3{margin:0 0 4px;font-size:15px}
+.tips p{margin:0;font-size:14px;color:var(--muted)}
+.notes-list{display:grid;gap:12px}
+.note-c{padding:14px 16px}
+.note-c header{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.note-c header .pill{font-size:11px}
+.note-c header b{font-size:15px;flex:1}
+.note-c header small{color:var(--muted)}
+.note-c p{margin:0;white-space:pre-wrap;font-size:14.5px}
+.note-c .btn{padding:5px 10px;font-size:13px}
+.empty-card{padding:28px;text-align:center;color:var(--muted)}
+.ruta{display:grid;gap:10px;padding:0;margin:0}
+.ruta li{list-style:none;display:grid;grid-template-columns:150px 1fr;gap:16px;padding:16px 18px}
+.ruta li.now{border-color:var(--accent);box-shadow:inset 4px 0 0 var(--accent)}
+.ruta .when b{display:block;font-family:var(--f-display);font-weight:800;font-size:17px}
+.ruta .when span{font-size:13px;color:var(--muted)}
+.ruta h3{margin:0 0 4px;font-size:16px}
+.ruta p{margin:0;color:var(--muted);font-size:14px}
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+.quick button{display:flex;gap:12px;align-items:center;padding:14px 16px;text-align:left;font:inherit;color:inherit}
+.quick button:hover{border-color:var(--accent)}
+.quick .ic{font-size:22px;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);flex:none}
+.quick b{display:block;font-size:15px}
+.quick span{font-size:13px;color:var(--muted)}
+/* Apuntes dentro de la lección */
+.mynotes{margin:22px 0 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.mynotes summary{list-style:none;cursor:pointer;padding:12px 16px;font-weight:700;display:flex;gap:8px;align-items:center}
+.mynotes summary::-webkit-details-marker{display:none}
+.mynotes summary small{color:var(--muted);font-weight:400;margin-left:auto}
+.mynotes textarea{display:block;width:calc(100% - 32px);margin:0 16px 8px;min-height:120px;resize:vertical;padding:10px 12px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);font:inherit;color:var(--ink);line-height:1.5}
+.mynotes .foot{display:flex;justify-content:space-between;align-items:center;padding:0 16px 12px;font-size:13px;color:var(--muted);gap:8px;flex-wrap:wrap}
+.theory kbd,.task kbd,.q kbd{font-size:.8em}
+
 /* ---------- Glosario ---------- */
 .gl-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
 .search{flex:1;min-width:220px;position:relative}
@@ -337,7 +414,10 @@ iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
   .brand{font-size:18px}
   .chip.streak{display:none}
   .prog{width:56px}
-  body[data-view="inicio"] #v-inicio,body[data-view="glosario"] #v-glosario,body[data-view="logros"] #v-logros{overflow:visible}
+  body[data-view="inicio"] #v-inicio,body[data-view="apuntes"] #v-apuntes,body[data-view="logros"] #v-logros{overflow:visible}
+  .tester{grid-template-columns:1fr}
+  .ruta li{grid-template-columns:1fr;gap:6px}
+  .cs-grid{grid-template-columns:1fr}
   body[data-view="curso"] #v-curso{display:flex;flex-direction:column}
   .lesson{overflow:visible;padding:18px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
   .bench{border-left:0;border-top:1px solid var(--line)}
@@ -382,7 +462,7 @@ iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
   <nav class="tabs-top" aria-label="Secciones">
     <button class="navbtn" data-go="inicio"><svg><use href="#i-home"/></svg><span>Inicio</span></button>
     <button class="navbtn" data-go="curso"><svg><use href="#i-code"/></svg><span>Curso</span></button>
-    <button class="navbtn" data-go="glosario"><svg><use href="#i-book"/></svg><span>Glosario</span></button>
+    <button class="navbtn" data-go="apuntes"><svg><use href="#i-book"/></svg><span>Apuntes</span></button>
     <button class="navbtn" data-go="logros"><svg><use href="#i-trophy"/></svg><span>Logros</span></button>
   </nav>
   <div class="stats">
@@ -425,6 +505,12 @@ iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
       </div>
 
       <div class="card tip" id="tip"></div>
+      <div class="quick">
+        <button class="card" data-ap="teclado"><span class="ic">⌨️</span><div><b>Guía del teclado</b><span>Dónde están &lt; &gt; { } [ ] y cómo escribirlos</span></div></button>
+        <button class="card" data-ap="chuletas"><span class="ic">📄</span><div><b>Chuletas</b><span>HTML, CSS, JS, Git y atajos en una página</span></div></button>
+        <button class="card" data-ap="notas"><span class="ic">📝</span><div><b>Mis apuntes</b><span id="qNotes">Tus notas de cada lección</span></div></button>
+        <button class="card" data-ap="ruta"><span class="ic">🧭</span><div><b>Qué sigue</b><span>Tu camino después de Ruta Web</span></div></button>
+      </div>
 
       <div class="sec-h"><h2>Tu ruta</h2><span id="routeSum"></span></div>
       <div class="levels" id="levels"></div>
@@ -451,6 +537,10 @@ iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
         <div id="win"></div>
         <section class="checks" id="checksBox"><h2>Comprobaciones</h2><ul id="checks"></ul></section>
         <div class="solution" id="solution"></div>
+        <details class="mynotes" id="myNotes"><summary>📝 Mis apuntes de esta lección <small id="nSaved"></small></summary>
+          <textarea id="noteIn" placeholder="Explica con tus palabras lo que aprendiste, lo que te costó o un ejemplo propio…"></textarea>
+          <div class="foot"><span>Se guarda solo. Los ves todos en Apuntes → Mis notas.</span><button class="mini" id="toNotes">Ver todas mis notas →</button></div>
+        </details>
         <div class="pager" id="pager"></div>
       </div>
     </section>
@@ -486,17 +576,70 @@ iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
     </section>
   </div>
 
-  <!-- ============ GLOSARIO ============ -->
-  <section class="view page" id="v-glosario" aria-label="Glosario">
+  <!-- ============ APUNTES ============ -->
+  <section class="view page" id="v-apuntes" aria-label="Apuntes">
     <div class="wrap">
-      <div class="eyebrow">Consulta rápida</div>
-      <h1 class="h-page">Glosario</h1>
-      <p class="lead">Los conceptos clave del curso explicados en una o dos líneas. Úsalo cuando una palabra se te olvide a mitad de un reto.</p>
-      <div class="gl-tools">
-        <label class="search"><span class="sr">Buscar término</span><svg><use href="#i-search"/></svg><input id="glQ" type="search" placeholder="Buscar: closure, flexbox, commit…"></label>
-        <div class="chips" id="glCats"></div>
+      <div class="eyebrow">Tu cuaderno</div>
+      <h1 class="h-page">Apuntes</h1>
+      <p class="lead">Tus notas, hojas de consulta rápida, la guía del teclado y el glosario: todo lo que conviene tener a mano mientras programas.</p>
+      <div class="seg" role="tablist" id="apTabs">
+        <button role="tab" data-ap="notas">📝 Mis notas</button>
+        <button role="tab" data-ap="chuletas">📄 Chuletas</button>
+        <button role="tab" data-ap="teclado">⌨️ Teclado</button>
+        <button role="tab" data-ap="glosario">📖 Glosario</button>
+        <button role="tab" data-ap="ruta">🧭 Qué sigue</button>
       </div>
-      <div class="terms" id="terms"></div>
+
+      <div class="ap-pane" id="ap-notas">
+        <p class="pane-intro">Cada lección tiene un cuadro <b>Mis apuntes</b> debajo del reto. Lo que escribas ahí aparece aquí, ordenado por la ruta. Explicar con tus palabras es la mejor forma de fijar lo aprendido.</p>
+        <div class="gl-tools"><label class="search"><span class="sr">Buscar en mis notas</span><svg><use href="#i-search"/></svg><input id="ntQ" type="search" placeholder="Buscar en mis notas…"></label><button class="btn" id="ntCopy">Copiar todas</button></div>
+        <div class="notes-list" id="notesList"></div>
+      </div>
+
+      <div class="ap-pane" id="ap-chuletas">
+        <p class="pane-intro">Resúmenes de una página para consultar mientras programas. Ábrelos en una pestaña aparte cuando hagas tus proyectos.</p>
+        <div class="cs-grid" id="csGrid"></div>
+      </div>
+
+      <div class="ap-pane" id="ap-teclado">
+        <p class="pane-intro">Los símbolos de programación cambian de lugar según la <b>distribución</b> de tu teclado. Aprende a leer las teclas, encuentra cada símbolo en la tabla y usa el probador para descubrir cómo se escriben en el tuyo.</p>
+        <div class="keycap-demo"><div class="kc"><span class="tl">?</span><span class="bl">'</span><span class="br">\</span></div><div class="kc-l"><p><b>Arriba a la izquierda:</b> con <kbd>Shift</kbd> (⇧).</p><p><b>Abajo a la izquierda:</b> la tecla sola.</p><p><b>Abajo a la derecha:</b> con <kbd>AltGr</kbd> (Alt derecho) o <kbd>Ctrl</kbd> + <kbd>Alt</kbd>. En Mac: <kbd>Option</kbd> ⌥.</p></div></div>
+        <div class="tester">
+          <div class="card">
+            <h3 style="margin:0 0 4px">Probador de teclado</h3>
+            <p style="margin:0 0 10px;color:var(--muted);font-size:14px">Haz clic en el cuadro y prueba combinaciones. Te dice qué símbolo salió y con qué teclas.</p>
+            <input id="kbIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Escribe aquí…" aria-label="Probador de teclado">
+            <div class="tester-out" id="kbOut" aria-live="polite"></div>
+          </div>
+          <div class="card">
+            <h3 style="margin:0 0 4px">Tus símbolos encontrados</h3>
+            <p style="margin:0;color:var(--muted);font-size:14px">Se marcan al escribirlos en el probador, y la columna “Tu teclado” de la tabla guarda cómo lo hiciste.</p>
+            <div class="need" id="kbNeed"></div>
+            <p style="margin:10px 0 0;font-size:13px" id="kbCount"></p>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom:10px;align-items:center"><span style="font-size:14px;color:var(--muted)">Resaltar columna:</span><div class="seg" id="kbLay" style="margin:0"><button data-l="2">Latinoamérica</button><button data-l="3">España</button><button data-l="4">EE. UU.</button></div></div>
+        <div class="kb-wrap"><table class="kb-t" id="kbTable"></table></div>
+        <div class="tips">
+          <div class="card"><h3>¿No coincide nada?</h3><p>Tu teclado puede estar configurado con otra distribución. En Windows pulsa <kbd>Win</kbd> + <kbd>Espacio</kbd> para cambiarla, o revisa Configuración → Hora e idioma → Idioma y región.</p></div>
+          <div class="card"><h3>Código Alt (Windows)</h3><p>Mantén <kbd>Alt</kbd> y escribe el número en el <b>teclado numérico</b> (con Bloq Num activo). Funciona con cualquier distribución.</p></div>
+          <div class="card"><h3>Teclado en pantalla</h3><p>Busca “Teclado en pantalla” en Windows. Al pulsar AltGr o Shift ves qué símbolo da cada tecla. En Mac: Visor de teclado, y mantén ⌥ Option.</p></div>
+          <div class="card"><h3>Teclas muertas</h3><p>Algunas teclas (tilde, <code>`</code>, <code>^</code>, <code>~</code>) esperan otra letra. Si quieres el símbolo solo, púlsala y luego la barra espaciadora.</p></div>
+        </div>
+      </div>
+
+      <div class="ap-pane" id="ap-glosario">
+        <div class="gl-tools">
+          <label class="search"><span class="sr">Buscar término</span><svg><use href="#i-search"/></svg><input id="glQ" type="search" placeholder="Buscar: closure, flexbox, AltGr…"></label>
+          <div class="chips" id="glCats"></div>
+        </div>
+        <div class="terms" id="terms"></div>
+      </div>
+
+      <div class="ap-pane" id="ap-ruta">
+        <p class="pane-intro">Ruta Web te da bases sólidas, pero aprender a programar para trabajar en esto toma varios cientos de horas de práctica. Este es un camino realista, con tiempos aproximados a tu ritmo.</p>
+        <ol class="ruta" id="rutaList"></ol>
+      </div>
     </div>
   </section>
 
@@ -547,7 +690,7 @@ iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
 <nav class="bottomnav" aria-label="Secciones">
   <button class="navbtn" data-go="inicio"><svg><use href="#i-home"/></svg>Inicio</button>
   <button class="navbtn" data-go="curso"><svg><use href="#i-code"/></svg>Curso</button>
-  <button class="navbtn" data-go="glosario"><svg><use href="#i-book"/></svg>Glosario</button>
+  <button class="navbtn" data-go="apuntes"><svg><use href="#i-book"/></svg>Apuntes</button>
   <button class="navbtn" data-go="logros"><svg><use href="#i-trophy"/></svg>Logros</button>
 </nav>
 
@@ -559,6 +702,7 @@ iframe{flex:1;width:100%;border:0;background:#ffffff;min-height:160px}
    Contenido del curso
    ================================================================== */
 var LEVELS = [
+  {id:"base",  name:"Antes de empezar",     sub:"Punto de partida",            glyph:"0",    color:"#0b7285", ink:"#fff", desc:"Tu teclado de programador, atajos, archivos, VS Code y cómo aprender de verdad.", nuevo:true},
   {id:"html",  name:"HTML",                 sub:"Básico: estructura",          glyph:"</>",  color:"#e8590c", ink:"#fff", desc:"Etiquetas, enlaces, imágenes, listas, semántica y formularios."},
   {id:"css",   name:"CSS",                  sub:"Intermedio: estilo y diseño", glyph:"{ }",  color:"#1971c2", ink:"#fff", desc:"Selectores, modelo de caja, Flexbox, Grid y diseño responsive."},
   {id:"js",    name:"JavaScript",           sub:"Avanzado: lógica",            glyph:"JS",   color:"#e0a800", ink:"#1a1a1a", desc:"Variables, funciones, arrays, objetos, el DOM y eventos."},
@@ -574,6 +718,71 @@ var LEVELS = [
 ];
 
 var L = [
+/* ===================== NIVEL 0 ===================== */
+{id:"b1", lvl:"base", title:"Tu teclado de programador", mins:12,
+ theory:"<p>Programar es, literalmente, escribir símbolos: <code>&lt; &gt; { } [ ] ( ) ; = \" '<\/code>. Muchos teclados en español no los muestran claramente, y es normal no saber dónde están. Esta lección resuelve eso de una vez.<\/p>\n<p><b>Cómo leer una tecla.<\/b> Cada tecla puede tener hasta tres símbolos:<\/p>\n<div class=\"keycap-demo\" aria-hidden=\"true\"><div class=\"kc\"><span class=\"tl\">?<\/span><span class=\"bl\">'<\/span><span class=\"br\">\\<\/span><\/div><div class=\"kc-l\"><p><b>Arriba a la izquierda:<\/b> con <kbd>Shift<\/kbd> (⇧).<\/p><p><b>Abajo a la izquierda:<\/b> la tecla sola.<\/p><p><b>Abajo a la derecha:<\/b> con <kbd>AltGr<\/kbd> (o <kbd>Ctrl<\/kbd> + <kbd>Alt<\/kbd>).<\/p><\/div><\/div>\n<p><kbd>AltGr<\/kbd> es la tecla <b>Alt de la derecha<\/b> de la barra espaciadora. Si tu portátil no la tiene, <kbd>Ctrl<\/kbd> + <kbd>Alt<\/kbd> hace lo mismo en Windows. En Mac el equivalente es <kbd>Option<\/kbd> (⌥).<\/p>\n<p><b>Dónde están los símbolos en un teclado latinoamericano<\/b> (el más común en Colombia):<\/p>\n<ul>\n<li><code>&lt;<\/code> tecla a la izquierda de la Z · <code>&gt;<\/code> <kbd>Shift<\/kbd> + esa misma tecla.<\/li>\n<li><code>{<\/code> tecla a la derecha de la Ñ · <code>[<\/code> <kbd>Shift<\/kbd> + esa tecla.<\/li>\n<li><code>}<\/code> la siguiente, junto a Enter · <code>]<\/code> <kbd>Shift<\/kbd> + esa tecla.<\/li>\n<li><code>(<\/code> <kbd>Shift<\/kbd> + 8 · <code>)<\/code> <kbd>Shift<\/kbd> + 9 · <code>=<\/code> <kbd>Shift<\/kbd> + 0 · <code>\"<\/code> <kbd>Shift<\/kbd> + 2 · <code>/<\/code> <kbd>Shift<\/kbd> + 7.<\/li>\n<li><code>'<\/code> tecla a la derecha del 0 · <code>\\<\/code> <kbd>AltGr<\/kbd> + esa tecla.<\/li>\n<li><code>@<\/code> <kbd>AltGr<\/kbd> + Q · <code>|<\/code> tecla a la izquierda del 1 · <code>`<\/code> (comilla invertida) <kbd>AltGr<\/kbd> + la tecla de <code>}<\/code>.<\/li>\n<\/ul>\n<p><b>Si nada coincide<\/b>, tu teclado puede estar configurado con otra distribución (España, Estados Unidos…). En la sección <b>Apuntes → Teclado<\/b> tienes la tabla completa por distribución, un <b>probador<\/b> que te dice qué combinación usaste para cada símbolo y el truco de emergencia de Windows: mantener <kbd>Alt<\/kbd> y teclear un número en el teclado numérico (<kbd>Alt<\/kbd> + 60 = <code>&lt;<\/code>, <kbd>Alt<\/kbd> + 62 = <code>&gt;<\/code>, <kbd>Alt<\/kbd> + 123 = <code>{<\/code>).<\/p>\n<p><b>Las comillas tipográficas engañan.<\/b> Word y algunos celulares cambian <code>\"<\/code> por “ ” y <code>'<\/code> por ’. El código no las entiende: escribe siempre en el editor, nunca copies código desde Word.<\/p>",
+ example:"Símbolo   Nombre                 Se usa en\n<  >      menor / mayor que      etiquetas HTML, comparaciones\n{  }      llaves                 reglas CSS, bloques de JS\n[  ]      corchetes              arrays, selectores de atributo\n(  )      paréntesis             funciones, condiciones\n;         punto y coma           fin de una instrucción\n\"  '  `   comillas               textos\n/  \\      barra / barra invertida rutas, cierres, comentarios\n|  &      barra vertical, et     condiciones (|| y &&)\n=         igual                  asignar; === para comparar",
+ task:"<p>Escribe en el editor <b>todos<\/b> estos símbolos (en una o varias líneas, separados por espacios si quieres):<\/p>\n<p><code>&lt; &gt; { } [ ] ( ) = ; : \" ' ` / \\ | &amp; # @ ~<\/code><\/p>\n<p>Si alguno se te resiste, abre <b>Apuntes → Teclado<\/b> en otra pestaña y usa el probador. Las comprobaciones te dicen cuáles faltan.<\/p>",
+ starter:"Mis símbolos de programador:\n\n",
+ solution:"Mis símbolos de programador:\n\n< > { } [ ] ( ) = ; : \" ' ` / \\ | & # @ ~",
+ hints:["Las llaves y corchetes en teclado latinoamericano están en las dos teclas a la derecha de la Ñ (solas para <code>{ }<\/code>, con Shift para <code>[ ]<\/code>).","Para <code>\\<\/code>, <code>@<\/code>, <code>`<\/code> y <code>~<\/code> casi siempre necesitas <kbd>AltGr<\/kbd>. Si no los encuentras, en Windows prueba <kbd>Alt<\/kbd> + 92, 64, 96 y 126 con el teclado numérico."],
+ tests:[
+  {d:"Escribiste <code>&lt;<\/code> y <code>&gt;<\/code>", t:function(c){return c.code.indexOf("<")>=0&&c.code.indexOf(">")>=0}},
+  {d:"Escribiste las llaves <code>{ }<\/code>", t:function(c){return c.code.indexOf("{")>=0&&c.code.indexOf("}")>=0}},
+  {d:"Escribiste los corchetes <code>[ ]<\/code>", t:function(c){return c.code.indexOf("[")>=0&&c.code.indexOf("]")>=0}},
+  {d:"Escribiste <code>( ) = ; :<\/code>", t:function(c){return ["(",")","=",";",":"].every(function(s){return c.code.indexOf(s)>=0})}},
+  {d:"Escribiste las tres comillas <code>\" ' `<\/code>", t:function(c){return ["\"","\x27","`"].every(function(s){return c.code.indexOf(s)>=0})}},
+  {d:"Escribiste <code>/ \\ | &amp;<\/code>", t:function(c){return ["/","\\","|","&"].every(function(s){return c.code.indexOf(s)>=0})}},
+  {d:"Escribiste <code># @ ~<\/code>", t:function(c){return ["#","@","~"].every(function(s){return c.code.indexOf(s)>=0})}},
+  {d:"No hay comillas tipográficas (“ ” ‘ ’)", t:function(c){return !/[\u201C\u201D\u2018\u2019]/.test(c.code)&&c.code.indexOf("\"")>=0}}
+ ]},
+{id:"b2", lvl:"base", title:"Atajos que usarás todo el día", mins:9,
+ type:"quiz",
+ theory:"<p>Los programadores casi no sueltan el teclado. Estos atajos de <b>Windows<\/b> (en Mac cambia <kbd>Ctrl<\/kbd> por <kbd>⌘ Cmd<\/kbd>) te ahorran horas:<\/p>\n<ul>\n<li><kbd>Ctrl<\/kbd> + <kbd>C<\/kbd> / <kbd>X<\/kbd> / <kbd>V<\/kbd>: copiar, cortar, pegar.<\/li>\n<li><kbd>Ctrl<\/kbd> + <kbd>Z<\/kbd>: deshacer. <kbd>Ctrl<\/kbd> + <kbd>Y<\/kbd> (o <kbd>Ctrl<\/kbd> + <kbd>Shift<\/kbd> + <kbd>Z<\/kbd>): rehacer.<\/li>\n<li><kbd>Ctrl<\/kbd> + <kbd>S<\/kbd>: guardar. Hazlo por reflejo.<\/li>\n<li><kbd>Ctrl<\/kbd> + <kbd>A<\/kbd>: seleccionar todo. <kbd>Ctrl<\/kbd> + <kbd>F<\/kbd>: buscar.<\/li>\n<li><kbd>Shift<\/kbd> + flechas: seleccionar texto. <kbd>Ctrl<\/kbd> + flechas: saltar palabra por palabra.<\/li>\n<li><kbd>Inicio<\/kbd> / <kbd>Fin<\/kbd> (Home / End): ir al principio o al final de la línea.<\/li>\n<li><kbd>Tab<\/kbd>: sangrar (mover a la derecha). <kbd>Shift<\/kbd> + <kbd>Tab<\/kbd>: quitar sangría.<\/li>\n<li><kbd>Alt<\/kbd> + <kbd>Tab<\/kbd>: cambiar de ventana (por ejemplo, del editor al navegador).<\/li>\n<li><kbd>Ctrl<\/kbd> + <kbd>Enter<\/kbd>: en este curso, comprobar tu reto.<\/li>\n<\/ul>\n<p><b>En VS Code<\/b> (el editor que usarás en tu computador):<\/p>\n<ul>\n<li><kbd>Ctrl<\/kbd> + <kbd>/<\/kbd>: comentar o descomentar la línea.<\/li>\n<li><kbd>Alt<\/kbd> + <kbd>↑<\/kbd> / <kbd>↓<\/kbd>: mover la línea arriba o abajo.<\/li>\n<li><kbd>Ctrl<\/kbd> + <kbd>D<\/kbd>: seleccionar la siguiente aparición de la palabra (editar varias a la vez).<\/li>\n<li><kbd>Ctrl<\/kbd> + <kbd>P<\/kbd>: abrir un archivo por su nombre.<\/li>\n<\/ul>",
+ example:"Seleccionar una palabra y reemplazarla en todo el archivo:\n1. Doble clic en la palabra\n2. Ctrl + D varias veces (o Ctrl + Shift + L para todas)\n3. Escribe el nuevo nombre",
+ questions:[
+  {q:"Borraste un bloque de código sin querer. ¿Qué pulsas?", o:["<kbd>Ctrl<\/kbd> + <kbd>Z<\/kbd>","<kbd>Ctrl<\/kbd> + <kbd>S<\/kbd>","<kbd>Ctrl<\/kbd> + <kbd>A<\/kbd>","<kbd>Alt<\/kbd> + <kbd>Tab<\/kbd>"], a:0, w:"Deshacer. Puedes pulsarlo varias veces para retroceder varios pasos."},
+  {q:"Quieres mover varias líneas seleccionadas un nivel a la izquierda (quitar sangría). ¿Qué usas?", o:["<kbd>Tab<\/kbd>","<kbd>Shift<\/kbd> + <kbd>Tab<\/kbd>","<kbd>Ctrl<\/kbd> + <kbd>Tab<\/kbd>","<kbd>Backspace<\/kbd> en cada línea"], a:1, w:"<kbd>Tab<\/kbd> sangra y <kbd>Shift<\/kbd> + <kbd>Tab<\/kbd> quita sangría, también con varias líneas a la vez. En el editor de este curso funciona igual."},
+  {q:"En VS Code, ¿cómo comentas rápido una línea?", o:["<kbd>Ctrl<\/kbd> + <kbd>/<\/kbd>","<kbd>Ctrl<\/kbd> + <kbd>C<\/kbd>","<kbd>Alt<\/kbd> + <kbd>/<\/kbd>","Escribiendo <code>#<\/code> al inicio"], a:0, w:"El editor pone el comentario correcto según el lenguaje: <code>&lt;!-- --&gt;<\/code> en HTML, <code>/* */<\/code> en CSS y <code>//<\/code> en JavaScript."},
+  {q:"¿Qué atajo te lleva al final de la línea donde está el cursor?", o:["<kbd>Ctrl<\/kbd> + <kbd>E<\/kbd>","<kbd>Fin<\/kbd> (End)","<kbd>Re Pág<\/kbd>","<kbd>Esc<\/kbd>"], a:1, w:"<kbd>Inicio<\/kbd> va al principio de la línea y <kbd>Fin<\/kbd> al final. Con <kbd>Shift<\/kbd> además seleccionas."},
+  {q:"Estás en el editor y quieres ver el navegador sin usar el mouse. ¿Qué usas?", o:["<kbd>Alt<\/kbd> + <kbd>Tab<\/kbd>","<kbd>Ctrl<\/kbd> + <kbd>V<\/kbd>","<kbd>Shift<\/kbd> + <kbd>Tab<\/kbd>","<kbd>Ctrl<\/kbd> + <kbd>F<\/kbd>"], a:0, w:"<kbd>Alt<\/kbd> + <kbd>Tab<\/kbd> cambia entre ventanas abiertas. Manteniendo <kbd>Alt<\/kbd> y pulsando <kbd>Tab<\/kbd> varias veces eliges cuál."},
+  {q:"¿Qué hace <kbd>Ctrl<\/kbd> + <kbd>D<\/kbd> en VS Code?", o:["Borra la línea","Duplica el archivo","Selecciona la siguiente aparición de la palabra para editar varias a la vez","Abre la terminal"], a:2, w:"Es perfecto para renombrar una variable en varios lugares de un bloque."}
+ ]},
+{id:"b3", lvl:"base", title:"Archivos, carpetas y extensiones", mins:9,
+ type:"quiz",
+ theory:"<p>Una página web es un conjunto de <b>archivos de texto<\/b> guardados en una carpeta. Entender cómo se nombran y organizan evita la mitad de los errores de principiante.<\/p>\n<p><b>Extensiones:<\/b> las letras después del punto dicen qué es el archivo.<\/p>\n<ul>\n<li><code>.html<\/code> estructura · <code>.css<\/code> estilos · <code>.js<\/code> JavaScript · <code>.json<\/code> datos · <code>.md<\/code> documentación (como el README).<\/li>\n<li>Windows oculta las extensiones por defecto. Actívalas: en el Explorador de archivos, <b>Vista → Mostrar → Extensiones de nombre de archivo<\/b>. Así evitas crear <code>index.html.txt<\/code> sin darte cuenta.<\/li>\n<\/ul>\n<p><b>Nombres seguros<\/b> para archivos y carpetas web:<\/p>\n<ul>\n<li>Todo en minúsculas, sin espacios, tildes ni ñ: <code>sobre-mi.html<\/code>, no <code>Sobre Mí.html<\/code>.<\/li>\n<li>Usa guiones para separar palabras.<\/li>\n<li>La página principal siempre se llama <code>index.html<\/code>.<\/li>\n<\/ul>\n<p><b>Rutas relativas:<\/b> desde un archivo apuntas a otro según dónde está:<\/p>\n<ul>\n<li><code>estilos.css<\/code>: en la misma carpeta.<\/li>\n<li><code>img/logo.png<\/code>: dentro de la carpeta <i>img<\/i>.<\/li>\n<li><code>../index.html<\/code>: en la carpeta de arriba.<\/li>\n<\/ul>\n<p>Nunca uses rutas de tu disco como <code>C:\\Users\\...<\/code>: solo funcionan en tu computador.<\/p>",
+ example:"mi-portafolio/\n├── index.html\n├── sobre-mi.html\n├── css/\n│   └── estilos.css\n├── js/\n│   └── app.js\n└── img/\n    └── foto-perfil.jpg\n\nDesde index.html:   <link rel=\"stylesheet\" href=\"css/estilos.css\">\n                    <img src=\"img/foto-perfil.jpg\" alt=\"...\">",
+ questions:[
+  {q:"¿Cuál es el mejor nombre para una página de contacto?", o:["<code>Contáctanos YA.html<\/code>","<code>contacto.html<\/code>","<code>Contacto Final (2).html<\/code>","<code>contacto.html.txt<\/code>"], a:1, w:"Minúsculas, sin espacios, sin tildes y con la extensión correcta."},
+  {q:"Guardaste <code>index.html<\/code> con el Bloc de notas y al abrirlo ves el código en vez de la página. ¿Qué pasó probablemente?", o:["El navegador está dañado","Se guardó como <code>index.html.txt<\/code> porque las extensiones estaban ocultas","Falta internet","HTML no funciona en Windows"], a:1, w:"Activa “Extensiones de nombre de archivo” en el Explorador para ver el nombre real."},
+  {q:"Tu <code>index.html<\/code> está en la raíz y la imagen en <code>img/gato.png<\/code>. ¿Qué escribes en <code>src<\/code>?", o:["<code>C:\\Users\\yo\\web\\img\\gato.png<\/code>","<code>img/gato.png<\/code>","<code>/gato.png<\/code>","<code>gato<\/code>"], a:1, w:"Ruta relativa: carpeta <i>img<\/i>, luego el archivo. Funciona en tu computador y en internet."},
+  {q:"Estás en <code>blog/post.html<\/code> y quieres enlazar al <code>index.html<\/code> de la raíz. ¿Qué ruta usas?", o:["<code>index.html<\/code>","<code>blog/index.html<\/code>","<code>../index.html<\/code>","<code>./blog/index.html<\/code>"], a:2, w:"<code>..<\/code> sube un nivel de carpeta, igual que <code>cd ..<\/code> en la terminal."},
+  {q:"¿Qué extensión tiene un archivo de estilos?", o:["<code>.style<\/code>","<code>.css<\/code>","<code>.html<\/code>","<code>.design<\/code>"], a:1, w:"Cascading Style Sheets: <code>.css<\/code>."},
+  {q:"¿Cómo debe llamarse la página principal de un sitio?", o:["<code>principal.html<\/code>","<code>home.htm<\/code>","<code>index.html<\/code>","<code>Inicio.HTML<\/code>"], a:2, w:"Los servidores, incluido GitHub Pages, abren <code>index.html<\/code> automáticamente."}
+ ]},
+{id:"b4", lvl:"base", title:"Tu taller: VS Code en tu computador", mins:11,
+ type:"quiz",
+ theory:"<p>Este curso trae un editor dentro del navegador para que empieces sin instalar nada. Pero los proyectos reales se hacen en tu computador con un editor de código. El más usado del mundo es <b>Visual Studio Code<\/b> (gratis).<\/p>\n<p><b>Puesta en marcha (10 minutos):<\/b><\/p>\n<ul>\n<li>Descarga VS Code desde <code>code.visualstudio.com<\/code> e instálalo.<\/li>\n<li>Instala el paquete de idioma en español si lo prefieres (VS Code te lo sugiere).<\/li>\n<li>Crea una carpeta para tus proyectos, por ejemplo <code>Documentos/proyectos/mi-primera-web<\/code>.<\/li>\n<li>En VS Code: <b>Archivo → Abrir carpeta<\/b> y elige esa carpeta. Trabaja siempre con la carpeta abierta, no con archivos sueltos.<\/li>\n<li>Crea <code>index.html<\/code>, escribe <code>!<\/code> y pulsa <kbd>Tab<\/kbd>: <b>Emmet<\/b> genera la estructura base completa de una página.<\/li>\n<li>Instala la extensión <b>Live Server<\/b>. Clic derecho en <code>index.html<\/code> → <i>Open with Live Server<\/i>: la página se abre en el navegador y se recarga sola cada vez que guardas.<\/li>\n<li>Activa <b>Archivo → Guardado automático<\/b> para no olvidar guardar.<\/li>\n<\/ul>\n<p><b>Separar en archivos.<\/b> En el curso todo va en un solo archivo, pero en un proyecto real se separa:<\/p>\n<ul>\n<li>El CSS va en <code>estilos.css<\/code> y se conecta en el <code>&lt;head&gt;<\/code> con <code>&lt;link rel=\"stylesheet\" href=\"estilos.css\"&gt;<\/code>.<\/li>\n<li>El JavaScript va en <code>app.js<\/code> y se conecta con <code>&lt;script src=\"app.js\" defer&gt;&lt;/script&gt;<\/code>. <code>defer<\/code> hace que se ejecute cuando el HTML ya cargó.<\/li>\n<\/ul>",
+ example:"<!DOCTYPE html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Mi primera web<\/title>\n  <link rel=\"stylesheet\" href=\"estilos.css\">\n  <script src=\"app.js\" defer><\/script>\n<\/head>\n<body>\n  <h1>Hola desde mi computador<\/h1>\n<\/body>\n<\/html>",
+ questions:[
+  {q:"En VS Code escribes <code>!<\/code> en un archivo <code>.html<\/code> vacío y pulsas <kbd>Tab<\/kbd>. ¿Qué pasa?", o:["Se borra el archivo","Emmet genera la estructura base de una página HTML","Aparece un error","Se abre el navegador"], a:1, w:"Emmet viene incluido en VS Code y expande abreviaturas: también <code>ul&gt;li*3<\/code> crea una lista con 3 elementos."},
+  {q:"¿Cómo conectas el archivo <code>estilos.css<\/code> a tu página?", o:["<code>&lt;style src=\"estilos.css\"&gt;<\/code>","<code>&lt;link rel=\"stylesheet\" href=\"estilos.css\"&gt;<\/code> en el <code>&lt;head&gt;<\/code>","<code>&lt;css&gt;estilos.css&lt;/css&gt;<\/code>","<code>import estilos.css<\/code>"], a:1, w:"Ojo: <code>&lt;link&gt;<\/code> usa <code>href<\/code>, mientras <code>&lt;script&gt;<\/code> usa <code>src<\/code>."},
+  {q:"Tu <code>app.js<\/code> dice que <code>querySelector<\/code> devuelve <code>null<\/code>, aunque el elemento existe. El script está en el <code>&lt;head&gt;<\/code>. ¿Solución más simple?", o:["Borrar el HTML","Agregar <code>defer<\/code> a la etiqueta <code>&lt;script&gt;<\/code>","Usar otro navegador","Poner el CSS después"], a:1, w:"Sin <code>defer<\/code>, el script se ejecuta antes de que exista el HTML de abajo. Con <code>defer<\/code> espera a que la página cargue."},
+  {q:"¿Para qué sirve la extensión Live Server?", o:["Publicar en internet","Ver la página en el navegador y que se recargue sola al guardar","Corregir la ortografía","Instalar JavaScript"], a:1, w:"Es solo para desarrollo en tu computador. Para publicar usarás GitHub Pages."},
+  {q:"¿Qué es mejor en VS Code?", o:["Abrir archivos sueltos uno por uno","Abrir la carpeta completa del proyecto","Trabajar desde el escritorio","Guardar todo en Descargas"], a:1, w:"Con la carpeta abierta ves todos los archivos, puedes buscar en todo el proyecto y usar Git integrado."}
+ ]},
+{id:"b5", lvl:"base", title:"Cómo aprender a programar de verdad", mins:9,
+ type:"quiz",
+ theory:"<p>La diferencia entre quien aprende a programar y quien abandona casi nunca es el talento: es el <b>método<\/b>.<\/p>\n<ul>\n<li><b>Escribe el código tú.<\/b> Leer una solución da la sensación de entender, pero solo escribiéndolo (y equivocándote) se aprende. Por eso este curso te pide intentarlo antes de mostrar la solución.<\/li>\n<li><b>Lee el error completo.<\/b> Los mensajes rojos dicen qué falló y en qué línea. Copia el mensaje exacto en un buscador: alguien ya tuvo ese error.<\/li>\n<li><b>La regla de los 20 minutos.<\/b> Si llevas 20 minutos atascado, pide ayuda o pide una pista. Ni rendirse a los 2 minutos ni sufrir 3 horas.<\/li>\n<li><b>Usa la IA como profesor, no como copiadora.<\/b> Pide que te explique, que te dé una pista o que revise tu código. Si te escribe la solución completa, después escríbela tú de nuevo sin mirar.<\/li>\n<li><b>Poco y seguido.<\/b> 30–45 minutos diarios rinden más que 5 horas un sábado. Por eso la app cuenta tu racha.<\/li>\n<li><b>Toma apuntes con tus palabras.<\/b> Cada lección tiene un cuadro de <b>Mis apuntes<\/b>. Explicar algo con tus palabras es la mejor prueba de que lo entendiste.<\/li>\n<li><b>Construye cosas tuyas.<\/b> Después de cada nivel, haz un mini proyecto propio, aunque sea pequeño. Ahí aparece el aprendizaje real.<\/li>\n<li><b>Aprende a leer en inglés técnico.<\/b> La documentación (MDN, por ejemplo) y la mayoría de respuestas están en inglés. No necesitas hablarlo perfecto para leerlo.<\/li>\n<\/ul>",
+ example:"Plan semanal sugerido (≈ 5 horas)\nLun · Mié · Vie   45 min   lecciones nuevas\nMar · Jue         30 min   repasar apuntes y rehacer un reto sin mirar\nSábado            90 min   mini proyecto propio con lo de la semana",
+ questions:[
+  {q:"Llevas 5 minutos sin resolver un reto. ¿Qué es lo más útil?", o:["Ver la solución y seguir","Releer el reto, revisar las comprobaciones en rojo y pedir una pista","Saltar al siguiente nivel","Cerrar y volver en un mes"], a:1, w:"Las comprobaciones te dicen exactamente qué falta. Las pistas guían sin regalarte la respuesta."},
+  {q:"La consola muestra un error en rojo. ¿Qué haces primero?", o:["Ignorarlo","Leer el mensaje y la línea que indica","Borrar todo el código","Reiniciar el computador"], a:1, w:"El primer error suele ser la causa de los demás. La línea indicada es el punto de partida."},
+  {q:"Le pides a una IA que te ayude con un reto. ¿Qué uso te hace aprender más?", o:["Copiar y pegar su solución completa","Pedir una explicación o una pista y escribir el código tú","No usar nunca ninguna ayuda","Pedirle que haga todo el nivel"], a:1, w:"La ayuda es valiosa cuando sigues siendo tú quien escribe y razona el código."},
+  {q:"¿Qué rinde más para aprender?", o:["5 horas seguidas una vez al mes","30–45 minutos casi todos los días","Ver tutoriales sin practicar","Leer solo teoría"], a:1, w:"La práctica distribuida fija mejor lo aprendido y crea el hábito."},
+  {q:"Terminaste un nivel. ¿Qué te ayuda a consolidarlo?", o:["Pasar al siguiente sin parar","Hacer un mini proyecto propio con lo aprendido","Borrar tus apuntes","Repetir el examen hasta memorizarlo"], a:1, w:"Un proyecto propio te obliga a decidir, buscar y resolver: así se aprende a programar de verdad."}
+ ]},
+
 /* ===================== HTML ===================== */
 {id:"h1", lvl:"html", title:"Tu primera página", mins:3,
  theory:"<p>HTML (HyperText Markup Language) es el esqueleto de toda página web. Se escribe usando <b>etiquetas</b>. Una etiqueta típica tiene tres partes: una etiqueta de apertura <code>&lt;h1&gt;</code>, el contenido en el medio, y una etiqueta de cierre <code>&lt;/h1&gt;</code> (nota la barra inclinada).</p><p>Las etiquetas le dicen al navegador qué tipo de contenido es. Los títulos van de <code>&lt;h1&gt;</code> (el más importante, como el título de un libro) a <code>&lt;h6&gt;</code> (el menos importante). Por buenas prácticas, cada página debería tener un solo <code>&lt;h1&gt;</code> principal.</p>",
@@ -1838,23 +2047,38 @@ var GLOSARIO = [
   ["Código de estado","Web","Número de la respuesta HTTP: 200 éxito, 404 no encontrado, 500 error del servidor."],
   ["DNS","Web","Sistema que traduce nombres de dominio a direcciones IP."],
   ["URL","Web","Dirección de un recurso en internet, como <code>https://sitio.com/pagina<\/code>."],
-  ["SEO","Web","Optimización para buscadores: hacer que Google entienda y muestre bien tu página."]
+  ["SEO","Web","Optimización para buscadores: hacer que Google entienda y muestre bien tu página."],
+  ["AltGr","Teclado","La tecla Alt de la derecha. Da el tercer símbolo de una tecla (abajo a la derecha), como <code>@<\/code> o <code>\\<\/code>. Equivale a <kbd>Ctrl<\/kbd> + <kbd>Alt<\/kbd> en Windows y a <kbd>Option<\/kbd> en Mac."],
+  ["Shift","Teclado","Tecla ⇧ (mayúsculas). Da el símbolo de arriba de cada tecla, como <code>&gt;<\/code> o <code>(<\/code>."],
+  ["Distribución de teclado","Teclado","La configuración que decide qué símbolo sale con cada tecla: Latinoamérica, España, EE. UU… En Windows se cambia con <kbd>Win<\/kbd> + <kbd>Espacio<\/kbd>."],
+  ["Código Alt","Teclado","Truco de Windows: mantener <kbd>Alt<\/kbd> y escribir un número en el teclado numérico produce un símbolo. <kbd>Alt<\/kbd> + 60 = <code>&lt;<\/code>."],
+  ["Tecla muerta","Teclado","Tecla que no escribe nada hasta que pulsas la siguiente, como la tilde o <code>`<\/code>. Si quieres el símbolo solo, pulsa después la barra espaciadora."],
+  ["Atajo","Teclado","Combinación de teclas que ejecuta una acción, como <kbd>Ctrl<\/kbd> + <kbd>S<\/kbd> para guardar."],
+  ["Extensión de archivo","Herramientas","Las letras tras el punto del nombre (<code>.html<\/code>, <code>.css<\/code>, <code>.js<\/code>) que indican qué tipo de archivo es."],
+  ["Ruta relativa","Herramientas","Dirección de un archivo a partir del archivo actual: <code>img/logo.png<\/code>, <code>../index.html<\/code>."],
+  ["VS Code","Herramientas","Visual Studio Code: el editor de código gratuito más usado. Abre carpetas de proyecto y tiene terminal y Git integrados."],
+  ["Emmet","Herramientas","Atajos de escritura en VS Code: <code>!<\/code> + <kbd>Tab<\/kbd> crea la estructura HTML; <code>ul&gt;li*3<\/code> crea una lista."],
+  ["Live Server","Herramientas","Extensión de VS Code que abre tu página en el navegador y la recarga cada vez que guardas."],
+  ["defer","HTML","Atributo de <code>&lt;script&gt;<\/code> que espera a que cargue el HTML antes de ejecutar el JavaScript."]
 ];
+var CHULETAS = [["html", "HTML esencial", "<\/>", "#e8590c", "<h4>Estructura base<\/h4><pre class=\"example cs-code\">&lt;!DOCTYPE html&gt;\n&lt;html lang=\"es\"&gt;\n&lt;head&gt;\n  &lt;meta charset=\"UTF-8\"&gt;\n  &lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"&gt;\n  &lt;title&gt;Título de la pestaña&lt;/title&gt;\n  &lt;link rel=\"stylesheet\" href=\"estilos.css\"&gt;\n  &lt;script src=\"app.js\" defer&gt;&lt;/script&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  ...\n&lt;/body&gt;\n&lt;/html&gt;<\/pre><h4>Etiquetas más usadas<\/h4><table class='cs-t'><tr><td><code>h1<\/code>…<code>h6<\/code><\/td><td>Títulos (un solo h1 por página)<\/td><\/tr><tr><td><code>p<\/code><\/td><td>Párrafo<\/td><\/tr><tr><td><code>a href=\"\"<\/code><\/td><td>Enlace<\/td><\/tr><tr><td><code>img src=\"\" alt=\"\"<\/code><\/td><td>Imagen (sin cierre)<\/td><\/tr><tr><td><code>ul<\/code> / <code>ol<\/code> + <code>li<\/code><\/td><td>Listas<\/td><\/tr><tr><td><code>strong<\/code> / <code>em<\/code><\/td><td>Importante / énfasis<\/td><\/tr><tr><td><code>div<\/code> / <code>span<\/code><\/td><td>Contenedor de bloque / en línea, sin significado<\/td><\/tr><tr><td><code>header nav main section article aside footer<\/code><\/td><td>Semántica<\/td><\/tr><tr><td><code>form label input select textarea button<\/code><\/td><td>Formularios<\/td><\/tr><tr><td><code>table thead tbody tr th td<\/code><\/td><td>Tablas de datos<\/td><\/tr><tr><td><code>dialog<\/code><\/td><td>Ventana modal<\/td><\/tr><\/table><h4>Atributos útiles<\/h4><table class='cs-t'><tr><td><code>id<\/code> / <code>class<\/code><\/td><td>Identificar (único) / agrupar (reutilizable)<\/td><\/tr><tr><td><code>type<\/code> en input<\/td><td>text, email, password, number, date, checkbox, radio<\/td><\/tr><tr><td><code>required minlength min max pattern<\/code><\/td><td>Validación<\/td><\/tr><tr><td><code>for<\/code> en label<\/td><td>Igual al id del input<\/td><\/tr><tr><td><code>target=\"_blank\"<\/code><\/td><td>Abrir en pestaña nueva<\/td><\/tr><tr><td><code>loading=\"lazy\"<\/code><\/td><td>Cargar la imagen cuando se va a ver<\/td><\/tr><tr><td><code>aria-label<\/code><\/td><td>Nombre accesible para iconos<\/td><\/tr><tr><td><code>data-algo<\/code><\/td><td>Datos propios, se leen con <code>dataset.algo<\/code><\/td><\/tr><\/table>"], ["css", "CSS esencial", "{ }", "#1971c2", "<h4>Selectores<\/h4><table class='cs-t'><tr><td><code>p<\/code><\/td><td>Etiqueta<\/td><\/tr><tr><td><code>.clase<\/code><\/td><td>Clase<\/td><\/tr><tr><td><code>#id<\/code><\/td><td>Id (evítalo para estilos)<\/td><\/tr><tr><td><code>nav a<\/code><\/td><td>Descendiente<\/td><\/tr><tr><td><code>ul &gt; li<\/code><\/td><td>Hijo directo<\/td><\/tr><tr><td><code>h2 + p<\/code><\/td><td>Hermano inmediato<\/td><\/tr><tr><td><code>a:hover<\/code> <code>:focus-visible<\/code> <code>:nth-child(2n)<\/code><\/td><td>Estados y posiciones<\/td><\/tr><tr><td><code>::before<\/code> <code>::after<\/code><\/td><td>Pseudo-elementos (necesitan <code>content<\/code>)<\/td><\/tr><tr><td><code>[type=\"email\"]<\/code><\/td><td>Por atributo<\/td><\/tr><\/table><h4>Modelo de caja<\/h4><pre class=\"example cs-code\">* { box-sizing: border-box; }   /* el ancho incluye padding y borde */\n.caja {\n  margin: 16px;          /* fuera */\n  border: 2px solid #ccc;\n  padding: 12px 20px;    /* dentro: vertical horizontal */\n  border-radius: 12px;\n}<\/pre><h4>Flexbox (una dimensión)<\/h4><pre class=\"example cs-code\">.fila {\n  display: flex;\n  flex-direction: row;          /* o column */\n  justify-content: space-between; /* center, flex-start, flex-end, space-around */\n  align-items: center;          /* stretch, flex-start, flex-end */\n  flex-wrap: wrap;\n  gap: 12px;\n}\n.hijo { flex: 1; }              /* ocupa el espacio libre */<\/pre><h4>Grid (dos dimensiones)<\/h4><pre class=\"example cs-code\">.rejilla {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* adaptable */\n  gap: 16px;\n}\n.ancho { grid-column: span 2; }<\/pre><h4>Responsive y variables<\/h4><pre class=\"example cs-code\">:root { --acento: #0f766e; }\n.boton { background: var(--acento); }\n\n@media (max-width: 600px) {\n  .rejilla { grid-template-columns: 1fr; }\n}<\/pre><h4>Unidades<\/h4><p><code>px<\/code> fijo · <code>rem<\/code> relativo a la letra base · <code>%<\/code> del padre · <code>vw<\/code>/<code>vh<\/code> de la ventana · <code>fr<\/code> fracción en Grid · <code>ch<\/code> ancho de un carácter.<\/p>"], ["js", "JavaScript esencial", "JS", "#e0a800", "<h4>Variables y tipos<\/h4><pre class=\"example cs-code\">const nombre = \"Ana\";      // texto (string)\nlet edad = 30;             // número\nconst activo = true;       // booleano\nconst lista = [1, 2, 3];   // array\nconst user = { nombre, edad };  // objeto\ntypeof edad;               // \"number\"<\/pre><h4>Condiciones y bucles<\/h4><pre class=\"example cs-code\">if (edad &gt;= 18 &amp;&amp; activo) { ... } else if (...) { ... } else { ... }\nconst tipo = edad &gt;= 18 ? \"adulto\" : \"menor\";   // ternario\n\nfor (let i = 0; i &lt; 3; i++) { ... }\nfor (const x of lista) { ... }\nwhile (condicion) { ... }<\/pre><h4>Funciones<\/h4><pre class=\"example cs-code\">function sumar(a, b = 0) { return a + b; }\nconst doble = (n) =&gt; n * 2;\nconst saludo = `Hola, ${nombre}`;   // template literal<\/pre><h4>Arrays<\/h4><table class='cs-t'><tr><td><code>push(x)<\/code> / <code>pop()<\/code><\/td><td>Agregar / quitar al final<\/td><\/tr><tr><td><code>map(fn)<\/code><\/td><td>Transformar cada uno<\/td><\/tr><tr><td><code>filter(fn)<\/code><\/td><td>Quedarse con los que cumplen<\/td><\/tr><tr><td><code>reduce(fn, inicio)<\/code><\/td><td>Reducir a un valor<\/td><\/tr><tr><td><code>find(fn)<\/code><\/td><td>Primer elemento que cumple<\/td><\/tr><tr><td><code>some<\/code> / <code>every<\/code><\/td><td>¿Alguno? / ¿todos?<\/td><\/tr><tr><td><code>includes(x)<\/code><\/td><td>¿Contiene?<\/td><\/tr><tr><td><code>[...a].sort((a,b)=&gt;a-b)<\/code><\/td><td>Copia ordenada de números<\/td><\/tr><tr><td><code>slice(i, j)<\/code><\/td><td>Copia de un tramo<\/td><\/tr><\/table><h4>Textos<\/h4><p><code>trim()<\/code> · <code>toLowerCase()<\/code> · <code>includes()<\/code> · <code>split(\" \")<\/code> · <code>join(\"-\")<\/code> · <code>replace()<\/code> · <code>slice()<\/code> · <code>padStart(2, \"0\")<\/code> · <code>length<\/code><\/p><h4>DOM y eventos<\/h4><pre class=\"example cs-code\">const btn = document.querySelector(\"#enviar\");\nconst items = document.querySelectorAll(\".item\");\nel.textContent = \"Hola\";\nel.classList.add(\"activo\");   // remove, toggle, contains\nconst li = document.createElement(\"li\");\nlista.append(li);\n\nbtn.addEventListener(\"click\", (e) =&gt; { ... });\nform.addEventListener(\"submit\", (e) =&gt; { e.preventDefault(); ... });\ninput.addEventListener(\"input\", () =&gt; console.log(input.value));<\/pre><h4>Datos y asincronía<\/h4><pre class=\"example cs-code\">JSON.parse(texto)         JSON.stringify(objeto)\nlocalStorage.setItem(\"k\", JSON.stringify(datos));\nconst datos = JSON.parse(localStorage.getItem(\"k\")) ?? [];\n\nasync function cargar() {\n  try {\n    const res = await fetch(url);\n    if (!res.ok) throw new Error(res.status);\n    return await res.json();\n  } catch (e) { console.error(e.message); }\n}<\/pre>"], ["git", "Terminal y Git", "$_", "#495057", "<h4>Terminal<\/h4><table class='cs-t'><tr><td><code>pwd<\/code><\/td><td>¿Dónde estoy?<\/td><\/tr><tr><td><code>ls<\/code><\/td><td>Listar archivos<\/td><\/tr><tr><td><code>cd carpeta<\/code> / <code>cd ..<\/code><\/td><td>Entrar / subir<\/td><\/tr><tr><td><code>mkdir nombre<\/code><\/td><td>Crear carpeta<\/td><\/tr><tr><td><code>touch archivo.html<\/code><\/td><td>Crear archivo<\/td><\/tr><tr><td><code>code .<\/code><\/td><td>Abrir la carpeta en VS Code<\/td><\/tr><tr><td><kbd>Tab<\/kbd> · <kbd>↑<\/kbd> · <kbd>Ctrl<\/kbd>+<kbd>C<\/kbd><\/td><td>Autocompletar · comando anterior · detener<\/td><\/tr><\/table><h4>Git: el ciclo diario<\/h4><pre class=\"example cs-code\">git status                       # ¿qué cambió?\ngit add .                        # preparar todo\ngit commit -m \"Agrega menú móvil\"\ngit push                         # subir a GitHub\ngit pull                         # bajar cambios<\/pre><h4>Primera vez<\/h4><pre class=\"example cs-code\">git config --global user.name \"Tu Nombre\"\ngit config --global user.email \"tu@correo.com\"\ngit init\ngit remote add origin https://github.com/usuario/repo.git\ngit push -u origin main\ngit clone https://github.com/usuario/repo.git<\/pre><h4>Ramas<\/h4><pre class=\"example cs-code\">git switch -c nueva-funcion   # crear y cambiar\ngit switch main\ngit merge nueva-funcion\ngit branch -d nueva-funcion\ngit log --oneline             # historia<\/pre>"], ["atajos", "Atajos de teclado", "⌨", "#7048e8", "<h4>Sistema (Windows · en Mac usa ⌘ en vez de Ctrl)<\/h4><table class='cs-t'><tr><td><kbd>Ctrl<\/kbd>+<kbd>C<\/kbd> / <kbd>X<\/kbd> / <kbd>V<\/kbd><\/td><td>Copiar / cortar / pegar<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>Z<\/kbd> / <kbd>Y<\/kbd><\/td><td>Deshacer / rehacer<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>S<\/kbd><\/td><td>Guardar<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>F<\/kbd><\/td><td>Buscar<\/td><\/tr><tr><td><kbd>Shift<\/kbd>+flechas<\/td><td>Seleccionar<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+flechas<\/td><td>Saltar por palabras<\/td><\/tr><tr><td><kbd>Inicio<\/kbd> / <kbd>Fin<\/kbd><\/td><td>Principio / final de línea<\/td><\/tr><tr><td><kbd>Alt<\/kbd>+<kbd>Tab<\/kbd><\/td><td>Cambiar de ventana<\/td><\/tr><tr><td><kbd>Win<\/kbd>+<kbd>Espacio<\/kbd><\/td><td>Cambiar distribución del teclado<\/td><\/tr><tr><td><kbd>Win<\/kbd>+<kbd>.<\/kbd><\/td><td>Panel de emojis y símbolos<\/td><\/tr><\/table><h4>VS Code<\/h4><table class='cs-t'><tr><td><kbd>Ctrl<\/kbd>+<kbd>/<\/kbd><\/td><td>Comentar línea<\/td><\/tr><tr><td><kbd>Alt<\/kbd>+<kbd>↑<\/kbd>/<kbd>↓<\/kbd><\/td><td>Mover línea<\/td><\/tr><tr><td><kbd>Shift<\/kbd>+<kbd>Alt<\/kbd>+<kbd>↓<\/kbd><\/td><td>Duplicar línea<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>D<\/kbd><\/td><td>Seleccionar siguiente igual<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>P<\/kbd><\/td><td>Abrir archivo por nombre<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>Shift<\/kbd>+<kbd>P<\/kbd><\/td><td>Paleta de comandos<\/td><\/tr><tr><td><kbd>Shift<\/kbd>+<kbd>Alt<\/kbd>+<kbd>F<\/kbd><\/td><td>Formatear el documento<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>ñ<\/kbd> o <kbd>Ctrl<\/kbd>+<kbd>`<\/kbd><\/td><td>Abrir la terminal integrada<\/td><\/tr><tr><td><code>!<\/code> + <kbd>Tab<\/kbd><\/td><td>Estructura HTML (Emmet)<\/td><\/tr><\/table><h4>Navegador<\/h4><table class='cs-t'><tr><td><kbd>F12<\/kbd><\/td><td>Herramientas para desarrolladores<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>Shift<\/kbd>+<kbd>M<\/kbd><\/td><td>Modo celular (con DevTools abiertas)<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>Shift<\/kbd>+<kbd>R<\/kbd><\/td><td>Recargar sin caché<\/td><\/tr><tr><td><kbd>Ctrl<\/kbd>+<kbd>U<\/kbd><\/td><td>Ver el código fuente<\/td><\/tr><\/table>"]];
+var TECLADO = [["<", "menor que", "Tecla a la izquierda de la Z", "Tecla a la izquierda de la Z", "Shift + ,", 60], [">", "mayor que", "Shift + tecla a la izquierda de la Z", "Shift + tecla a la izquierda de la Z", "Shift + .", 62], ["{", "llave que abre", "Tecla a la derecha de la Ñ", "AltGr + tecla ´ (derecha de la Ñ)", "Shift + [", 123], ["}", "llave que cierra", "Tecla junto a Enter (la de } ])", "AltGr + tecla Ç", "Shift + ]", 125], ["[", "corchete que abre", "Shift + tecla a la derecha de la Ñ", "AltGr + tecla ` (derecha de la P)", "Tecla [", 91], ["]", "corchete que cierra", "Shift + tecla junto a Enter", "AltGr + tecla + (junto a Enter)", "Tecla ]", 93], ["(", "paréntesis que abre", "Shift + 8", "Shift + 8", "Shift + 9", 40], [")", "paréntesis que cierra", "Shift + 9", "Shift + 9", "Shift + 0", 41], ["=", "igual", "Shift + 0", "Shift + 0", "Tecla =", 61], ["\"", "comillas dobles", "Shift + 2", "Shift + 2", "Shift + '", 34], ["'", "comilla simple", "Tecla a la derecha del 0", "Tecla a la derecha del 0", "Tecla '", 39], ["`", "comilla invertida (backtick)", "AltGr + tecla de } (y espacio si no aparece)", "Tecla ` (derecha de la P) y luego espacio", "Tecla a la izquierda del 1", 96], [";", "punto y coma", "Shift + ,", "Shift + ,", "Tecla ;", 59], [":", "dos puntos", "Shift + .", "Shift + .", "Shift + ;", 58], ["/", "barra", "Shift + 7", "Shift + 7", "Tecla /", 47], ["\\", "barra invertida", "AltGr + tecla ' (derecha del 0)", "AltGr + tecla º (izquierda del 1)", "Tecla \\", 92], ["|", "barra vertical", "Tecla a la izquierda del 1", "AltGr + 1", "Shift + \\", 124], ["&", "et (ampersand)", "Shift + 6", "Shift + 6", "Shift + 7", 38], ["#", "numeral", "Shift + 3", "AltGr + 3", "Shift + 3", 35], ["@", "arroba", "AltGr + Q", "AltGr + 2", "Shift + 2", 64], ["~", "virgulilla", "AltGr + tecla + (y espacio si no aparece)", "AltGr + 4", "Shift + `", 126], ["^", "circunflejo", "AltGr + tecla de { (y espacio)", "Shift + tecla ` y espacio", "Shift + 6", 94], ["*", "asterisco", "Shift + tecla +", "Shift + tecla +", "Shift + 8", 42], ["_", "guion bajo", "Shift + tecla -", "Shift + tecla -", "Shift + -", 95], ["$", "pesos / dólar", "Shift + 4", "Shift + 4", "Shift + 4", 36], ["%", "porcentaje", "Shift + 5", "Shift + 5", "Shift + 5", 37], ["!", "exclamación", "Shift + 1", "Shift + 1", "Shift + 1", 33]];
+var RUTA = [["Ahora", "≈ 14 h de lecciones + práctica", "Ruta Web completa, con un mini proyecto propio por nivel", "Te da las bases reales de HTML, CSS y JavaScript y el hábito de programar."], ["Siguiente 1", "40–60 h", "3 proyectos propios en tu computador con VS Code, Git y GitHub Pages", "Aquí pasas de resolver retos guiados a construir desde cero. Es el salto más importante."], ["Siguiente 2", "60–80 h", "JavaScript más profundo: módulos, fetch con APIs reales, manejo de errores, depurar con DevTools", "Las bases de cualquier framework."], ["Siguiente 3", "80–120 h", "React (o Vue) con Vite, y TypeScript básico", "Es lo que piden la mayoría de ofertas de frontend."], ["Siguiente 4", "40–60 h", "Backend básico: Node + Express o un servicio como Supabase/Firebase; bases de datos", "Para apps con usuarios y datos guardados en un servidor."], ["Empleo", "continuo", "Portafolio con 3–5 proyectos publicados, README cuidados, inglés técnico y práctica de entrevistas", "Con esto puedes aplicar a puestos junior o tomar clientes freelance."]];
 
 /* ==================================================================
    Estado (se guarda en localStorage; misma clave que la versión anterior)
    ================================================================== */
 var KEY="ruta-web-v1";
-var S={done:{},help:{},xp:0,days:[],code:{},current:"h1",hintN:{},tries:{},quiz:{},log:{},best:0,name:"",theme:"auto",finishedAt:null};
+var S={done:{},help:{},xp:0,days:[],code:{},current:"h1",hintN:{},tries:{},quiz:{},log:{},best:0,name:"",theme:"auto",finishedAt:null,notes:{},notesAt:{},kbmap:{},kbLay:"2"};
 try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);for(var k in p)S[k]=p[k];}}catch(e){}
-["done","help","code","hintN","tries","quiz","log"].forEach(function(k){if(!S[k]||typeof S[k]!=="object")S[k]={}});
+["done","help","code","hintN","tries","quiz","log","notes","notesAt","kbmap"].forEach(function(k){if(!S[k]||typeof S[k]!=="object")S[k]={}});
 if(!Array.isArray(S.days))S.days=[];
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
 var $=function(id){return document.getElementById(id)};
 var byId={},lvById={};
 L.forEach(function(l,i){l.n=i;byId[l.id]=l});
-LEVELS.forEach(function(lv,i){lv.n=i+1;lvById[lv.id]=lv;lv.lessons=L.filter(function(l){return l.lvl===lv.id});lv.mins=lv.lessons.reduce(function(s,l){return s+l.mins},0)});
+LEVELS.forEach(function(lv,i){lv.n=i;lvById[lv.id]=lv;lv.lessons=L.filter(function(l){return l.lvl===lv.id});lv.mins=lv.lessons.reduce(function(s,l){return s+l.mins},0)});
 var cur=byId[S.current]||L[0];
 var TOTAL_MIN=L.reduce(function(s,l){return s+l.mins},0);
 
@@ -2177,7 +2401,7 @@ function go(id,noRoute){
     showTab(false);
     run();
   }
-  renderPager();renderSide();
+  renderPager();renderSide();renderMyNotes();
   $("lesson").scrollTop=0;
   if(window.innerWidth<=820&&document.body.dataset.view==="curso")window.scrollTo(0,0);
   if(S.done[id]){
@@ -2220,6 +2444,7 @@ function renderHome(){
   $("ringTxt").textContent=pct+"%";
   $("ringSub").innerHTML="<b>"+d.length+"</b> de "+L.length+" lecciones<br>"+S.xp+" XP acumulados";
   $("msDone").textContent=d.length;$("msTime").textContent=fmtH(minsDone);
+  $("qNotes").textContent=notesArr().length?notesArr().length+" lecciones con notas":"Tus notas de cada lección";
   $("msStreak").textContent=streak();$("msBadges").textContent=earnedBadges().length;
 
   var heat="",dt=new Date();dt.setDate(dt.getDate()-27);
@@ -2325,16 +2550,112 @@ $("importIn").onchange=function(){
 };
 var resetArm=0;
 $("resetAll").onclick=function(){
-  if(Date.now()-resetArm>4000){resetArm=Date.now();$("resetAll").textContent="Pulsa otra vez para confirmar";setTimeout(function(){$("resetAll").textContent="Borrar progreso"},4000);return}
+  if(Date.now()-resetArm>4000){resetArm=Date.now();$("resetAll").textContent="Pulsa otra vez (también borra tus notas)";setTimeout(function(){$("resetAll").textContent="Borrar progreso"},4000);return}
   var theme=S.theme;
-  S={done:{},help:{},xp:0,days:[],code:{},current:L[0].id,hintN:{},tries:{},quiz:{},log:{},best:0,name:"",theme:theme,finishedAt:null};
+  S={done:{},help:{},xp:0,days:[],code:{},current:L[0].id,hintN:{},tries:{},quiz:{},log:{},best:0,name:"",theme:theme,finishedAt:null,notes:{},notesAt:{},kbmap:{},kbLay:"2"};
   save();resetArm=0;$("resetAll").textContent="Borrar progreso";cur=L[0];renderAll();toast("Progreso borrado");
 };
 
 /* ==================================================================
+   Apuntes: notas, chuletas, teclado, glosario y qué sigue
+   ================================================================== */
+var AP_SUBS=["notas","chuletas","teclado","glosario","ruta"];
+function openAp(sub){apSub=sub;route("apuntes")}
+Array.prototype.forEach.call(document.querySelectorAll(".quick [data-ap]"),function(b){b.onclick=function(){openAp(b.dataset.ap)}});
+Array.prototype.forEach.call($("apTabs").children,function(b){b.onclick=function(){apSub=b.dataset.ap;renderApuntes();setHash("apuntes/"+apSub)}});
+function renderApuntes(){
+  Array.prototype.forEach.call($("apTabs").children,function(b){b.setAttribute("aria-selected",b.dataset.ap===apSub)});
+  AP_SUBS.forEach(function(k){$("ap-"+k).hidden=k!==apSub});
+  if(apSub==="notas")renderNotes();
+  if(apSub==="chuletas")renderChuletas();
+  if(apSub==="teclado")renderTeclado();
+  if(apSub==="glosario")renderGlos();
+  if(apSub==="ruta")renderRuta();
+}
+
+/* ---------- Mis apuntes por lección ---------- */
+var noteT;
+function renderMyNotes(){
+  var t=S.notes[cur.id]||"";
+  $("noteIn").value=t;
+  $("myNotes").open=!!t;
+  $("nSaved").textContent=t?"guardado":"";
+}
+$("noteIn").addEventListener("input",function(){
+  var v=$("noteIn").value;
+  if(v.trim()){S.notes[cur.id]=v;S.notesAt[cur.id]=today()}else{delete S.notes[cur.id];delete S.notesAt[cur.id]}
+  $("nSaved").textContent="guardando…";clearTimeout(noteT);noteT=setTimeout(function(){save();$("nSaved").textContent=v.trim()?"guardado":""},400);
+});
+$("toNotes").onclick=function(){openAp("notas")};
+function notesArr(){return L.filter(function(l){return S.notes[l.id]&&S.notes[l.id].trim()})}
+function renderNotes(){
+  var q=$("ntQ").value.trim().toLowerCase(),list=notesArr().filter(function(l){return !q||(l.title+" "+S.notes[l.id]).toLowerCase().indexOf(q)>=0});
+  if(!notesArr().length){$("notesList").innerHTML='<div class="card empty-card">Todavía no tienes apuntes. Abre cualquier lección y escribe en el cuadro <b>📝 Mis apuntes</b> que está debajo del reto.</div>';return}
+  $("notesList").innerHTML=list.length?list.map(function(l){var lv=lvById[l.lvl];return '<article class="card note-c" style="'+lvStyle(lv)+'"><header><span class="pill lv">Nivel '+lv.n+'</span><b>'+esc(l.title)+'</b><small>'+esc(S.notesAt[l.id]||"")+'</small><button class="btn" data-open="'+l.id+'">Abrir lección</button></header><p>'+esc(S.notes[l.id])+'</p></article>'}).join(""):'<p class="empty-msg">Ninguna nota coincide con la búsqueda.</p>';
+  Array.prototype.forEach.call($("notesList").querySelectorAll("[data-open]"),function(b){b.onclick=function(){route("curso");go(b.dataset.open);$("myNotes").open=true}});
+}
+$("ntQ").addEventListener("input",renderNotes);
+$("ntCopy").onclick=function(){
+  var txt=notesArr().map(function(l){return "## "+l.title+"\n"+S.notes[l.id].trim()}).join("\n\n");
+  if(!txt){toast("Aún no tienes notas para copiar");return}
+  var done=function(){toast("Notas copiadas. Pégalas donde quieras guardarlas.")};
+  try{navigator.clipboard.writeText(txt).then(done,function(){fallbackCopy(txt);done()})}catch(e){fallbackCopy(txt);done()}
+};
+function fallbackCopy(t){var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(e){}a.remove()}
+
+/* ---------- Chuletas ---------- */
+var csDone=false;
+function renderChuletas(){
+  if(csDone)return;csDone=true;
+  $("csGrid").innerHTML=CHULETAS.map(function(c,i){return '<details class="card cs-card" style="--lv:'+c[3]+'"'+(i<2?" open":"")+'><summary><span class="lvdot" style="--lv:'+c[3]+';--lv-ink:#fff">'+esc(c[2])+'</span><h3>'+esc(c[1])+'</h3><span class="chev">▶</span></summary><div class="cs-body">'+c[4]+'</div></details>'}).join("");
+}
+
+/* ---------- Teclado ---------- */
+var KEYNAME={Backquote:"tecla a la izquierda del 1",Minus:"tecla a la derecha del 0",Equal:"segunda tecla a la derecha del 0",BracketLeft:"tecla a la derecha de la P",BracketRight:"segunda tecla a la derecha de la P",Semicolon:"tecla Ñ",Quote:"tecla a la derecha de la Ñ",Backslash:"tecla junto a Enter",IntlBackslash:"tecla a la izquierda de la Z",Comma:"tecla ,",Period:"tecla .",Slash:"tecla a la derecha del punto",Space:"barra espaciadora",IntlRo:"tecla junto a Shift derecho"};
+function keyDesc(e){
+  var k=KEYNAME[e.code]||(/^Key/.test(e.code)?"tecla "+e.code.slice(3):/^Digit/.test(e.code)?"tecla "+e.code.slice(5):/^Numpad/.test(e.code)?"teclado numérico "+e.code.slice(6):e.code);
+  var m=[],alt=e.getModifierState&&e.getModifierState("AltGraph");
+  if(alt)m.push("AltGr");else{if(e.ctrlKey)m.push("Ctrl");if(e.altKey)m.push(/Mac/.test(navigator.platform)?"Option":"Alt")}
+  if(e.shiftKey)m.push("Shift");
+  return m.concat([k]).join(" + ");
+}
+var kbLast="";
+function renderTeclado(){
+  var lay=S.kbLay||"2";
+  Array.prototype.forEach.call($("kbLay").children,function(b){b.setAttribute("aria-selected",b.dataset.l===lay)});
+  var cols=["Símbolo","Nombre","Latinoamérica","España","EE. UU.","Alt + número","Tu teclado"];
+  $("kbTable").innerHTML='<thead><tr>'+cols.map(function(c,i){return '<th'+(String(i)===lay?' class="hl"':'')+'>'+c+'</th>'}).join("")+'</tr></thead><tbody>'+
+    TECLADO.map(function(r){var mine=S.kbmap[r[0]];return '<tr><td class="sym">'+esc(r[0])+'</td><td>'+esc(r[1])+'</td>'+[2,3,4].map(function(i){return '<td'+(String(i)===lay?' class="hl"':'')+'>'+esc(r[i])+'</td>'}).join("")+'<td><kbd>Alt</kbd> + '+r[5]+'</td><td class="'+(mine?"mine":"")+'">'+(mine?esc(mine):"—")+'</td></tr>'}).join("")+'</tbody>';
+  $("kbNeed").innerHTML=TECLADO.map(function(r){return '<span class="'+(S.kbmap[r[0]]?"ok":"")+'" title="'+esc(r[1])+'">'+esc(r[0])+'</span>'}).join("");
+  var n=TECLADO.filter(function(r){return S.kbmap[r[0]]}).length;
+  $("kbCount").textContent=n+" de "+TECLADO.length+" símbolos encontrados"+(n===TECLADO.length?" · ¡Dominas tu teclado!":"");
+}
+Array.prototype.forEach.call($("kbLay").children,function(b){b.onclick=function(){S.kbLay=b.dataset.l;save();renderTeclado()}});
+$("kbIn").addEventListener("keydown",function(e){
+  if(["Shift","Control","Alt","AltGraph","Meta","CapsLock","Dead"].indexOf(e.key)>=0){if(e.key==="Dead")$("kbOut").innerHTML='Esa es una <b>tecla muerta</b>: pulsa la barra espaciadora para que aparezca el símbolo.';return}
+  if(e.key.length!==1)return;
+  kbLast=keyDesc(e);
+  var row=TECLADO.filter(function(r){return r[0]===e.key})[0];
+  $("kbOut").innerHTML='<span class="big">'+esc(e.key)+'</span>'+(row?'<b>'+esc(row[1])+'</b>: ':'')+'<kbd>'+esc(kbLast).replace(/ \+ /g,'</kbd> + <kbd>')+'</kbd>';
+  if(row){S.kbmap[e.key]=kbLast;save();renderTeclado()}
+});
+$("kbIn").addEventListener("input",function(e){
+  var v=$("kbIn").value,ch=v.slice(-1);
+  if(e.inputType==="insertText"&&ch){var row=TECLADO.filter(function(r){return r[0]===ch})[0];if(row&&!S.kbmap[ch]){S.kbmap[ch]=kbLast||"(tecla muerta + espacio)";save();renderTeclado()}}
+  if(v.length>40)$("kbIn").value=v.slice(-20);
+});
+
+/* ---------- Qué sigue ---------- */
+function renderRuta(){
+  var pct=Math.round(doneList().length/L.length*100);
+  $("rutaList").innerHTML=RUTA.map(function(r,i){return '<li class="card'+(i===0?" now":"")+'"><div class="when"><b>'+esc(r[0])+'</b><span>'+esc(r[1])+'</span></div><div><h3>'+esc(r[2])+(i===0?' · vas en '+pct+'%':'')+'</h3><p>'+esc(r[3])+'</p></div></li>'}).join("");
+}
+
+/* ==================================================================
    Navegación entre vistas (con #enlaces compartibles)
    ================================================================== */
-var VIEWS=["inicio","curso","glosario","logros"];
+var VIEWS=["inicio","curso","apuntes","logros"];
+var apSub="notas";
 function setHash(h){try{if(location.hash!=="#"+h)history.replaceState(null,"","#"+h)}catch(e){}}
 function route(v,noHash){
   if(VIEWS.indexOf(v)<0)v="inicio";
@@ -2342,9 +2663,9 @@ function route(v,noHash){
   Array.prototype.forEach.call(document.querySelectorAll(".navbtn[data-go]"),function(b){if(b.dataset.go===v)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
   closeSide();
   if(v==="inicio")renderHome();
-  if(v==="glosario")renderGlos();
+  if(v==="apuntes")renderApuntes();
   if(v==="logros")renderLogros();
-  if(v==="curso"&&!noHash){setHash("curso/"+cur.id)}else if(!noHash)setHash(v);
+  if(v==="curso"&&!noHash){setHash("curso/"+cur.id)}else if(v==="apuntes"&&!noHash){setHash("apuntes/"+apSub)}else if(!noHash)setHash(v);
   var el=$("v-"+v);if(el)el.scrollTop=0;
   window.scrollTo(0,0);
 }
@@ -2352,6 +2673,8 @@ function bindGo(root){Array.prototype.forEach.call(root.querySelectorAll("[data-
 bindGo(document);
 function fromHash(){
   var h=(location.hash||"").replace(/^#\/?/,"").split("/");
+  if(h[0]==="glosario"){h=["apuntes","glosario"]}
+  if(h[0]==="apuntes"&&AP_SUBS.indexOf(h[1])>=0)apSub=h[1];
   if(h[0]==="curso"){route("curso",true);go(byId[h[1]]?h[1]:cur.id,true)}
   else if(VIEWS.indexOf(h[0])>=0)route(h[0],true);
   else route("inicio",true);
