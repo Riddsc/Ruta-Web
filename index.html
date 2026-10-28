@@ -6,6 +6,8 @@
 <title>Ruta Web</title>
 <meta name="description" content="Curso interactivo y gratuito de desarrollo web en español: HTML, CSS, JavaScript, Git y proyectos de portafolio, con retos que se corrigen solos.">
 <meta name="theme-color" content="#0f766e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f766e'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='26' font-weight='700' fill='white' text-anchor='middle'%3E%3C/%3E%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,7 +87,7 @@ h1,h2,h3{text-wrap:balance}
 body[data-view="inicio"] #v-inicio,
 body[data-view="apuntes"] #v-apuntes,
 body[data-view="logros"] #v-logros{display:block;overflow:auto}
-body[data-view="curso"] #v-curso{display:grid}
+body[data-view="curso"] #v-curso,body[data-view="taller"] #v-taller{display:grid}
 .page{padding:28px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
 .wrap{max-width:1080px;margin:0 auto}
 .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700}
@@ -121,12 +123,12 @@ body[data-view="curso"] #v-curso{display:grid}
 .mini-stats div{background:var(--surface-2);border-radius:10px;padding:10px 12px}
 .mini-stats b{display:block;font-family:var(--f-display);font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
 .mini-stats span{font-size:12px;color:var(--muted)}
-.heat{display:grid;grid-template-columns:repeat(14,1fr);gap:4px}
+.heat{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));align-content:start;gap:4px}
 .heat i{aspect-ratio:1;border-radius:4px;background:var(--line)}
 .heat i.l1{background:color-mix(in srgb,var(--accent) 45%,var(--line))}
 .heat i.l2{background:color-mix(in srgb,var(--accent) 72%,var(--line))}
 .heat i.l3{background:var(--accent)}
-.heat i.today{outline:2px solid var(--xp);outline-offset:1px}
+.heat i.hoy{outline:2px solid var(--xp);outline-offset:1px}
 .heat-l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px}
 
 .levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
@@ -342,6 +344,68 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
 .mynotes .foot{display:flex;justify-content:space-between;align-items:center;padding:0 16px 12px;font-size:13px;color:var(--muted);gap:8px;flex-wrap:wrap}
 .theory kbd,.task kbd,.q kbd{font-size:.8em}
 
+.modebar{display:flex;gap:12px;align-items:center;background:var(--xp-soft);border-radius:12px;padding:10px 14px;margin-bottom:14px}
+.modebar .mb-ic{font-size:22px}
+.modebar div{flex:1}
+.modebar b{display:block}
+.modebar span{font-size:13.5px;color:var(--muted)}
+.today{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:18px}
+.today-c{display:flex;gap:14px;align-items:center;padding:16px 18px}
+.today-c .ic{font-size:24px;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--xp-soft);flex:none}
+.today-c div{flex:1;min-width:0}
+.today-c small{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.today-c b{display:block;font-size:16px}
+.today-c span{font-size:13.5px;color:var(--muted)}
+.today-c.done .ic{background:var(--ok-soft)}
+.redo{margin-top:12px!important;font-size:14px;color:var(--muted)}
+.redo .mini{color:var(--accent);font-weight:700;padding:2px 4px}
+
+/* ---------- Taller ---------- */
+#v-taller{grid-template-columns:270px 1fr;min-height:0}
+.tl-side{border-right:1px solid var(--line);background:var(--surface);overflow:auto;padding:14px 12px 24px;display:flex;flex-direction:column;gap:10px}
+.tl-side-h{display:flex;justify-content:space-between;align-items:baseline;padding:0 4px}
+.tl-side-h b{font-family:var(--f-display);font-size:17px}
+.tl-side-h span{font-size:12px;color:var(--muted)}
+.tl-new{display:flex;gap:6px}
+.tl-new select{flex:1;min-width:0;padding:8px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);font:inherit;font-size:13.5px;color:var(--ink)}
+.tl-list{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:4px}
+.tl-list button{width:100%;text-align:left;border:0;background:none;border-radius:9px;padding:9px 10px;display:block}
+.tl-list button:hover{background:var(--surface-2)}
+.tl-list button[aria-current="true"]{background:var(--accent-soft)}
+.tl-list b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tl-list small{font-size:12px;color:var(--muted)}
+.tl-help{font-size:12.5px;color:var(--muted);margin:auto 4px 0}
+.tl-main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.tl-bar{display:flex;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap;position:relative}
+.tl-bar input{font:700 15px var(--f-body);border:1px solid transparent;background:none;border-radius:8px;padding:6px 8px;color:var(--ink);width:200px}
+.tl-bar input:hover,.tl-bar input:focus{border-color:var(--line);background:var(--surface-2);outline:none}
+.tl-bar .sp{flex:1}
+.tl-bar .btn{padding:7px 11px;font-size:13px}
+.tl-bar .tab{font-family:var(--f-mono);font-weight:600;font-size:12.5px}
+.tl-menu{position:absolute;right:12px;top:calc(100% - 4px);z-index:20;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:4px;display:grid;min-width:180px}
+.tl-menu button{border:0;background:none;text-align:left;padding:8px 10px;border-radius:7px;font-size:14px}
+.tl-menu button:hover{background:var(--surface-2)}
+.tl-menu .danger{color:var(--bad)}
+.tl-work{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr}
+.tl-ed{display:flex;min-height:0}
+.tl-ed .editor{flex:1;min-height:300px;width:100%}
+.tl-pv{display:flex;flex-direction:column;min-height:0;border-left:1px solid var(--line);background:var(--surface)}
+.chip.install{cursor:pointer;background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip.install svg{width:16px;height:16px}
+@media (max-width:1180px){
+  #v-taller{grid-template-columns:1fr}
+  .tl-side{border-right:0;border-bottom:1px solid var(--line);max-height:none}
+  .tl-list{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  .tl-help{display:none}
+}
+@media (max-width:820px){
+  body[data-view="taller"] #v-taller{display:flex;flex-direction:column}
+  .tl-work{grid-template-columns:1fr}
+  .tl-ed .editor{height:380px;flex:none}
+  .tl-pv{border-left:0;border-top:1px solid var(--line);min-height:360px}
+  .tl-bar input{width:100%}
+}
+
 /* ---------- Glosario ---------- */
 .gl-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
 .search{flex:1;min-width:220px;position:relative}
@@ -427,7 +491,6 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
   .bottomnav .navbtn{flex:1;flex-direction:column;gap:2px;font-size:11px;padding:6px 4px}
   .toast{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   .cert-wrap{grid-template-columns:1fr}
-  .heat{grid-template-columns:repeat(14,1fr)}
   .mini-stats b{font-size:19px}
 }
 @media (max-width:420px){
@@ -453,6 +516,8 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
   <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
   <symbol id="i-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+  <symbol id="i-tool" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 8-8-1.3-1.3a4 4 0 0 1-5-5L13 2z"/><path d="M3 21l4-4"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-5-5 5 5 5-5M5 21h14"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
 </svg>
 
@@ -462,6 +527,7 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
   <nav class="tabs-top" aria-label="Secciones">
     <button class="navbtn" data-go="inicio"><svg><use href="#i-home"/></svg><span>Inicio</span></button>
     <button class="navbtn" data-go="curso"><svg><use href="#i-code"/></svg><span>Curso</span></button>
+    <button class="navbtn" data-go="taller"><svg><use href="#i-tool"/></svg><span>Taller</span></button>
     <button class="navbtn" data-go="apuntes"><svg><use href="#i-book"/></svg><span>Apuntes</span></button>
     <button class="navbtn" data-go="logros"><svg><use href="#i-trophy"/></svg><span>Logros</span></button>
   </nav>
@@ -469,6 +535,7 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
     <div class="chip streak" title="Días seguidos practicando">🔥 <b id="streak">0</b> días</div>
     <div class="chip xp" title="Puntos de experiencia"><b id="xp">0</b> XP</div>
     <div class="chip" title="Lecciones completadas"><span class="prog"><i id="progBar"></i></span><b id="progTxt">0/0</b></div>
+    <button class="chip install" id="installBtn" hidden title="Instalar Ruta Web como app"><svg width="16" height="16"><use href="#i-down"/></svg><b>Instalar</b></button>
     <button class="iconbtn" id="themeBtn" aria-label="Cambiar tema"><svg><use id="themeIcon" href="#i-auto"/></svg></button>
   </div>
 </header>
@@ -504,6 +571,7 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
         </div>
       </div>
 
+      <div class="today" id="today"></div>
       <div class="card tip" id="tip"></div>
       <div class="quick">
         <button class="card" data-ap="teclado"><span class="ic">⌨️</span><div><b>Guía del teclado</b><span>Dónde están &lt; &gt; { } [ ] y cómo escribirlos</span></div></button>
@@ -524,6 +592,7 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
 
     <section class="lesson" id="lesson" aria-label="Lección">
       <div class="lesson-in">
+        <div class="modebar" id="modeBar" hidden></div>
         <div class="crumb"><span class="pill lv" id="lvlTag"></span><span class="pill kind" id="kindTag"></span><span id="lessonNum"></span><span id="mins"></span></div>
         <h1 class="l-title" id="lTitle"></h1>
         <div class="theory" id="theory"></div>
@@ -572,6 +641,54 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
           <iframe id="frame" title="Vista previa de tu página"></iframe>
         </div>
         <div class="console" id="consolePane" hidden></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ TALLER ============ -->
+  <div class="view" id="v-taller">
+    <aside class="tl-side">
+      <div class="tl-side-h"><b>Mis proyectos</b><span id="tlCount"></span></div>
+      <div class="tl-new">
+        <select id="tlTpl" aria-label="Plantilla"><option value="vacio">Proyecto vacío</option><option value="personal">Página personal</option><option value="tarjetas">Tarjetas con Grid</option><option value="contador">App con JavaScript</option></select>
+        <button class="btn primary" id="tlNew">+ Nuevo</button>
+      </div>
+      <button class="btn" id="tlOpenDir" style="width:100%;justify-content:center">📂 Abrir carpeta de mi PC</button>
+      <ul class="tl-list" id="tlList"></ul>
+      <p class="tl-help">El Taller es tu espacio libre: una hoja en blanco con archivos separados, como en un proyecto real. Todo se guarda solo en este navegador.</p>
+    </aside>
+    <section class="tl-main">
+      <div class="tl-bar">
+        <input id="tlName" aria-label="Nombre del proyecto" maxlength="60">
+        <div class="tabs" role="tablist" id="tlTabs"></div>
+        <span class="sp"></span>
+        <button class="btn" id="tlSaveDir" title="Guardar los archivos en una carpeta de tu computador">💾 Guardar en mi PC</button>
+        <button class="btn" id="tlDown" title="Descargar como un solo archivo HTML">⬇ Descargar</button>
+        <button class="btn" id="tlMore" aria-haspopup="true">⋯</button>
+        <div class="tl-menu" id="tlMenu" hidden>
+          <button data-a="dup">Duplicar proyecto</button>
+          <button data-a="del" class="danger">Eliminar proyecto</button>
+        </div>
+      </div>
+      <div class="tl-work">
+        <div class="tl-ed">
+          <div class="editor">
+            <div class="gutter" id="tGut">1</div>
+            <div class="code-wrap"><pre id="tHl" aria-hidden="true"></pre><textarea id="tEd" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Editor del proyecto"></textarea></div>
+          </div>
+        </div>
+        <div class="tl-pv">
+          <div class="pv-head">
+            <div class="tabs" role="tablist">
+              <button class="tab" role="tab" id="tTabView" aria-selected="true">Vista previa</button>
+              <button class="tab" role="tab" id="tTabCon" aria-selected="false">Consola<span class="badge" id="tConBadge" hidden>0</span></button>
+            </div>
+            <span class="sp"></span>
+            <button class="mini" id="tRun">Actualizar <kbd>Ctrl+Enter</kbd></button>
+          </div>
+          <div class="browser" id="tBrowser"><div class="urlbar"><i></i><i></i><i></i><span id="tUrl">index.html</span></div><iframe id="tFrame" title="Vista previa del proyecto"></iframe></div>
+          <div class="console" id="tConsole" hidden></div>
+        </div>
       </div>
     </section>
   </div>
@@ -675,7 +792,8 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
 
       <div class="sec-h"><h2>Tu progreso</h2></div>
       <div class="card panel">
-        <p>El progreso se guarda en este navegador. Descarga una copia para pasarlo a otro dispositivo o no perderlo si borras los datos del navegador.</p>
+        <p>El progreso, tus notas y tus proyectos del Taller se guardan en este navegador. Descarga una copia para pasarlos a otro dispositivo o no perderlos si borras los datos del navegador.</p>
+        <p id="persistState" style="font-size:14px"></p>
         <div class="row">
           <button class="btn" id="exportBtn">Descargar copia</button>
           <label class="btn" for="importIn">Restaurar copia</label>
@@ -690,6 +808,7 @@ kbd{font-family:var(--f-mono);font-size:.82em;font-weight:600;background:var(--s
 <nav class="bottomnav" aria-label="Secciones">
   <button class="navbtn" data-go="inicio"><svg><use href="#i-home"/></svg>Inicio</button>
   <button class="navbtn" data-go="curso"><svg><use href="#i-code"/></svg>Curso</button>
+  <button class="navbtn" data-go="taller"><svg><use href="#i-tool"/></svg>Taller</button>
   <button class="navbtn" data-go="apuntes"><svg><use href="#i-book"/></svg>Apuntes</button>
   <button class="navbtn" data-go="logros"><svg><use href="#i-trophy"/></svg>Logros</button>
 </nav>
@@ -2069,10 +2188,11 @@ var RUTA = [["Ahora", "≈ 14 h de lecciones + práctica", "Ruta Web completa, c
    Estado (se guarda en localStorage; misma clave que la versión anterior)
    ================================================================== */
 var KEY="ruta-web-v1";
-var S={done:{},help:{},xp:0,days:[],code:{},current:"h1",hintN:{},tries:{},quiz:{},log:{},best:0,name:"",theme:"auto",finishedAt:null,notes:{},notesAt:{},kbmap:{},kbLay:"2"};
+var S={done:{},help:{},xp:0,days:[],code:{},current:"h1",hintN:{},tries:{},quiz:{},log:{},best:0,name:"",theme:"auto",finishedAt:null,notes:{},notesAt:{},kbmap:{},kbLay:"2",rev:{},daily:null,projects:[],curProject:null,lastBackup:null};
 try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);for(var k in p)S[k]=p[k];}}catch(e){}
-["done","help","code","hintN","tries","quiz","log","notes","notesAt","kbmap"].forEach(function(k){if(!S[k]||typeof S[k]!=="object")S[k]={}});
+["done","help","code","hintN","tries","quiz","log","notes","notesAt","kbmap","rev"].forEach(function(k){if(!S[k]||typeof S[k]!=="object")S[k]={}});
 if(!Array.isArray(S.days))S.days=[];
+if(!Array.isArray(S.projects))S.projects=[];
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
 var $=function(id){return document.getElementById(id)};
@@ -2143,31 +2263,36 @@ function paint(){
 function syncScroll(){hl.scrollTop=ta.scrollTop;hl.scrollLeft=ta.scrollLeft;gut.scrollTop=ta.scrollTop}
 ta.addEventListener("scroll",syncScroll);
 var runT;
-ta.addEventListener("input",function(){paint();S.code[cur.id]=ta.value;save();clearTimeout(runT);runT=setTimeout(function(){if(!checking)run()},450)});
-ta.addEventListener("keydown",function(e){
-  if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();check();return}
-  var s=ta.selectionStart,en=ta.selectionEnd,v=ta.value;
-  if(e.key==="Tab"){
-    e.preventDefault();
-    if(s===en){insert("  ")}
-    else{
-      var ls=v.lastIndexOf("\n",s-1)+1,block=v.slice(ls,en);
-      var nb=e.shiftKey?block.replace(/^ {1,2}/gm,""):block.replace(/^/gm,"  ");
-      ta.setRangeText(nb,ls,en,"select");ta.dispatchEvent(new Event("input"));
+ta.addEventListener("input",function(){paint();if(mode==="normal"){S.code[cur.id]=ta.value;save()}clearTimeout(runT);runT=setTimeout(function(){if(!checking)run()},450)});
+/* Teclas del editor (sangría con Tab, autoindentación con Enter, Ctrl+Enter).
+   Se usa en el editor de lecciones y en el del Taller. */
+function edKeys(el,onCtrlEnter){
+  function ins(t){el.setRangeText(t,el.selectionStart,el.selectionEnd,"end");el.dispatchEvent(new Event("input"))}
+  return function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();onCtrlEnter();return}
+    var s=el.selectionStart,en=el.selectionEnd,v=el.value;
+    if(e.key==="Tab"){
+      e.preventDefault();
+      if(s===en&&!e.shiftKey){ins("  ")}
+      else{
+        var ls=v.lastIndexOf("\n",s-1)+1,block=v.slice(ls,en);
+        var nb=e.shiftKey?block.replace(/^ {1,2}/gm,""):block.replace(/^/gm,"  ");
+        el.setRangeText(nb,ls,en,"select");el.dispatchEvent(new Event("input"));
+      }
+    }else if(e.key==="Enter"){
+      var line=v.slice(v.lastIndexOf("\n",s-1)+1,s);var ind=(line.match(/^\s*/)||[""])[0];
+      var prev=v[s-1];if(prev==="{"||prev==="["||prev==="("||prev===">"&&!/<\/[^>]*>$|\/>$/.test(line)&&/<[a-z]/i.test(line)) ind+="  ";
+      e.preventDefault();ins("\n"+ind);
     }
-  }else if(e.key==="Enter"){
-    var line=v.slice(v.lastIndexOf("\n",s-1)+1,s);var ind=(line.match(/^\s*/)||[""])[0];
-    var prev=v[s-1];if(prev==="{"||prev==="["||prev==="("||prev===">"&&!/<\/[^>]*>$|\/>$/.test(line)&&/<[a-z]/i.test(line)) ind+="  ";
-    e.preventDefault();insert("\n"+ind);
-  }
-});
-function insert(t){ta.setRangeText(t,ta.selectionStart,ta.selectionEnd,"end");ta.dispatchEvent(new Event("input"))}
+  };
+}
+ta.addEventListener("keydown",edKeys(ta,function(){check()}));
 
 /* ==================================================================
    Vista previa + consola
    ================================================================== */
 var frame=$("frame"),logs=[],runSeq=0;
-window.__cap=function(type,args){
+window.__cap=function(type,args,ch){
   var text=args.map(function(a){
     if(typeof a==="string")return a;
     var tag=Object.prototype.toString.call(a);
@@ -2176,9 +2301,11 @@ window.__cap=function(type,args){
     if(tag==="[object Set]")return "Set {"+Array.from(a).map(function(e){return JSON.stringify(e)}).join(", ")+"}";
     try{var j=JSON.stringify(a);return j===undefined?String(a):j}catch(e){return String(a)}
   }).join(" ");
+  if(ch==="t"){tlogs.push({type:type,text:text});renderTConsole();return}
   logs.push({type:type,text:text});renderConsole();
 };
-var PRE='<script>(function(){var P=window.parent;["log","info","warn","error"].forEach(function(k){var o=console[k];console[k]=function(){try{P.__cap(k==="info"?"log":k,[].slice.call(arguments))}catch(e){}o.apply(console,arguments)}});window.addEventListener("error",function(e){try{P.__cap("error",[e.message+(e.lineno?" (línea "+e.lineno+")":"")])}catch(x){}});window.addEventListener("unhandledrejection",function(e){try{P.__cap("error",["Promesa rechazada: "+(e.reason&&e.reason.message||e.reason)])}catch(x){}});})();<\/script>';
+function makePre(ch){return '<script>(function(){var P=window.parent,C="'+ch+'";["log","info","warn","error"].forEach(function(k){var o=console[k];console[k]=function(){try{P.__cap(k==="info"?"log":k,[].slice.call(arguments),C)}catch(e){}o.apply(console,arguments)}});window.addEventListener("error",function(e){try{P.__cap("error",[e.message+(e.lineno?" (línea "+e.lineno+")":"")],C)}catch(x){}});window.addEventListener("unhandledrejection",function(e){try{P.__cap("error",["Promesa rechazada: "+(e.reason&&e.reason.message||e.reason)],C)}catch(x){}});})();<\/script>'}
+var PRE=makePre("l");
 /* Cada ejecución lleva un número. Solo se da por cargada cuando el documento
    que terminó de cargar es el de la última ejecución. Así una recarga anterior
    (al abrir la lección o al escribir) no interfiere con "Comprobar". */
@@ -2249,7 +2376,7 @@ async function check(){
 
 /* ---------- Cuestionarios ---------- */
 function renderQuiz(){
-  var ans=S.quiz[cur.id]||[];
+  var ans=mode==="normal"?(S.quiz[cur.id]||[]):[];
   $("task").innerHTML='<div class="quiz">'+cur.questions.map(function(q,i){
     return '<fieldset class="q" id="q'+i+'"><legend><span>'+(i+1)+'.</span>'+q.q+'</legend><div class="opts">'+
       q.o.map(function(o,j){return '<label><input type="radio" name="q'+i+'" value="'+j+'"'+(ans[i]===j?" checked":"")+'><span>'+o+'</span></label>'}).join("")+
@@ -2257,7 +2384,7 @@ function renderQuiz(){
   }).join("")+'</div>';
   $("task").onchange=function(e){
     if(!e.target.name)return;
-    var a=S.quiz[cur.id]||[];a[Number(e.target.name.slice(1))]=Number(e.target.value);S.quiz[cur.id]=a;save();
+    if(mode==="normal"){var a=S.quiz[cur.id]||[];a[Number(e.target.name.slice(1))]=Number(e.target.value);S.quiz[cur.id]=a;save()}
     var fs=e.target.closest(".q");fs.classList.remove("ok","bad");var w=fs.querySelector(".why");if(w)w.remove();
   };
 }
@@ -2280,8 +2407,10 @@ function gradeQuiz(){
 
 /* ---------- Completar lección ---------- */
 function complete(){
+  if(mode!=="normal"&&S.done[cur.id]){practiceDone();return}
   var first=!S.done[cur.id];
   if(first){
+    if(S.help[cur.id]||(S.tries[cur.id]||0)>=3){S.rev[cur.id]={box:0,due:addDays(2)}}
     var before=earnedBadges().map(function(b){return b.id});
     var gain=S.help[cur.id]?5:10;S.xp+=gain;S.done[cur.id]=true;
     var t=today();if(S.days.indexOf(t)<0)S.days.push(t);
@@ -2290,6 +2419,7 @@ function complete(){
     var lv=lvById[cur.lvl],lvlDone=lvDone(lv)===lv.lessons.length;
     if(lvlDone){S.xp+=25}
     if(doneList().length===L.length&&!S.finishedAt)S.finishedAt=t;
+    askPersist();
     save();renderStats();renderSide();
     toast(lvlDone?"¡Nivel "+lv.n+" completado! +"+(gain+25)+" XP":"¡Lección superada! +"+gain+" XP");
     if(lvlDone)confetti();
@@ -2299,6 +2429,66 @@ function complete(){
   var next=L[cur.n+1];
   $("win").innerHTML='<div class="win"><div><strong>'+(next?"¡Lo lograste!":"¡Terminaste la ruta completa!")+'</strong><p>'+(next?"Siguiente: "+esc(next.title):"Tu certificado ya está disponible en la sección Logros.")+'</p></div>'+(next?'<button class="btn primary" id="nextBtn">Siguiente lección →</button>':'<button class="btn primary" id="nextBtn">Ver mi certificado</button>')+'</div>';
   $("nextBtn").onclick=function(){next?go(next.id):route("logros")};
+  addRevBtn();
+}
+
+/* ==================================================================
+   Repaso inteligente y reto del día
+   ================================================================== */
+var mode="normal",practiceHelp=false;
+var REV_DAYS=[2,5,12,30];
+function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return dkey(d)}
+function dueReviews(){var t=today();return L.filter(function(l){var r=S.rev[l.id];return r&&S.done[l.id]&&r.due<=t})}
+function dailyPick(){
+  var t=today();
+  if(S.daily&&S.daily.date===t&&byId[S.daily.id])return S.daily;
+  var pool=doneList();if(!pool.length)return null;
+  var h=0;for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))>>>0;
+  S.daily={date:t,id:pool[h%pool.length].id,done:false};save();return S.daily;
+}
+function markDay(){var t=today();if(S.days.indexOf(t)<0)S.days.push(t);S.log[t]=(S.log[t]||0)+1;S.best=Math.max(S.best||0,streak())}
+function practiceDone(){
+  var msg,gain=0;
+  if(mode==="diario"){
+    var d=dailyPick();
+    if(d&&d.id===cur.id&&!d.done){d.done=true;gain=practiceHelp?5:15;msg="¡Reto del día superado! +"+gain+" XP"}
+    else msg="¡Bien hecho! Ya habías cumplido el reto de hoy.";
+  }else{
+    var r=S.rev[cur.id]||{box:0};
+    if(practiceHelp){r.due=addDays(1);msg="Repaso hecho con ayuda: lo verás de nuevo mañana."}
+    else{r.box=(r.box||0)+1;if(r.box>=REV_DAYS.length){delete S.rev[cur.id];r=null;msg="¡Dominada! Esta lección sale de tus repasos."}else{r.due=addDays(REV_DAYS[r.box]);msg="¡Repaso superado! Volverá en "+REV_DAYS[r.box]+" días."}}
+    if(r)S.rev[cur.id]=r;
+    gain=practiceHelp?2:5;msg+=" +"+gain+" XP";
+  }
+  S.xp+=gain;markDay();save();renderStats();toast(msg);
+  var nx=mode==="repaso"?dueReviews()[0]:null;
+  $("win").innerHTML='<div class="win"><div><strong>'+(mode==="diario"?"Reto del día completado":"Repaso completado")+'</strong><p>'+(nx?"Te quedan "+dueReviews().length+" repasos para hoy.":"Por hoy está listo. ¡Buen trabajo!")+'</p></div><button class="btn primary" id="nextBtn">'+(nx?"Siguiente repaso →":"Volver al inicio")+'</button></div>';
+  $("nextBtn").onclick=function(){nx?go(nx.id,false,{mode:"repaso"}):route("inicio")};
+}
+function renderModeBar(){
+  var b=$("modeBar");
+  if(mode==="normal"){b.hidden=true;return}
+  b.hidden=false;
+  b.innerHTML='<span class="mb-ic">'+(mode==="diario"?"⚡":"🔁")+'</span><div><b>'+(mode==="diario"?"Reto del día":"Modo repaso")+'</b><span>Resuélvelo desde cero, sin mirar tu solución anterior. Tu código guardado de la lección no se toca.</span></div><button class="mini" id="exitMode">Salir</button>';
+  $("exitMode").onclick=function(){go(cur.id)};
+}
+function addRevBtn(){
+  var w=$("win").querySelector(".win");if(!w||S.rev[cur.id])return;
+  var b=document.createElement("button");b.className="btn";b.textContent="🔁 Añadir a mis repasos";
+  b.onclick=function(){S.rev[cur.id]={box:0,due:addDays(2)};save();b.remove();toast("La repasarás en 2 días")};
+  w.insertBefore(b,w.querySelector(".btn"));
+}
+function renderToday(){
+  var d=dailyPick(),due=dueReviews(),h="";
+  if(d){var l=byId[d.id];h+='<div class="card today-c'+(d.done?" done":"")+'"><span class="ic">⚡</span><div><small>Reto del día</small><b>'+esc(l.title)+'</b><span>'+(d.done?"Cumplido hoy ✓":"Rehazlo desde cero · +15 XP")+'</span></div><button class="btn'+(d.done?"":" primary")+'" id="dailyBtn">'+(d.done?"Repetir":"Empezar")+'</button></div>'}
+  else h+='<div class="card today-c"><span class="ic">⚡</span><div><small>Reto del día</small><b>Se desbloquea con tu primera lección</b><span>Cada día te propondrá rehacer algo que ya aprendiste.</span></div></div>';
+  var nrev=Object.keys(S.rev).filter(function(k){return byId[k]&&S.done[k]}).length;
+  h+='<div class="card today-c"><span class="ic">🔁</span><div><small>Repasos</small><b>'+(due.length?due.length+(due.length===1?" pendiente hoy":" pendientes hoy"):"Nada pendiente hoy")+'</b><span>'+(nrev?nrev+(nrev===1?" lección":" lecciones")+" en tu plan de repaso":"Las lecciones difíciles se agregan solas")+'</span></div>'+(due.length?'<button class="btn primary" id="revBtn">Repasar</button>':'')+'</div>';
+  var nd=doneList().length,old=!S.lastBackup||(Date.now()-new Date(S.lastBackup+"T12:00:00"))/864e5>14;
+  if(nd>=5&&old)h+='<div class="card today-c"><span class="ic">💾</span><div><small>Protege tu avance</small><b>Descarga una copia de tu progreso</b><span>'+(S.lastBackup?"La última fue el "+esc(S.lastBackup):"Llevas "+nd+" lecciones y aún no tienes copia")+'</span></div><button class="btn" data-go="logros">Ir</button></div>';
+  $("today").innerHTML=h;bindGo($("today"));
+  if($("dailyBtn"))$("dailyBtn").onclick=function(){route("curso",true);go(d.id,false,{mode:"diario"})};
+  if($("revBtn"))$("revBtn").onclick=function(){route("curso",true);go(due[0].id,false,{mode:"repaso"})};
 }
 
 /* ==================================================================
@@ -2311,7 +2501,7 @@ function renderHints(){
   $("hintBtn").disabled=n>=cur.hints.length;
   $("hintBtn").textContent=n>=cur.hints.length?"Sin más pistas":"Pedir pista ("+(cur.hints.length-n)+")";
 }
-$("hintBtn").onclick=function(){S.hintN[cur.id]=Math.min((S.hintN[cur.id]||0)+1,cur.hints.length);save();renderHints()};
+$("hintBtn").onclick=function(){S.hintN[cur.id]=Math.min((S.hintN[cur.id]||0)+1,cur.hints.length);if(mode!=="normal")practiceHelp=true;save();renderHints()};
 $("solBtn").onclick=function(){
   var box=$("solution");
   if(box.innerHTML){box.innerHTML="";$("solBtn").textContent="Ver solución";return}
@@ -2323,6 +2513,7 @@ $("solBtn").onclick=function(){
   $("solBtn").textContent="Ocultar solución";
   $("useSol").onclick=function(){
     if(!S.done[cur.id]){S.help[cur.id]=true;save()}
+    if(mode!=="normal")practiceHelp=true;
     ta.value=cur.solution;ta.dispatchEvent(new Event("input"));
     toast("Solución cargada. Léela línea por línea y luego pulsa Comprobar.");
   };
@@ -2373,9 +2564,12 @@ function renderStats(){
 /* ==================================================================
    Abrir una lección
    ================================================================== */
-function go(id,noRoute){
+function go(id,noRoute,opts){
   if(!byId[id])id=L[0].id;
-  cur=byId[id];S.current=id;save();
+  cur=byId[id];
+  mode=(opts&&opts.mode)||"normal";practiceHelp=false;
+  if(mode==="normal"){S.current=id;save()}
+  renderModeBar();
   var lv=lvById[cur.lvl],quiz=cur.type==="quiz";
   document.body.classList.toggle("quiz-mode",quiz);
   $("lesson").setAttribute("style",lvStyle(lv));
@@ -2396,19 +2590,22 @@ function go(id,noRoute){
     $("taskH").textContent="Tu reto";$("task").onchange=null;
     $("task").innerHTML=cur.task;
     $("checks").innerHTML=cur.tests.map(function(t){return '<li><span class="st"></span><span>'+t.d+'</span></li>'}).join("");
+    if(mode!=="normal")S.hintN[id]=0;
     renderHints();
-    ta.value=S.code[id]!=null?S.code[id]:cur.starter;paint();ta.scrollTop=0;
+    ta.value=mode==="normal"&&S.code[id]!=null?S.code[id]:cur.starter;paint();ta.scrollTop=0;
     showTab(false);
     run();
   }
   renderPager();renderSide();renderMyNotes();
   $("lesson").scrollTop=0;
   if(window.innerWidth<=820&&document.body.dataset.view==="curso")window.scrollTo(0,0);
-  if(S.done[id]){
+  if(S.done[id]&&mode==="normal"){
     var next=L[cur.n+1];
     $("win").innerHTML='<div class="win"><div><strong>Lección completada</strong><p>Puedes repasarla o seguir adelante.</p></div>'+(next?'<button class="btn primary" id="nextBtn">Siguiente lección →</button>':'')+'</div>';
     if(next)$("nextBtn").onclick=function(){go(next.id)};
+    addRevBtn();
   }
+  if(kindOf(cur)==="Proyecto"&&cur.type!=="quiz"){var tb=document.createElement("p");tb.className="redo";tb.innerHTML='¿Quieres hacerlo desde cero, como en un proyecto real? <button class="mini" id="redoBtn">Ábrelo en el Taller con archivos separados →</button>';$("task").appendChild(tb);$("redoBtn").onclick=function(){projectFromLesson(cur)}}
   if(!noRoute)setHash("curso/"+id);
 }
 function renderPager(){
@@ -2440,6 +2637,7 @@ function renderHome(){
   if($("contBtn"))$("contBtn").onclick=function(){route("curso");go(np.id)};
   bindGo($("continue"));
 
+  renderToday();
   $("ringFg").style.strokeDashoffset=263.9*(1-pct/100);
   $("ringTxt").textContent=pct+"%";
   $("ringSub").innerHTML="<b>"+d.length+"</b> de "+L.length+" lecciones<br>"+S.xp+" XP acumulados";
@@ -2450,7 +2648,7 @@ function renderHome(){
   var heat="",dt=new Date();dt.setDate(dt.getDate()-27);
   for(var i=0;i<28;i++){
     var k=dkey(dt),c=S.log[k]||(S.days.indexOf(k)>=0?1:0);
-    heat+='<i class="'+(c>=4?"l3":c>=2?"l2":c>=1?"l1":"")+(i===27?" today":"")+'" title="'+k+": "+c+' lecciones"></i>';
+    heat+='<i class="'+(c>=4?"l3":c>=2?"l2":c>=1?"l1":"")+(i===27?" hoy":"")+'" title="'+k+": "+c+' lecciones"></i>';
     dt.setDate(dt.getDate()+1);
   }
   $("heat").innerHTML=heat;
@@ -2526,6 +2724,10 @@ function renderLogros(){
   $("certHours").textContent="≈ "+Math.round(TOTAL_MIN/60)+" horas de práctica";
   $("certState").textContent=all?"¡Lo lograste! Escribe tu nombre y guárdalo como PDF desde el cuadro de impresión.":"Completa todas las lecciones para desbloquearlo. Puedes ir dejando tu nombre listo.";
   $("printBtn").disabled=!all;
+  var ps=$("persistState");
+  var lb=S.lastBackup?"Última copia: "+S.lastBackup+".":"Aún no has descargado ninguna copia.";
+  if(navigator.storage&&navigator.storage.persisted){navigator.storage.persisted().then(function(ok){ps.innerHTML=(ok?"🔒 <b>Almacenamiento protegido:</b> el navegador no lo borrará automáticamente. ":"⚠️ <b>Almacenamiento normal:</b> el navegador podría borrarlo si limpias los datos o falta espacio. Instalar la app ayuda a protegerlo. ")+lb})}
+  else ps.textContent=lb;
 }
 $("nameIn").addEventListener("input",function(){S.name=$("nameIn").value.trim().slice(0,60);save();$("certName").textContent=S.name||"Tu nombre"});
 $("printBtn").onclick=function(){window.print()};
@@ -2533,6 +2735,7 @@ $("exportBtn").onclick=function(){
   var blob=new Blob([JSON.stringify({app:"ruta-web",version:1,fecha:new Date().toISOString(),progreso:S},null,2)],{type:"application/json"});
   var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ruta-web-progreso-"+today()+".json";
   document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+  S.lastBackup=today();save();
   toast("Copia descargada");
 };
 $("importIn").onchange=function(){
@@ -2552,7 +2755,7 @@ var resetArm=0;
 $("resetAll").onclick=function(){
   if(Date.now()-resetArm>4000){resetArm=Date.now();$("resetAll").textContent="Pulsa otra vez (también borra tus notas)";setTimeout(function(){$("resetAll").textContent="Borrar progreso"},4000);return}
   var theme=S.theme;
-  S={done:{},help:{},xp:0,days:[],code:{},current:L[0].id,hintN:{},tries:{},quiz:{},log:{},best:0,name:"",theme:theme,finishedAt:null,notes:{},notesAt:{},kbmap:{},kbLay:"2"};
+  var keepProj=S.projects;S={done:{},help:{},xp:0,days:[],code:{},current:L[0].id,hintN:{},tries:{},quiz:{},log:{},best:0,name:"",theme:theme,finishedAt:null,notes:{},notesAt:{},kbmap:{},kbLay:"2",rev:{},daily:null,projects:keepProj,curProject:null,lastBackup:null};
   save();resetArm=0;$("resetAll").textContent="Borrar progreso";cur=L[0];renderAll();toast("Progreso borrado");
 };
 
@@ -2652,9 +2855,123 @@ function renderRuta(){
 }
 
 /* ==================================================================
+   Taller: proyectos libres con varios archivos
+   ================================================================== */
+var FILES=["index.html","estilos.css","app.js"],tFile="index.html",tlogs=[],tSeq=0,tRunT,dirHandles={};
+var TPL={
+  vacio:["Mi proyecto",'<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Mi proyecto</title>\n  <link rel="stylesheet" href="estilos.css">\n  <script src="app.js" defer><\/script>\n</head>\n<body>\n  <h1>¡Hola!</h1>\n\n</body>\n</html>\n','body {\n  font-family: system-ui, sans-serif;\n  margin: 0;\n  padding: 24px;\n}\n','// Tu JavaScript aquí\nconsole.log("Proyecto listo");\n'],
+  personal:["Página personal",'<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Sobre mí</title>\n  <link rel="stylesheet" href="estilos.css">\n  <script src="app.js" defer><\/script>\n</head>\n<body>\n  <header>\n    <h1>Tu nombre</h1>\n    <p>Aprendiendo desarrollo web</p>\n  </header>\n  <main>\n    <section>\n      <h2>Sobre mí</h2>\n      <p>Escribe aquí algo sobre ti.</p>\n    </section>\n    <section>\n      <h2>Mis proyectos</h2>\n      <ul id="proyectos"></ul>\n    </section>\n  </main>\n  <footer>Hecho con Ruta Web</footer>\n</body>\n</html>\n',':root {\n  --acento: #0f766e;\n}\nbody {\n  font-family: system-ui, sans-serif;\n  margin: 0;\n  color: #1f2937;\n  line-height: 1.6;\n}\nheader {\n  background: var(--acento);\n  color: white;\n  padding: 48px 24px;\n  text-align: center;\n}\nmain {\n  max-width: 680px;\n  margin: 0 auto;\n  padding: 24px;\n}\nfooter {\n  text-align: center;\n  padding: 24px;\n  color: #6b7280;\n}\n','const proyectos = ["Lista de tareas", "Divisor de cuentas"];\nconst lista = document.querySelector("#proyectos");\n\nfor (const p of proyectos) {\n  const li = document.createElement("li");\n  li.textContent = p;\n  lista.append(li);\n}\n'],
+  tarjetas:["Tarjetas con Grid",'<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Tarjetas</title>\n  <link rel="stylesheet" href="estilos.css">\n  <script src="app.js" defer><\/script>\n</head>\n<body>\n  <h1>Mis tarjetas</h1>\n  <div class="grilla" id="grilla"></div>\n</body>\n</html>\n','body {\n  font-family: system-ui, sans-serif;\n  background: #f1f5f9;\n  padding: 24px;\n}\n.grilla {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));\n  gap: 16px;\n}\n.tarjeta {\n  background: white;\n  border-radius: 14px;\n  padding: 18px;\n  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);\n}\n','const datos = [\n  { titulo: "HTML", texto: "La estructura" },\n  { titulo: "CSS", texto: "El diseño" },\n  { titulo: "JavaScript", texto: "La lógica" }\n];\n\nconst grilla = document.querySelector("#grilla");\nfor (const d of datos) {\n  const div = document.createElement("div");\n  div.className = "tarjeta";\n  div.innerHTML = `<h3>${d.titulo}</h3><p>${d.texto}</p>`;\n  grilla.append(div);\n}\n'],
+  contador:["App con JavaScript",'<!DOCTYPE html>\n<html lang="es">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Contador</title>\n  <link rel="stylesheet" href="estilos.css">\n  <script src="app.js" defer><\/script>\n</head>\n<body>\n  <main>\n    <h1 id="numero">0</h1>\n    <div class="botones">\n      <button id="menos">−</button>\n      <button id="mas">+</button>\n    </div>\n  </main>\n</body>\n</html>\n','body {\n  font-family: system-ui, sans-serif;\n  display: grid;\n  place-items: center;\n  min-height: 90vh;\n  margin: 0;\n}\nh1 {\n  font-size: 96px;\n  text-align: center;\n  margin: 0;\n}\n.botones {\n  display: flex;\n  gap: 12px;\n  justify-content: center;\n}\nbutton {\n  font-size: 28px;\n  width: 64px;\n  height: 64px;\n  border-radius: 50%;\n  border: 0;\n  background: #0f766e;\n  color: white;\n  cursor: pointer;\n}\n','let cuenta = 0;\nconst numero = document.querySelector("#numero");\n\nfunction pintar() {\n  numero.textContent = cuenta;\n}\n\ndocument.querySelector("#mas").addEventListener("click", () => {\n  cuenta++;\n  pintar();\n});\n\ndocument.querySelector("#menos").addEventListener("click", () => {\n  cuenta--;\n  pintar();\n});\n']
+};
+function projById(id){return S.projects.filter(function(p){return p.id===id})[0]}
+function curProj(){return projById(S.curProject)}
+function newProject(name,files){
+  var p={id:"p"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),name:name,files:files,updated:new Date().toISOString()};
+  S.projects.unshift(p);S.curProject=p.id;save();return p;
+}
+function projectFromTpl(k){var t=TPL[k];var n=t[0],c=S.projects.filter(function(p){return p.name.indexOf(n)===0}).length;return newProject(c?n+" "+(c+1):n,{"index.html":t[1],"estilos.css":t[2],"app.js":t[3]})}
+function projectFromLesson(l){
+  var txt=l.task.replace(/<br\s*\/?>/g,"\n").replace(/<\/p>/g,"\n").replace(/<[^>]+>/g,"").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/\n{2,}/g,"\n").trim();
+  var t=TPL.vacio;
+  newProject("Desde cero: "+l.title,{"index.html":"<!--\n  Reto: "+l.title+"\n\n  "+txt.replace(/--/g,"- -").split("\n").join("\n  ")+"\n\n  Hazlo sin mirar la lección. Si te atascas, vuelve a ella.\n-->\n"+t[1].replace("Mi proyecto",l.title).replace("<h1>¡Hola!</h1>\n",""),"estilos.css":t[2],"app.js":"// Tu JavaScript aquí\n"});
+  tFile="index.html";route("taller");toast("Proyecto creado en el Taller");
+}
+function buildDoc(p){
+  var html=p.files["index.html"]||"",css=p.files["estilos.css"]||"",js=p.files["app.js"]||"";
+  var hasCss=/<link[^>]+href=["']?\.?\/?estilos\.css["']?[^>]*>/i.test(html),hasJs=/<script[^>]+src=["']?\.?\/?app\.js["']?[^>]*>\s*<\/script>/i.test(html);
+  html=html.replace(/<link[^>]+href=["']?\.?\/?estilos\.css["']?[^>]*>/i,function(){return "<style>\n"+css+"\n</style>"});
+  html=html.replace(/<script[^>]+src=["']?\.?\/?app\.js["']?[^>]*>\s*<\/script>/i,"");
+  if(!hasCss&&css.trim())html=/<\/head>/i.test(html)?html.replace(/<\/head>/i,"<style>\n"+css+"\n</style>\n</head>"):"<style>\n"+css+"\n</style>\n"+html;
+  /* El JS va al final del body: así se comporta como un script con defer */
+  if(js.trim())html=/<\/body>/i.test(html)?html.replace(/<\/body>/i,"<script>\n"+js+"\n<\/script>\n</body>"):html+"\n<script>\n"+js+"\n<\/script>";
+  return html;
+}
+function tRun(){
+  var p=curProj();if(!p)return;
+  var my=++tSeq,doc=buildDoc(p),pre=makePre("t");
+  tlogs=[];renderTConsole();
+  doc=/<head[^>]*>/i.test(doc)?doc.replace(/<head[^>]*>/i,function(m){return m+pre}):(/^\s*<!doctype[^>]*>/i.test(doc)?doc.replace(/^\s*<!doctype[^>]*>/i,function(m){return m+pre}):pre+doc);
+  if(my===tSeq)$("tFrame").srcdoc=doc;
+}
+function renderTConsole(){
+  var c=$("tConsole");
+  c.innerHTML=tlogs.length?tlogs.map(function(l){return '<div class="'+(l.type==="error"?"err":l.type==="warn"?"warn":"")+'">'+(l.type==="error"?"✕ ":"› ")+esc(l.text)+"</div>"}).join(""):'<div class="empty">Aquí aparecen los console.log() y errores de tu proyecto.</div>';
+  var b=$("tConBadge");b.hidden=!tlogs.length;b.textContent=tlogs.length;
+}
+function tShowTab(con){$("tTabView").setAttribute("aria-selected",!con);$("tTabCon").setAttribute("aria-selected",!!con);$("tBrowser").hidden=!!con;$("tConsole").hidden=!con}
+$("tTabView").onclick=function(){tShowTab(false)};$("tTabCon").onclick=function(){tShowTab(true)};$("tRun").onclick=tRun;
+var tEd=$("tEd");
+function tPaint(){$("tHl").innerHTML=highlight(tEd.value)+"\n";var n=tEd.value.split("\n").length,s="";for(var i=1;i<=n;i++)s+=i+"\n";$("tGut").textContent=s;tSync()}
+function tSync(){$("tHl").scrollTop=tEd.scrollTop;$("tHl").scrollLeft=tEd.scrollLeft;$("tGut").scrollTop=tEd.scrollTop}
+tEd.addEventListener("scroll",tSync);
+tEd.addEventListener("keydown",edKeys(tEd,tRun));
+tEd.addEventListener("input",function(){
+  var p=curProj();if(!p)return;tPaint();p.files[tFile]=tEd.value;p.updated=new Date().toISOString();save();
+  clearTimeout(tRunT);tRunT=setTimeout(tRun,500);
+});
+function renderTaller(){
+  if(!S.projects.length)projectFromTpl("vacio");
+  if(!curProj())S.curProject=S.projects[0].id;
+  var p=curProj();
+  $("tlCount").textContent=S.projects.length+(S.projects.length===1?" proyecto":" proyectos");
+  $("tlList").innerHTML=S.projects.map(function(x){return '<li><button data-p="'+x.id+'" aria-current="'+(x.id===p.id)+'"><b>'+esc(x.name)+'</b><small>'+new Date(x.updated).toLocaleDateString("es-CO",{day:"numeric",month:"short"})+'</small></button></li>'}).join("");
+  Array.prototype.forEach.call($("tlList").querySelectorAll("[data-p]"),function(b){b.onclick=function(){S.curProject=b.dataset.p;tFile="index.html";save();renderTaller();setHash("taller/"+S.curProject)}});
+  $("tlName").value=p.name;
+  $("tlTabs").innerHTML=FILES.map(function(f){return '<button class="tab" role="tab" data-f="'+f+'" aria-selected="'+(f===tFile)+'">'+f+'</button>'}).join("");
+  Array.prototype.forEach.call($("tlTabs").children,function(b){b.onclick=function(){tFile=b.dataset.f;renderTaller()}});
+  tEd.value=p.files[tFile]||"";tPaint();tEd.scrollTop=0;
+  $("tUrl").textContent=p.name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"/index.html";
+  $("tlSaveDir").textContent=dirHandles[p.id]?"💾 Guardar en "+dirHandles[p.id].name:"💾 Guardar en mi PC";
+  tRun();
+}
+$("tlName").addEventListener("input",function(){var p=curProj();if(!p)return;p.name=$("tlName").value.trim()||"Sin nombre";save();var b=$("tlList").querySelector('[aria-current="true"] b');if(b)b.textContent=p.name});
+$("tlNew").onclick=function(){projectFromTpl($("tlTpl").value);tFile="index.html";renderTaller();setHash("taller/"+S.curProject);toast("Proyecto creado")};
+$("tlMore").onclick=function(e){e.stopPropagation();$("tlMenu").hidden=!$("tlMenu").hidden};
+document.addEventListener("click",function(){$("tlMenu").hidden=true});
+var delArm=0;
+$("tlMenu").onclick=function(e){
+  var a=e.target.dataset.a,p=curProj();if(!a||!p)return;e.stopPropagation();
+  if(a==="dup"){var c=JSON.parse(JSON.stringify(p.files));newProject(p.name+" (copia)",c);$("tlMenu").hidden=true;renderTaller();toast("Proyecto duplicado")}
+  if(a==="del"){
+    if(Date.now()-delArm>4000){delArm=Date.now();e.target.textContent="¿Seguro? Pulsa otra vez";return}
+    S.projects=S.projects.filter(function(x){return x.id!==p.id});S.curProject=S.projects[0]&&S.projects[0].id;delArm=0;e.target.textContent="Eliminar proyecto";$("tlMenu").hidden=true;save();renderTaller();toast("Proyecto eliminado");
+  }
+};
+function slug(n){return n.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"proyecto"}
+$("tlDown").onclick=function(){
+  var p=curProj();if(!p)return;
+  try{var blob=new Blob([buildDoc(p)],{type:"text/html"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=slug(p.name)+".html";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);toast("Descargado como un solo archivo HTML")}
+  catch(e){toast("Tu navegador no permitió la descarga aquí")}
+};
+async function writeFile(dir,name,text){var fh=await dir.getFileHandle(name,{create:true});var w=await fh.createWritable();await w.write(text);await w.close()}
+$("tlSaveDir").onclick=async function(){
+  var p=curProj();if(!p)return;
+  if(!window.showDirectoryPicker){toast("Esta función necesita Chrome o Edge en un computador. Usa “Descargar”.");return}
+  try{
+    var dir=dirHandles[p.id];
+    if(!dir){dir=await window.showDirectoryPicker({id:"ruta-web",mode:"readwrite"});dirHandles[p.id]=dir}
+    for(var i=0;i<FILES.length;i++)await writeFile(dir,FILES[i],p.files[FILES[i]]||"");
+    $("tlSaveDir").textContent="💾 Guardar en "+dir.name;
+    toast("Guardado en la carpeta “"+dir.name+"”. Ábrela con VS Code.");
+  }catch(e){if(e&&e.name!=="AbortError")toast("No se pudo guardar: "+(e.message||e))}
+};
+$("tlOpenDir").onclick=async function(){
+  if(!window.showDirectoryPicker){toast("Esta función necesita Chrome o Edge en un computador.");return}
+  try{
+    var dir=await window.showDirectoryPicker({id:"ruta-web",mode:"readwrite"}),files={};
+    var alias={"index.html":["index.html"],"estilos.css":["estilos.css","style.css","styles.css"],"app.js":["app.js","script.js","main.js"]};
+    for(var k in alias){files[k]="";for(var i=0;i<alias[k].length;i++){try{var fh=await dir.getFileHandle(alias[k][i]);files[k]=await (await fh.getFile()).text();break}catch(x){}}}
+    if(!files["index.html"]){toast("No encontré un index.html en esa carpeta");return}
+    var p=newProject(dir.name,files);dirHandles[p.id]=dir;tFile="index.html";renderTaller();setHash("taller/"+p.id);
+    toast("Carpeta “"+dir.name+"” abierta. “Guardar” escribirá ahí.");
+  }catch(e){if(e&&e.name!=="AbortError")toast("No se pudo abrir: "+(e.message||e))}
+};
+
+/* ==================================================================
    Navegación entre vistas (con #enlaces compartibles)
    ================================================================== */
-var VIEWS=["inicio","curso","apuntes","logros"];
+var VIEWS=["inicio","curso","taller","apuntes","logros"];
 var apSub="notas";
 function setHash(h){try{if(location.hash!=="#"+h)history.replaceState(null,"","#"+h)}catch(e){}}
 function route(v,noHash){
@@ -2664,8 +2981,10 @@ function route(v,noHash){
   closeSide();
   if(v==="inicio")renderHome();
   if(v==="apuntes")renderApuntes();
+  if(v==="taller")renderTaller();
   if(v==="logros")renderLogros();
-  if(v==="curso"&&!noHash){setHash("curso/"+cur.id)}else if(v==="apuntes"&&!noHash){setHash("apuntes/"+apSub)}else if(!noHash)setHash(v);
+  if(v==="taller"&&!noHash){setHash("taller"+(S.curProject?"/"+S.curProject:""))}
+  else if(v==="curso"&&!noHash){setHash("curso/"+cur.id)}else if(v==="apuntes"&&!noHash){setHash("apuntes/"+apSub)}else if(!noHash)setHash(v);
   var el=$("v-"+v);if(el)el.scrollTop=0;
   window.scrollTo(0,0);
 }
@@ -2675,6 +2994,7 @@ function fromHash(){
   var h=(location.hash||"").replace(/^#\/?/,"").split("/");
   if(h[0]==="glosario"){h=["apuntes","glosario"]}
   if(h[0]==="apuntes"&&AP_SUBS.indexOf(h[1])>=0)apSub=h[1];
+  if(h[0]==="taller"&&h[1]&&projById(h[1]))S.curProject=h[1];
   if(h[0]==="curso"){route("curso",true);go(byId[h[1]]?h[1]:cur.id,true)}
   else if(VIEWS.indexOf(h[0])>=0)route(h[0],true);
   else route("inicio",true);
@@ -2698,6 +3018,21 @@ function confetti(){
     if(t-t0<1800)requestAnimationFrame(f);else c.clearRect(0,0,W,H);
   })(t0);
 }
+
+/* ==================================================================
+   App instalable (PWA) y almacenamiento persistente
+   ================================================================== */
+function askPersist(){try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(function(p){if(!p)navigator.storage.persist()})}catch(e){}}
+var deferredInstall=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferredInstall=e;$("installBtn").hidden=false});
+$("installBtn").onclick=function(){
+  if(!deferredInstall)return;
+  deferredInstall.prompt();
+  deferredInstall.userChoice.then(function(r){deferredInstall=null;$("installBtn").hidden=true;if(r.outcome==="accepted")toast("¡Instalada! La encuentras en el menú Inicio de Windows")});
+};
+window.addEventListener("appinstalled",function(){$("installBtn").hidden=true;askPersist()});
+try{if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(function(){})}catch(e){}
+if(doneList().length)askPersist();
 
 /* ==================================================================
    Arranque

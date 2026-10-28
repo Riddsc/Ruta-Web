@@ -20,13 +20,15 @@ Curso interactivo y gratuito de desarrollo web en español. Cada lección tiene 
 | 11 · Lógica y algoritmos | FizzBuzz, palíndromos, anagramas, Big O, búsqueda binaria, pilas |
 | 12 · Proyectos de portafolio | Divisor de cuentas, temporizador de rounds, trivia, juego, catálogo, buscador de películas |
 
-Además: pantalla de inicio con progreso y racha; sección **Apuntes** con notas por lección, chuletas (HTML, CSS, JS, Git, atajos), guía y probador de teclado, glosario y plan de estudio posterior; insignias, certificado imprimible, tema claro/oscuro y copia de seguridad del progreso.
+Además: **Taller** (proyectos propios con `index.html`, `estilos.css` y `app.js` separados, plantillas, guardar en una carpeta del PC desde Chrome/Edge); **repaso inteligente** de las lecciones difíciles y **reto del día**; pantalla de inicio con progreso y racha; sección **Apuntes** con notas por lección, chuletas (HTML, CSS, JS, Git, atajos), guía y probador de teclado, glosario y plan de estudio posterior; insignias, certificado imprimible, tema claro/oscuro y copia de seguridad del progreso.
 
 ## Uso
 
-Es un solo archivo: abre `index.html` en el navegador o publícalo con GitHub Pages (Settings → Pages → rama `main`, carpeta `/ (root)`).
+La app es `index.html`. Publícala con GitHub Pages (Settings → Pages → rama `main`, carpeta `/ (root)`) y queda en `https://riddsc.github.io/Ruta-Web/`.
 
-El progreso se guarda en el navegador (`localStorage`). Desde **Logros** puedes descargar una copia y restaurarla en otro dispositivo.
+**Instalar como app (Windows, Chrome o Edge):** abre ese enlace y pulsa el botón **Instalar** de la barra superior (o el ícono de instalar en la barra de direcciones). Queda en el menú Inicio con su propia ventana y funciona sin internet. `manifest.webmanifest`, `sw.js` e `icons/` hacen posible la instalación.
+
+Cada persona que abre el enlace tiene su propio progreso, guardado en su navegador (`localStorage`): lecciones, notas y proyectos del Taller. Desde **Logros** se descarga una copia y se restaura en otro dispositivo o navegador.
 
 ## Agregar una lección
 
