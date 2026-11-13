@@ -2,7 +2,7 @@
 
 Curso interactivo y gratuito de desarrollo web en español. Cada lección tiene teoría breve, un ejemplo y un reto que se escribe en un editor dentro de la página y se corrige automáticamente.
 
-**13 niveles · 94 lecciones · unas 15 horas de práctica**
+**19 niveles · 154 lecciones · unas 26 horas de práctica**
 
 | Nivel | Contenido |
 |---|---|
@@ -18,9 +18,15 @@ Curso interactivo y gratuito de desarrollo web en español. Cada lección tiene 
 | 9 · CSS avanzado y UI | Temas, selectores, pseudo-elementos, sombras, componentes, modales |
 | 10 · JavaScript avanzado | Closures, temporizadores, Set/Map, regex, `?.` y `??`, recursión, debounce |
 | 11 · Lógica y algoritmos | FizzBuzz, palíndromos, anagramas, Big O, búsqueda binaria, pilas |
-| 12 · Proyectos de portafolio | Divisor de cuentas, temporizador de rounds, trivia, juego, catálogo, buscador de películas |
+| 12 · APIs del navegador | URLSearchParams, FormData, Intl, portapapeles, IntersectionObserver, arrastrar y soltar, atajos de teclado, ubicación |
+| 13 · Asincronía a fondo | Event loop, crear promesas, then/catch, Promise.all/allSettled/any, tiempo límite, AbortController, reintentos, panel del clima |
+| 14 · Backend y datos | Cómo piensa un servidor, REST, router propio, CRUD con fetch, errores HTTP, tokens, paginación, interfaz optimista, modelar datos |
+| 15 · Canvas y animación | Dibujar, gráfico de barras, transformaciones (reloj), requestAnimationFrame, teclado, colisiones, partículas, juego completo |
+| 16 · Pruebas y calidad | Tu propia librería de pruebas, expect, casos borde, TDD, funciones puras, depurar, refactorizar, TypeScript y linters |
+| 17 · Seguridad, rendimiento y SEO | XSS, validar entradas, secretos y CORS, enlaces seguros, SEO y Open Graph, carga rápida, DOM eficiente, pestañas accesibles, auditoría |
+| 18 · Proyectos de portafolio | Divisor de cuentas, temporizador de rounds, trivia, juego, catálogo, buscador de películas |
 
-Además: **Taller** (proyectos propios con `index.html`, `estilos.css` y `app.js` separados, plantillas, guardar en una carpeta del PC desde Chrome/Edge); **repaso inteligente** de las lecciones difíciles y **reto del día**; pantalla de inicio con progreso y racha; sección **Apuntes** con notas por lección, chuletas (HTML, CSS, JS, Git, atajos), guía y probador de teclado, glosario y plan de estudio posterior; insignias, certificado imprimible, tema claro/oscuro y copia de seguridad del progreso.
+Además: **Taller** (proyectos propios con `index.html`, `estilos.css` y `app.js` separados, plantillas, guardar en una carpeta del PC desde Chrome/Edge); **repaso inteligente** de las lecciones difíciles y **reto del día**; pantalla de inicio con progreso y racha; sección **Apuntes** con notas por lección, chuletas (HTML, CSS, JS, Git, atajos, async/APIs/seguridad), guía y probador de teclado, glosario y plan de estudio posterior; insignias, certificado imprimible, tema claro/oscuro y copia de seguridad del progreso.
 
 ## Uso
 
