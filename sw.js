@@ -1,9 +1,9 @@
-/* Ruta Web · service worker
+/* Satronho Analysis and Programming Learning · service worker
    - La página principal se pide primero a la red (para recibir actualizaciones)
      y, si no hay internet, se usa la copia guardada.
    - El resto de archivos propios y las fuentes se sirven desde la caché. */
-const CACHE = "ruta-web-v6";
-const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png"];
+const CACHE = "ruta-web-v7";
+const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./vendor/sql/sql-wasm.js", "./vendor/sql/sql-wasm.wasm"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
