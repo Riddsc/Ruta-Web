@@ -2,7 +2,7 @@
    - La página principal se pide primero a la red (para recibir actualizaciones)
      y, si no hay internet, se usa la copia guardada.
    - El resto de archivos propios y las fuentes se sirven desde la caché. */
-const CACHE = "ruta-web-v5";
+const CACHE = "ruta-web-v6";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png"];
 
 self.addEventListener("install", (e) => {
