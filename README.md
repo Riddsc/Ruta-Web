@@ -1,8 +1,13 @@
-# Ruta Web
+# Satronho Analysis and Programming Learning
 
-Curso interactivo y gratuito de desarrollo web en español. Cada lección tiene teoría breve, un ejemplo y un reto que se escribe en un editor dentro de la página y se corrige automáticamente.
+Plataforma interactiva y gratuita, en español, con dos cursos: **Programador** y **Analista de datos**. Cada lección tiene teoría breve, un ejemplo y un reto que se escribe en un editor dentro de la página y se corrige automáticamente. El progreso de cada curso se lleva por separado y se cambia de uno a otro con el selector de la pantalla de inicio o de la barra lateral.
 
-**19 niveles · 282 lecciones · unas 55 horas de práctica**
+| Curso | Niveles | Lecciones | Práctica |
+|---|---|---|---|
+| Programador | 19 | 282 | unas 55 horas |
+| Analista de datos | 11 | 93 | unas 19 horas |
+
+## Curso de Programador
 
 Cada nivel tiene dos partes: la **parte 1** enseña lo esencial y la **parte 2 ("A fondo")** lo lleva al nivel de un primer año de programación, con retos más largos y un proyecto de cierre. Las lecciones básicas incluyen además un bloque **Entiéndelo a fondo** con una analogía, el error típico y un consejo del oficio.
 
@@ -28,6 +33,24 @@ Cada nivel tiene dos partes: la **parte 1** enseña lo esencial y la **parte 2 (
 | 17 · Seguridad, rendimiento y SEO | XSS, validar entradas, secretos y CORS, enlaces seguros, SEO y Open Graph, carga rápida, DOM eficiente, pestañas accesibles, auditoría. **A fondo:** sanitizar HTML, CSP, cookies y CSRF, `srcset` y formatos modernos, listas virtuales, modales con foco atrapado, regiones vivas, service workers, autocompletado accesible |
 | 18 · Proyectos de portafolio | Divisor de cuentas, temporizador de rounds, trivia, juego, catálogo, buscador de películas. **A fondo:** conversor de unidades, juego de memoria, hábitos con rachas, generador de contraseñas, control de gastos con gráfico |
 
+## Curso de Analista de datos
+
+Las consultas SQL se ejecutan en una base de datos SQLite real dentro del navegador, y los programas de Python con Python real (Pyodide). Nada se instala y, tras la primera visita, funciona sin conexión.
+
+| Nivel | Contenido |
+|---|---|
+| 0 · El oficio del analista | Qué hace un analista, filas, columnas y granularidad, de una pregunta vaga a una precisa, métricas (conteos, tasas, promedios), privacidad y ética |
+| 1 · SQL: consultar | `SELECT`, columnas calculadas y alias, `WHERE`, `AND`/`OR`/`IN`/`BETWEEN`, `LIKE` y funciones de texto, `ORDER BY` y `LIMIT`, `DISTINCT`, `NULL`, `CASE`, informe de catálogo |
+| 2 · SQL: resumir | Funciones de agregación, `GROUP BY` por una y varias columnas, `HAVING`, orden de ejecución, fechas por mes y año, `SUM` con `CASE`, embudo de conversión |
+| 3 · SQL: combinar tablas | `INNER JOIN`, `JOIN` con `GROUP BY`, `LEFT JOIN`, tres y cuatro tablas, self join, subconsultas, CTE con `WITH`, `UNION`, los mejores clientes |
+| 4 · SQL avanzado | Funciones de ventana (rankings, `PARTITION BY`, acumulados, `LAG`, porcentaje del total), tablas cruzadas, `INSERT`/`UPDATE`/`DELETE`, diseño de tablas, recompra de clientes |
+| 5 · Estadística para decidir | Media y mediana, dispersión y percentiles, histogramas, valores atípicos, porcentajes sin trampas, correlación y causalidad, muestras y sesgos, pruebas A/B, perfil de una variable |
+| 6 · Visualización | Para qué sirve un gráfico, barras, series de tiempo, elegir el gráfico, gráficos que engañan, color y títulos, diseño de tableros, contar una historia, los datos de un tablero |
+| 7 · Hojas de cálculo y Power BI | Tablas bien hechas, fórmulas y referencias, `SUMAR.SI.CONJUNTO`, `BUSCARV`/`BUSCARX`, tablas dinámicas, limpieza y Power Query, modelo en estrella, medidas DAX. Se practica en Excel, Google Sheets o Power BI; las lecciones son guías con cuestionario |
+| 8 · Python | `print` y operaciones, variables y tipos, texto y f-strings, `if`/`elif`/`else`, listas, bucle `for`, diccionarios, funciones, tablas como listas de diccionarios, `try`/`except`, resumen de ventas |
+| 9 · Python para datos | Leer CSV, limpieza (faltantes, duplicados, formatos), fechas con `datetime`, `Counter` y `defaultdict`, cruzar tablas, módulo `statistics`, introducción a pandas, del CSV al informe |
+| 10 · Proyectos de análisis | El método de principio a fin, informe mensual de ventas, rentabilidad por producto, segmentación de clientes, análisis de una prueba A/B, detección de días anormales, portafolio de analista |
+
 Además: **Taller** (proyectos propios con `index.html`, `estilos.css` y `app.js` separados, plantillas, guardar en una carpeta del PC desde Chrome/Edge); **repaso inteligente** de las lecciones difíciles y **reto del día**; pantalla de inicio con progreso y racha; sección **Apuntes** con notas por lección, chuletas (HTML, CSS, JS, Git, atajos, async/APIs/seguridad), guía y probador de teclado, glosario y plan de estudio posterior; insignias, certificado imprimible, tema claro/oscuro y copia de seguridad del progreso.
 
 ## Uso
@@ -40,4 +63,17 @@ Cada persona que abre el enlace tiene su propio progreso, guardado en su navegad
 
 ## Agregar una lección
 
-Las lecciones de la parte 1 están en el array `L` dentro de `index.html`, y las de la parte 2 en el array `L2`, con el mismo formato (más `p2: true`); cada una se coloca sola al final de su nivel. El objeto `DEEP` añade el bloque "Entiéndelo a fondo" a una lección existente (`DEEP[id] = { m: minutos, h: HTML }`). Cada una tiene `id`, `lvl` (nivel), `title`, `mins`, `theory`, `example`, `task`, `starter`, `solution`, `hints` y `tests`. Cada prueba recibe un contexto `c` con utilidades (`c.q`, `c.all`, `c.txt`, `c.cs`, `c.ev`, `c.rules`) y devuelve `true` si pasa. Las lecciones con `type: "quiz"` usan `questions` en lugar de editor.
+Las lecciones originales del curso de Programador están en el array `L` dentro de `index.html`, y todas las demás (la parte 2 y el curso de Analista de datos) en el array `L2`, con el mismo formato; cada una se coloca sola al final de su nivel. El objeto `DEEP` añade el bloque "Entiéndelo a fondo" a una lección existente (`DEEP[id] = { m: minutos, h: HTML }`). Cada una tiene `id`, `lvl` (nivel), `title`, `mins`, `theory`, `example`, `task`, `starter`, `solution`, `hints` y `tests`. Cada prueba recibe un contexto `c` con utilidades (`c.q`, `c.all`, `c.txt`, `c.cs`, `c.ev`, `c.rules`) y devuelve `true` si pasa. Las lecciones con `type: "quiz"` usan `questions` en lugar de editor.
+
+
+Tipos de lección además del editor web:
+
+- `type: "quiz"`: cuestionario, con `questions`.
+- `type: "sql"`: la consulta se ejecuta en un SQLite real dentro del navegador, sobre la base de práctica definida en `DBS` (una tienda con clientes, productos, pedidos, detalle, empleados y visitas). Se corrige comparando el resultado con el de `solution`; `orden: true` exige el mismo orden de filas, `chart: true` dibuja barras y `probe` indica una consulta de comprobación para lecciones que modifican datos.
+- `type: "py"`: el programa se ejecuta con Python real (Pyodide). `pre` es código que corre antes que el del estudiante. Las pruebas usan `c.py("expresión de Python")` y `c.pyRun("datos nuevos", "expresión")`, que vuelve a ejecutar el programa con otros datos.
+
+Cada nivel indica su curso con `curso` (`"datos"` para Analista de datos; sin valor, Programador).
+
+## Carpeta `vendor/`
+
+Contiene los dos motores que hacen posible ejecutar SQL y Python sin servidor ni instalación: `vendor/sql/` (sql.js, SQLite compilado a WebAssembly, alrededor de 0,7 MB) y `vendor/pyodide/` (Python con su biblioteca estándar, unos 13 MB). Se descargan solo cuando se abre la primera lección que los necesita y quedan guardados para usarse sin conexión. pandas no está incluido: se enseña como guía para practicar en el computador.
