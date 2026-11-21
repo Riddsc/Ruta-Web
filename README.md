@@ -4,8 +4,14 @@ Plataforma interactiva y gratuita, en español, con dos cursos: **Programador** 
 
 | Curso | Niveles | Lecciones | Práctica |
 |---|---|---|---|
-| Programador | 19 | 282 | unas 55 horas |
-| Analista de datos | 11 | 93 | unas 19 horas |
+| Programador | 21 | 308 | unas 60 horas de lecciones + unas 65 de proyectos |
+| Analista de datos | 15 | 127 | unas 25 horas de lecciones + unas 41 de proyectos |
+
+El objetivo es llegar al nivel de un **programador junior** y de un **analista de datos junior** contratables: además de las lecciones, cada curso termina con proyectos reales evaluados con una rúbrica, y hay herramientas para practicar como en una entrevista:
+
+- **Modo sin pistas**: oculta pistas y solución en todas las lecciones. Lo que se resuelve así queda marcado como "resuelto sin ayuda".
+- **Simulacro de entrevista**: tres ejercicios al azar, sin pistas y con tiempo límite (45 minutos en Programador y 40 en Analista).
+- **Proyectos con rúbrica**: proyectos abiertos que se hacen en el computador y se entregan con un enlace, revisados con la misma lista que usaría un reclutador.
 
 ## Curso de Programador
 
@@ -31,11 +37,13 @@ Cada nivel tiene dos partes: la **parte 1** enseña lo esencial y la **parte 2 (
 | 15 · Canvas y animación | Dibujar, gráfico de barras, transformaciones (reloj), requestAnimationFrame, teclado, colisiones, partículas, juego completo. **A fondo:** gravedad y rebotes, escenas de un juego, arrastrar con puntero, mundos en cuadrícula, interpolación y curvas, gráfico de líneas con escalas, filtros de imagen, Snake |
 | 16 · Pruebas y calidad | Tu propia librería de pruebas, expect, casos borde, TDD, funciones puras, depurar, refactorizar, TypeScript y linters. **A fondo:** espías y dobles, pruebas asíncronas, inyección de dependencias, tablas de casos, pirámide de pruebas, clases de error, pruebas de propiedades, números romanos con TDD |
 | 17 · Seguridad, rendimiento y SEO | XSS, validar entradas, secretos y CORS, enlaces seguros, SEO y Open Graph, carga rápida, DOM eficiente, pestañas accesibles, auditoría. **A fondo:** sanitizar HTML, CSP, cookies y CSRF, `srcset` y formatos modernos, listas virtuales, modales con foco atrapado, regiones vivas, service workers, autocompletado accesible |
-| 18 · Proyectos de portafolio | Divisor de cuentas, temporizador de rounds, trivia, juego, catálogo, buscador de películas. **A fondo:** conversor de unidades, juego de memoria, hábitos con rachas, generador de contraseñas, control de gastos con gráfico |
+| 18 · React y TypeScript | **TypeScript** con el compilador real en modo estricto y mensajes en español: tipos, interfaces, uniones discriminadas, genéricos, tipos utilitarios y un carrito tipado. **React 19**: componentes, props tipadas, listas y keys, `useState`, formularios controlados, estado derivado, `useEffect`, elevar el estado, datos de una API con sus cuatro estados y condiciones de carrera, `useReducer`, Context, hooks propios, un proyecto de control de gastos y cómo llevarlo a Vite |
+| 19 · Proyectos de portafolio | Divisor de cuentas, temporizador de rounds, trivia, juego, catálogo, buscador de películas. **A fondo:** conversor de unidades, juego de memoria, hábitos con rachas, generador de contraseñas, control de gastos con gráfico |
+| 20 · Proyectos para conseguir empleo | Con rúbrica: app en React y TypeScript con una API real, full stack con API propia, un producto para un negocio real, y la preparación para aplicar (hoja de vida, GitHub, LinkedIn, simulacros) |
 
 ## Curso de Analista de datos
 
-Las consultas SQL se ejecutan en una base de datos SQLite real dentro del navegador, y los programas de Python con Python real (Pyodide). Nada se instala y, tras la primera visita, funciona sin conexión.
+Las consultas SQL se ejecutan en una base de datos SQLite real dentro del navegador, y los programas de Python con Python real (Pyodide), incluido pandas. Nada se instala y, tras la primera visita, funciona sin conexión.
 
 | Nivel | Contenido |
 |---|---|
@@ -44,12 +52,16 @@ Las consultas SQL se ejecutan en una base de datos SQLite real dentro del navega
 | 2 · SQL: resumir | Funciones de agregación, `GROUP BY` por una y varias columnas, `HAVING`, orden de ejecución, fechas por mes y año, `SUM` con `CASE`, embudo de conversión |
 | 3 · SQL: combinar tablas | `INNER JOIN`, `JOIN` con `GROUP BY`, `LEFT JOIN`, tres y cuatro tablas, self join, subconsultas, CTE con `WITH`, `UNION`, los mejores clientes |
 | 4 · SQL avanzado | Funciones de ventana (rankings, `PARTITION BY`, acumulados, `LAG`, porcentaje del total), tablas cruzadas, `INSERT`/`UPDATE`/`DELETE`, diseño de tablas, recompra de clientes |
-| 5 · Estadística para decidir | Media y mediana, dispersión y percentiles, histogramas, valores atípicos, porcentajes sin trampas, correlación y causalidad, muestras y sesgos, pruebas A/B, perfil de una variable |
-| 6 · Visualización | Para qué sirve un gráfico, barras, series de tiempo, elegir el gráfico, gráficos que engañan, color y títulos, diseño de tableros, contar una historia, los datos de un tablero |
-| 7 · Hojas de cálculo y Power BI | Tablas bien hechas, fórmulas y referencias, `SUMAR.SI.CONJUNTO`, `BUSCARV`/`BUSCARX`, tablas dinámicas, limpieza y Power Query, modelo en estrella, medidas DAX. Se practica en Excel, Google Sheets o Power BI; las lecciones son guías con cuestionario |
-| 8 · Python | `print` y operaciones, variables y tipos, texto y f-strings, `if`/`elif`/`else`, listas, bucle `for`, diccionarios, funciones, tablas como listas de diccionarios, `try`/`except`, resumen de ventas |
-| 9 · Python para datos | Leer CSV, limpieza (faltantes, duplicados, formatos), fechas con `datetime`, `Counter` y `defaultdict`, cruzar tablas, módulo `statistics`, introducción a pandas, del CSV al informe |
-| 10 · Proyectos de análisis | El método de principio a fin, informe mensual de ventas, rentabilidad por producto, segmentación de clientes, análisis de una prueba A/B, detección de días anormales, portafolio de analista |
+| 5 · Práctica intensiva de SQL | Nivel entrevista: cómo resolver un ejercicio, clientes sin compras, segundo salario más alto, top N por grupo, crecimiento mes a mes, clientes fieles, tiempo hasta la segunda compra, tasas, mediana sin `MEDIAN`, acumulados, self join, clientes nuevos por mes, producto estrella, valores atípicos e informe para gerencia. Cada consulta se prueba también con datos modificados |
+| 6 · Estadística para decidir | Media y mediana, dispersión y percentiles, histogramas, valores atípicos, porcentajes sin trampas, correlación y causalidad, muestras y sesgos, pruebas A/B, perfil de una variable |
+| 7 · Visualización | Para qué sirve un gráfico, barras, series de tiempo, elegir el gráfico, gráficos que engañan, color y títulos, diseño de tableros, contar una historia, los datos de un tablero |
+| 8 · Hojas de cálculo y Power BI | Tablas bien hechas, fórmulas y referencias, `SUMAR.SI.CONJUNTO`, `BUSCARV`/`BUSCARX`, tablas dinámicas, limpieza y Power Query, modelo en estrella, medidas DAX. Se practica en Excel, Google Sheets o Power BI; las lecciones son guías con cuestionario |
+| 9 · Excel y Power BI con entregables | Con datos para descargar (CSV generados de la base de práctica): informe en Excel, tablero en Power BI con modelo en estrella y DAX, y presentación de hallazgos, evaluados con rúbrica |
+| 10 · Python | `print` y operaciones, variables y tipos, texto y f-strings, `if`/`elif`/`else`, listas, bucle `for`, diccionarios, funciones, tablas como listas de diccionarios, `try`/`except`, resumen de ventas |
+| 11 · Python para datos | Leer CSV, limpieza (faltantes, duplicados, formatos), fechas con `datetime`, `Counter` y `defaultdict`, cruzar tablas, módulo `statistics`, introducción a pandas, del CSV al informe |
+| 12 · pandas de verdad | pandas real dentro del navegador: DataFrames, filtros, fechas y tipos, `groupby` y `agg`, `merge` con `validate`, limpieza de un archivo sucio, series de tiempo, `pivot_table` y `crosstab`, `cut` y `map`, validaciones de calidad, y dos proyectos: embudo por canal y segmentación RFM |
+| 13 · Proyectos de análisis | El método de principio a fin, informe mensual de ventas, rentabilidad por producto, segmentación de clientes, análisis de una prueba A/B, detección de días anormales, portafolio de analista |
+| 14 · Proyectos para conseguir empleo | Con rúbrica: análisis con datos abiertos de Colombia, tablero público, caso de negocio de principio a fin y preparación para aplicar |
 
 Además: **Taller** (proyectos propios con `index.html`, `estilos.css` y `app.js` separados, plantillas, guardar en una carpeta del PC desde Chrome/Edge); **repaso inteligente** de las lecciones difíciles y **reto del día**; pantalla de inicio con progreso y racha; sección **Apuntes** con notas por lección, chuletas (HTML, CSS, JS, Git, atajos, async/APIs/seguridad), guía y probador de teclado, glosario y plan de estudio posterior; insignias, certificado imprimible, tema claro/oscuro y copia de seguridad del progreso.
 
@@ -72,8 +84,21 @@ Tipos de lección además del editor web:
 - `type: "sql"`: la consulta se ejecuta en un SQLite real dentro del navegador, sobre la base de práctica definida en `DBS` (una tienda con clientes, productos, pedidos, detalle, empleados y visitas). Se corrige comparando el resultado con el de `solution`; `orden: true` exige el mismo orden de filas, `chart: true` dibuja barras y `probe` indica una consulta de comprobación para lecciones que modifican datos.
 - `type: "py"`: el programa se ejecuta con Python real (Pyodide). `pre` es código que corre antes que el del estudiante. Las pruebas usan `c.py("expresión de Python")` y `c.pyRun("datos nuevos", "expresión")`, que vuelve a ejecutar el programa con otros datos.
 
+- `type: "ts"`: TypeScript real en modo estricto. Los errores de tipos se muestran con su línea y su código, en español, y el programa se ejecuta igual. Las pruebas reciben además `c.tsErrors`, `c.tsDecl(nombre)`, `c.tsType(nombre)`, `c.tsMembers(nombre)`, `c.tsFn(nombre)` (parámetros, tipo de retorno y si es genérica) y `c.tsWith(codigoExtra)`, que compila el código del alumno con líneas extra y devuelve sus errores (sirve para comprobar que algo **no** compila).
+- `type: "react"`: un archivo `App.tsx` completo, con `import` de `react` y `react-dom/client`, que se ejecuta con React 19 en modo de desarrollo. `css` agrega estilos a la vista previa. Las pruebas tienen `c.click(sel)`, `c.type(sel, valor)`, `c.submit(sel)`, `c.tick(ms)` y `c.remount()`, que vuelve a montar la app (para probar lo que se guarda en `localStorage`).
+- `type: "rubrica"`: proyecto abierto sin editor. `rubric` es una lista de `[criterio, detalle]`, `urlHint` describe el enlace de entrega y `datasets` agrega botones para descargar CSV (definidos en `DATASETS`).
+- En lecciones `sql`, `alt` es SQL que modifica la base antes de volver a ejecutar la consulta del alumno y la solución; `c.sqlAltSame(orden)` compara ambos resultados.
+- En lecciones `py`, si el código importa `pandas` o `numpy`, se descargan la primera vez y quedan guardados. Las lecciones del nivel de pandas usan `pre: PD_PRE`, que escribe los archivos CSV de `PD_FILES` en el disco virtual de Python.
+
+Las lecciones agregadas en esta versión están entre `/*P3:START*/` y `/*P3:END*/`, en el arreglo `L3`.
+
 Cada nivel indica su curso con `curso` (`"datos"` para Analista de datos; sin valor, Programador).
 
 ## Carpeta `vendor/`
 
-Contiene los dos motores que hacen posible ejecutar SQL y Python sin servidor ni instalación: `vendor/sql/` (sql.js, SQLite compilado a WebAssembly, alrededor de 0,7 MB) y `vendor/pyodide/` (Python con su biblioteca estándar, unos 13 MB). Se descargan solo cuando se abre la primera lección que los necesita y quedan guardados para usarse sin conexión. pandas no está incluido: se enseña como guía para practicar en el computador.
+Contiene los motores que hacen posible ejecutar todo sin servidor ni instalación. Cada uno se descarga solo cuando se abre la primera lección que lo necesita y queda guardado para usarse sin conexión.
+
+- `vendor/sql/`: sql.js, SQLite compilado a WebAssembly (alrededor de 0,7 MB).
+- `vendor/pyodide/`: Python con su biblioteca estándar (unos 13 MB). pandas y numpy se descargan del CDN oficial de Pyodide la primera vez que una lección los importa (unos 10 MB) y el service worker los guarda.
+- `vendor/typescript/`: el compilador de TypeScript 6 (minificado), las definiciones de tipos del navegador y de JavaScript (`lib.d.ts`) y los mensajes de error en español.
+- `vendor/react/`: React 19 y React DOM en modo de desarrollo, empaquetados en un solo archivo (así React avisa en la consola, por ejemplo, cuando falta una `key`).

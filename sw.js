@@ -1,8 +1,10 @@
 /* Satronho Analysis and Programming Learning · service worker
    - La página principal se pide primero a la red (para recibir actualizaciones)
      y, si no hay internet, se usa la copia guardada.
-   - El resto de archivos propios y las fuentes se sirven desde la caché. */
-const CACHE = "ruta-web-v10";
+   - El resto de archivos propios y las fuentes se sirven desde la caché.
+   - Los paquetes de Python que vienen del CDN de Pyodide (pandas, numpy) también se guardan,
+     para que las lecciones de pandas funcionen sin conexión después de la primera vez. */
+const CACHE = "ruta-web-v11";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./vendor/sql/sql-wasm.js", "./vendor/sql/sql-wasm.wasm"];
 
 self.addEventListener("install", (e) => {
@@ -36,10 +38,11 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // Archivos propios y fuentes de Google: caché primero, y se guardan al pedirlos
+  // Archivos propios, fuentes de Google y paquetes de Pyodide: caché primero, y se guardan al pedirlos
   const sameOrigin = url.origin === self.location.origin;
   const fonts = /fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
-  if (sameOrigin || fonts) {
+  const pyodide = url.hostname === "cdn.jsdelivr.net" && url.pathname.indexOf("/pyodide/") === 0;
+  if (sameOrigin || fonts || pyodide) {
     e.respondWith(
       caches.match(req).then((hit) =>
         hit ||
